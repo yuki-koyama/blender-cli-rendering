@@ -9,14 +9,6 @@ import math
 output_file_path = str(sys.argv[sys.argv.index('--') + 1])
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
 
-# Render Setting
-
-bpy.context.scene.render.image_settings.file_format = 'PNG'
-bpy.context.scene.render.resolution_percentage = resolution_percentage
-bpy.data.scenes["Scene"].render.engine = 'CYCLES'
-bpy.data.scenes["Scene"].render.filepath = output_file_path
-bpy.context.scene.render.use_freestyle = False
-
 # Scene Building
 
 ## Reset
@@ -31,6 +23,9 @@ num_suzannes = 15
 for index in range(num_suzannes):
 	bpy.ops.mesh.primitive_monkey_add(location=((index - (num_suzannes - 1) / 2) * 3.0, 0.0, 0.0))
 	bpy.context.object.name = "Suzanne" + str(index)
+	bpy.ops.object.modifier_add(type='SUBSURF')
+	bpy.context.object.modifiers["Subsurf"].levels = 3
+	bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Subsurf")
 
 center_suzanne = bpy.data.objects["Suzanne" + str(int((num_suzannes - 1) / 2))]
 
@@ -51,7 +46,16 @@ camera.data.dof_object = center_suzanne
 camera.data.cycles.aperture_type = 'FSTOP'
 camera.data.cycles.aperture_fstop = 1.2
 
-bpy.data.scenes["Scene"].camera = camera
+# Render Setting
+
+scene = bpy.data.scenes["Scene"]
+
+scene.render.image_settings.file_format = 'PNG'
+scene.render.resolution_percentage = resolution_percentage
+scene.render.engine = 'CYCLES'
+scene.render.filepath = output_file_path
+scene.render.use_freestyle = False
+scene.camera = camera
 
 ## Lights
 
