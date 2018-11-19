@@ -2,7 +2,7 @@
 
 import bpy
 import sys
-from math import pi
+import math
 
 # Args
 
@@ -25,10 +25,10 @@ for item in bpy.data.objects:
 for index in range(5):
 	bpy.ops.mesh.primitive_monkey_add(location=((index - 2) * 3.0, 0, 0))
 
-bpy.ops.object.camera_add(view_align=False, location=[0.0, -15.0, 0.0], rotation=[pi * 0.5, 0.0, 0.0])
+bpy.ops.object.camera_add(view_align=False, location=[0.0, -10.0, 0.0], rotation=[math.pi * 0.5, 0.0, 0.0])
 bpy.context.scene.camera = bpy.context.object
+bpy.ops.object.lamp_add(type='SUN', location=[0.0, 0.0, 0.0], rotation=[0.0, math.pi * 0.5, 0.0])
 
-bpy.ops.object.lamp_add(type='SUN', location=[0.0, 0.0, 0.0], rotation=[0.0, pi * 0.5, 0.0])
 
 # Rendering
 
