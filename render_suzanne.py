@@ -26,22 +26,30 @@ for item in bpy.data.objects:
 
 ## Suzannes
 
-num_suzannes = 7
+num_suzannes = 15
 
 for index in range(num_suzannes):
 	bpy.ops.mesh.primitive_monkey_add(location=((index - (num_suzannes - 1) / 2) * 3.0, 0.0, 0.0))
 	bpy.context.object.name = "Suzanne" + str(index)
 
+center_suzanne = bpy.data.objects["Suzanne" + str(int((num_suzannes - 1) / 2))]
+
 ## Camera
 
 bpy.ops.object.camera_add(view_align=False, location=[10.0, - 7.0, 0.0])
 camera = bpy.context.object
-camera.data.lens = 50
 
 bpy.ops.object.constraint_add(type='TRACK_TO')
-camera.constraints["Track To"].target = bpy.data.objects["Suzanne" + str(int((num_suzannes - 1) / 2))]
+camera.constraints["Track To"].target = center_suzanne
 camera.constraints["Track To"].track_axis = 'TRACK_NEGATIVE_Z'
 camera.constraints["Track To"].up_axis = 'UP_Y'
+
+camera.data.sensor_fit = 'HORIZONTAL'
+camera.data.sensor_width = 36.0
+camera.data.lens = 50
+camera.data.dof_object = center_suzanne
+camera.data.cycles.aperture_type = 'FSTOP'
+camera.data.cycles.aperture_fstop = 1.2
 
 bpy.data.scenes["Scene"].camera = camera
 
