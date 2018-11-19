@@ -46,6 +46,10 @@ camera.data.dof_object = center_suzanne
 camera.data.cycles.aperture_type = 'FSTOP'
 camera.data.cycles.aperture_fstop = 1.2
 
+## Lights
+
+bpy.ops.object.lamp_add(type='SUN', location=[0.0, 0.0, 0.0], rotation=[0.0, math.pi * 0.5, - math.pi * 0.1])
+
 # Render Setting
 
 scene = bpy.data.scenes["Scene"]
@@ -56,10 +60,6 @@ scene.render.engine = 'CYCLES'
 scene.render.filepath = output_file_path
 scene.render.use_freestyle = False
 scene.camera = camera
-
-## Lights
-
-bpy.ops.object.lamp_add(type='SUN', location=[0.0, 0.0, 0.0], rotation=[0.0, math.pi * 0.5, - math.pi * 0.1])
 
 # Rendering
 
