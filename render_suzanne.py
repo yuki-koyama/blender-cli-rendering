@@ -19,16 +19,35 @@ bpy.context.scene.render.use_freestyle = False
 
 # Scene Building
 
+## Reset
+
 for item in bpy.data.objects:
 	bpy.data.objects.remove(item)
 
-for index in range(5):
-	bpy.ops.mesh.primitive_monkey_add(location=((index - 2) * 3.0, 0, 0))
+## Suzannes
 
-bpy.ops.object.camera_add(view_align=False, location=[0.0, -10.0, 0.0], rotation=[math.pi * 0.5, 0.0, 0.0])
-bpy.context.scene.camera = bpy.context.object
-bpy.ops.object.lamp_add(type='SUN', location=[0.0, 0.0, 0.0], rotation=[0.0, math.pi * 0.5, 0.0])
+num_suzannes = 7
 
+for index in range(num_suzannes):
+	bpy.ops.mesh.primitive_monkey_add(location=((index - (num_suzannes - 1) / 2) * 3.0, 0.0, 0.0))
+	bpy.context.object.name = "Suzanne" + str(index)
+
+## Camera
+
+bpy.ops.object.camera_add(view_align=False, location=[10.0, - 7.0, 0.0])
+camera = bpy.context.object
+camera.data.lens = 50
+
+bpy.ops.object.constraint_add(type='TRACK_TO')
+camera.constraints["Track To"].target = bpy.data.objects["Suzanne" + str(int((num_suzannes - 1) / 2))]
+camera.constraints["Track To"].track_axis = 'TRACK_NEGATIVE_Z'
+camera.constraints["Track To"].up_axis = 'UP_Y'
+
+bpy.data.scenes["Scene"].camera = camera
+
+## Lights
+
+bpy.ops.object.lamp_add(type='SUN', location=[0.0, 0.0, 0.0], rotation=[0.0, math.pi * 0.5, - math.pi * 0.1])
 
 # Rendering
 
