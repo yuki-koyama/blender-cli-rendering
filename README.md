@@ -6,6 +6,7 @@ Python scripts for rendering images using Blender from command-line interface.
 
 - Able to run without display
 - Designed for non-Blender users
+- Based on Blender 2.79
 
 ## Possible Usages
 
