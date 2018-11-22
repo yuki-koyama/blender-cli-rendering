@@ -4,6 +4,20 @@ import bpy
 import sys
 import math
 
+# Functions
+
+def reset_scene():
+	for item in bpy.data.objects:
+		bpy.data.objects.remove(item)
+
+def setup_camera_params(camera, dof_target):
+	camera.data.sensor_fit = 'HORIZONTAL'
+	camera.data.sensor_width = 36.0
+	camera.data.lens = 50
+	camera.data.dof_object = dof_target
+	camera.data.cycles.aperture_type = 'FSTOP'
+	camera.data.cycles.aperture_fstop = 1.2
+
 # Args
 
 output_file_path = str(sys.argv[sys.argv.index('--') + 1])
@@ -13,8 +27,7 @@ resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
 
 ## Reset
 
-for item in bpy.data.objects:
-	bpy.data.objects.remove(item)
+reset_scene()
 
 ## Suzannes
 
@@ -39,12 +52,7 @@ camera.constraints["Track To"].target = center_suzanne
 camera.constraints["Track To"].track_axis = 'TRACK_NEGATIVE_Z'
 camera.constraints["Track To"].up_axis = 'UP_Y'
 
-camera.data.sensor_fit = 'HORIZONTAL'
-camera.data.sensor_width = 36.0
-camera.data.lens = 50
-camera.data.dof_object = center_suzanne
-camera.data.cycles.aperture_type = 'FSTOP'
-camera.data.cycles.aperture_fstop = 1.2
+setup_camera_params(camera, center_suzanne)
 
 ## Lights
 
