@@ -27,6 +27,10 @@ Python scripts for rendering images using Blender from command-line interface.
 - `TRACK_TO` constraint to achieve camera's _look-at_ behavior
 - Depth of field
 
+### 3. render_suzanne_with_ibl.py
+
+- Image-based rendering using an HDR image
+
 ## License
 
 Scripts in this repository use the Blender Python API, which is licensed under GNU General Public License (GPL). Thus, these scripts are considered as derivative works of a GPL-licensed work, so they are also licensed under GPL following the copyleft rule.
