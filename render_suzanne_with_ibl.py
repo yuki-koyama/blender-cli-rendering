@@ -42,6 +42,13 @@ def set_camera_lookat_target(camera, lookat_target):
 	camera.constraints["Track To"].track_axis = 'TRACK_NEGATIVE_Z'
 	camera.constraints["Track To"].up_axis = 'UP_Y'
 
+def set_background_light(world, hdri_path):
+	world.use_nodes = True
+	node_tree = world.node_tree
+	environment_texture_node = node_tree.nodes.new(type="ShaderNodeTexEnvironment")
+	environment_texture_node.image = bpy.data.images.load(hdri_path)
+	node_tree.links.new(environment_texture_node.outputs["Color"], node_tree.nodes["Background"].inputs["Color"])
+
 def set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples):
 	scene.render.image_settings.file_format = 'PNG'
 	scene.render.resolution_percentage = resolution_percentage
@@ -56,7 +63,15 @@ def set_scene_renderer(scene, resolution_percentage, output_file_path, camera, n
 output_file_path = str(sys.argv[sys.argv.index('--') + 1])
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
 
+# Parameters
+
+num_samples = 512
+hdri_path = "./assets/green_point_park_2k.hdr"
+
 # Scene Building
+
+scene = bpy.data.scenes["Scene"]
+world = scene.world
 
 ## Reset
 
@@ -76,17 +91,11 @@ set_camera_params(camera, center_suzanne)
 
 ## Lights
 
-world = bpy.context.scene.world
-world.use_nodes = True
-node_tree = world.node_tree
-tex_env_node = node_tree.nodes.new(type="ShaderNodeTexEnvironment")
-tex_env_node.image = bpy.data.images.load("./assets/syferfontein_6d_clear_2k.hdr")
-node_tree.links.new(tex_env_node.outputs["Color"], node_tree.nodes["Background"].inputs["Color"])
+set_background_light(world, hdri_path)
 
 # Render Setting
 
-scene = bpy.data.scenes["Scene"]
-set_scene_renderer(scene, resolution_percentage, output_file_path, camera, 512)
+set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples)
 
 # Rendering
 
