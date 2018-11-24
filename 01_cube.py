@@ -1,4 +1,4 @@
-# blender --background --python render_cube.py -- </path/to/output/image> <resolution_percentage>
+# blender --background --python 01_cube.py -- </path/to/output/image> <resolution_percentage>
 
 import bpy
 import sys

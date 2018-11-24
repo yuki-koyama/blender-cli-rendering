@@ -1,4 +1,4 @@
-# blender --background --python render_suzanne.py -- </path/to/output/image> <resolution_percentage>
+# blender --background --python 02_suzanne.py -- </path/to/output/image> <resolution_percentage>
 
 import bpy
 import sys
