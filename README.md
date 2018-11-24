@@ -29,7 +29,7 @@ Python scripts for rendering images using Blender from command-line interface.
 
 ### 03_ibl.py
 
-- Image-based rendering using an HDR image
+- Image-based lighting using an HDR image
 
 ## License
 
