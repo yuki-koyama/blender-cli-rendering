@@ -15,17 +15,21 @@ Python scripts for rendering images using Blender from command-line interface.
 
 ## Scripts
 
-### 1. render_cube.py
+### 01_cube.py
 
 - Cycles renderer
 
-### 2. render_suzanne.py
+### 02_suzanne.py
 
 - Directional light
 - Algorithmic object placement
 - Subdivision surfaces
 - `TRACK_TO` constraint to achieve camera's _look-at_ behavior
 - Depth of field
+
+### 03_ibl.py
+
+- Image-based rendering using an HDR image
 
 ## License
 

@@ -1,4 +1,4 @@
-# blender --background --python render_suzanne.py -- </path/to/output/image> <resolution_percentage>
+# blender --background --python 03_ibl.py -- </path/to/output/image> <resolution_percentage>
 
 import bpy
 import sys
@@ -17,21 +17,23 @@ def apply_subdivision_surface(target, level):
 	bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Subsurf")
 
 def set_scene_objects():
-	num_suzannes = 15
+	num_suzannes = 7
 	for index in range(num_suzannes):
-		bpy.ops.mesh.primitive_monkey_add(location=((index - (num_suzannes - 1) / 2) * 3.0, 0.0, 0.0))
+		bpy.ops.mesh.primitive_monkey_add(location=((index - (num_suzannes - 1) / 2) * 3.0, 0.0, 1.0))
 		current_object = bpy.context.object
 		current_object.name = "Suzanne" + str(index)
 		apply_subdivision_surface(current_object, 3)
+	bpy.ops.mesh.primitive_plane_add(radius=10.0)
 	return bpy.data.objects["Suzanne" + str(int((num_suzannes - 1) / 2))]
 
 def set_camera_params(camera, dof_target):
 	camera.data.sensor_fit = 'HORIZONTAL'
 	camera.data.sensor_width = 36.0
+	camera.data.sensor_height = 24.0
 	camera.data.lens = 50
 	camera.data.dof_object = dof_target
-	camera.data.cycles.aperture_type = 'FSTOP'
-	camera.data.cycles.aperture_fstop = 1.2
+	camera.data.cycles.aperture_type = 'RADIUS'
+	camera.data.cycles.aperture_size = 0.2
 
 def set_camera_lookat_target(camera, lookat_target):
 	bpy.context.scene.objects.active = camera
@@ -40,12 +42,20 @@ def set_camera_lookat_target(camera, lookat_target):
 	camera.constraints["Track To"].track_axis = 'TRACK_NEGATIVE_Z'
 	camera.constraints["Track To"].up_axis = 'UP_Y'
 
-def set_scene_renderer(scene, resolution_percentage, output_file_path, camera):
+def set_background_light(world, hdri_path):
+	world.use_nodes = True
+	node_tree = world.node_tree
+	environment_texture_node = node_tree.nodes.new(type="ShaderNodeTexEnvironment")
+	environment_texture_node.image = bpy.data.images.load(hdri_path)
+	node_tree.links.new(environment_texture_node.outputs["Color"], node_tree.nodes["Background"].inputs["Color"])
+
+def set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples):
 	scene.render.image_settings.file_format = 'PNG'
 	scene.render.resolution_percentage = resolution_percentage
 	scene.render.engine = 'CYCLES'
 	scene.render.filepath = output_file_path
 	scene.render.use_freestyle = False
+	scene.cycles.samples = num_samples
 	scene.camera = camera
 
 # Args
@@ -53,7 +63,15 @@ def set_scene_renderer(scene, resolution_percentage, output_file_path, camera):
 output_file_path = str(sys.argv[sys.argv.index('--') + 1])
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
 
+# Parameters
+
+num_samples = 512
+hdri_path = "./assets/green_point_park_2k.hdr"
+
 # Scene Building
+
+scene = bpy.data.scenes["Scene"]
+world = scene.world
 
 ## Reset
 
@@ -65,7 +83,7 @@ center_suzanne = set_scene_objects()
 
 ## Camera
 
-bpy.ops.object.camera_add(view_align=False, location=[10.0, - 7.0, 0.0])
+bpy.ops.object.camera_add(view_align=False, location=[6.0, - 12.0, 2.0])
 camera = bpy.context.object
 
 set_camera_lookat_target(camera, center_suzanne)
@@ -73,12 +91,11 @@ set_camera_params(camera, center_suzanne)
 
 ## Lights
 
-bpy.ops.object.lamp_add(type='SUN', location=[0.0, 0.0, 0.0], rotation=[0.0, math.pi * 0.5, - math.pi * 0.1])
+set_background_light(world, hdri_path)
 
 # Render Setting
 
-scene = bpy.data.scenes["Scene"]
-set_scene_renderer(scene, resolution_percentage, output_file_path, camera)
+set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples)
 
 # Rendering
 
