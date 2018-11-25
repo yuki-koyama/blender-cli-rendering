@@ -1,5 +1,19 @@
 # Assets
 
+## PBR Textures
+
+### Metal08
+
+- File names:
+  - ./[2K]Metal08/Metal08_col.jpg
+  - ./[2K]Metal08/Metal08_disp.jpg
+  - ./[2K]Metal08/Metal08_met.jpg
+  - ./[2K]Metal08/Metal08_nrm.jpg
+  - ./[2K]Metal08/Metal08_rgh.jpg
+- Author: StruffelProductions
+- License: CC0
+- URL: <https://cc0textures.com/view.php?tex=Metal08>
+
 ## HDRIs
 
 ### Royal Esplanade
