@@ -66,7 +66,7 @@ resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
 # Parameters
 
 num_samples = 512
-hdri_path = "./assets/green_point_park_2k.hdr"
+hdri_path = "./assets/HDRIs/green_point_park_2k.hdr"
 
 # Scene Building
 
