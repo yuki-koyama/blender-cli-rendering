@@ -10,6 +10,10 @@ def reset_scene():
 	for item in bpy.data.objects:
 		bpy.data.objects.remove(item)
 
+def reset_nodes(nodes):
+	for node in nodes:
+		nodes.remove(node)
+
 def apply_subdivision_surface(target, level):
 	bpy.context.scene.objects.active = target
 	bpy.ops.object.modifier_add(type='SUBSURF')
@@ -21,6 +25,15 @@ def set_scene_objects():
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Left"
 	apply_subdivision_surface(current_object, 3)
+	left_mat = bpy.data.materials.new("Material_Left")
+	left_mat.use_nodes = True
+	nodes = left_mat.node_tree.nodes
+	links = left_mat.node_tree.links
+	reset_nodes(nodes)
+	output_node = nodes.new(type='ShaderNodeOutputMaterial')
+	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
+	links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+	current_object.data.materials.append(left_mat)
 
 	bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0))
 	current_object = bpy.context.object
