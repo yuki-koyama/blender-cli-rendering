@@ -152,7 +152,9 @@ def set_scene_objects():
 	links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
 	current_object.data.materials.append(mat)
 
-	return bpy.data.objects["Suzanne_Center"]
+	bpy.ops.object.empty_add(location=(0.0, -0.75, 1.0))
+	focus_target = bpy.context.object
+	return focus_target
 
 def set_camera_params(camera, dof_target):
 	camera.data.sensor_fit = 'HORIZONTAL'
@@ -161,7 +163,7 @@ def set_camera_params(camera, dof_target):
 	camera.data.lens = 50
 	camera.data.dof_object = dof_target
 	camera.data.cycles.aperture_type = 'RADIUS'
-	camera.data.cycles.aperture_size = 0.2
+	camera.data.cycles.aperture_size = 0.18
 
 def set_camera_lookat_target(camera, lookat_target):
 	bpy.context.scene.objects.active = camera
@@ -207,15 +209,15 @@ reset_scene()
 
 ## Suzannes
 
-center_suzanne = set_scene_objects()
+focus_target = set_scene_objects()
 
 ## Camera
 
 bpy.ops.object.camera_add(view_align=False, location=[0.0, - 15.0, 2.0])
 camera = bpy.context.object
 
-set_camera_lookat_target(camera, center_suzanne)
-set_camera_params(camera, center_suzanne)
+set_camera_lookat_target(camera, focus_target)
+set_camera_params(camera, focus_target)
 
 ## Lights
 
