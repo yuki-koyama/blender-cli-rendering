@@ -186,6 +186,7 @@ def set_scene_renderer(scene, resolution_percentage, output_file_path, camera, n
 	scene.render.filepath = output_file_path
 	scene.render.use_freestyle = False
 	scene.cycles.samples = num_samples
+	scene.render.layers[0].cycles.use_denoising = True
 	scene.camera = camera
 
 # Args
