@@ -20,32 +20,137 @@ def apply_subdivision_surface(target, level):
 	bpy.context.object.modifiers["Subsurf"].levels = level
 	bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Subsurf")
 
+def set_principled_node_as_rough_blue(principled_node):
+	principled_node.inputs['Base Color'].default_value = (0.1, 0.2, 0.8, 1.0)
+	principled_node.inputs['Subsurface'].default_value = 0.0
+	principled_node.inputs['Subsurface Color'].default_value = (0.9, 0.9, 0.9, 1.0)
+	principled_node.inputs['Subsurface Radius'].default_value = (1.0, 1.0, 1.0)
+	principled_node.inputs['Metallic'].default_value = 1.0
+	principled_node.inputs['Specular'].default_value = 0.5
+	principled_node.inputs['Specular Tint'].default_value = 0.0
+	principled_node.inputs['Roughness'].default_value = 0.8
+	principled_node.inputs['Anisotropic'].default_value = 0.0
+	principled_node.inputs['Anisotropic Rotation'].default_value = 0.0
+	principled_node.inputs['Sheen'].default_value = 0.0
+	principled_node.inputs['Sheen Tint'].default_value = 0.5
+	principled_node.inputs['Clearcoat'].default_value = 0.5
+	principled_node.inputs['Clearcoat Roughness'].default_value = 0.030
+	principled_node.inputs['IOR'].default_value = 1.450
+	principled_node.inputs['Transmission'].default_value = 0.0
+
+def set_principled_node_as_ceramic(principled_node):
+	principled_node.inputs['Base Color'].default_value = (0.8, 0.8, 0.8, 1.0)
+	principled_node.inputs['Subsurface'].default_value = 0.5
+	principled_node.inputs['Subsurface Color'].default_value = (0.9, 0.9, 0.9, 1.0)
+	principled_node.inputs['Subsurface Radius'].default_value = (1.0, 1.0, 1.0)
+	principled_node.inputs['Metallic'].default_value = 0.2
+	principled_node.inputs['Specular'].default_value = 0.5
+	principled_node.inputs['Specular Tint'].default_value = 0.0
+	principled_node.inputs['Roughness'].default_value = 0.0
+	principled_node.inputs['Anisotropic'].default_value = 0.0
+	principled_node.inputs['Anisotropic Rotation'].default_value = 0.0
+	principled_node.inputs['Sheen'].default_value = 0.0
+	principled_node.inputs['Sheen Tint'].default_value = 0.5
+	principled_node.inputs['Clearcoat'].default_value = 0.9
+	principled_node.inputs['Clearcoat Roughness'].default_value = 0.030
+	principled_node.inputs['IOR'].default_value = 1.450
+	principled_node.inputs['Transmission'].default_value = 0.0
+
+def set_principled_node_as_gold(principled_node):
+	principled_node.inputs['Base Color'].default_value = (1.00, 0.75, 0.35, 1.0)
+	principled_node.inputs['Subsurface'].default_value = 0.0
+	principled_node.inputs['Subsurface Color'].default_value = (0.3, 0.1, 0.1, 1.0)
+	principled_node.inputs['Subsurface Radius'].default_value = (1.0, 1.0, 1.0)
+	principled_node.inputs['Metallic'].default_value = 1.0
+	principled_node.inputs['Specular'].default_value = 0.5
+	principled_node.inputs['Specular Tint'].default_value = 0.0
+	principled_node.inputs['Roughness'].default_value = 0.0
+	principled_node.inputs['Anisotropic'].default_value = 0.0
+	principled_node.inputs['Anisotropic Rotation'].default_value = 0.0
+	principled_node.inputs['Sheen'].default_value = 0.0
+	principled_node.inputs['Sheen Tint'].default_value = 0.5
+	principled_node.inputs['Clearcoat'].default_value = 0.5
+	principled_node.inputs['Clearcoat Roughness'].default_value = 0.030
+	principled_node.inputs['IOR'].default_value = 1.450
+	principled_node.inputs['Transmission'].default_value = 0.0
+
+def set_principled_node_as_glass(principled_node):
+	principled_node.inputs['Base Color'].default_value = (0.92, 0.92, 0.95, 1.0)
+	principled_node.inputs['Subsurface'].default_value = 0.0
+	principled_node.inputs['Subsurface Color'].default_value = (0.3, 0.1, 0.1, 1.0)
+	principled_node.inputs['Subsurface Radius'].default_value = (1.0, 1.0, 1.0)
+	principled_node.inputs['Metallic'].default_value = 0.0
+	principled_node.inputs['Specular'].default_value = 0.5
+	principled_node.inputs['Specular Tint'].default_value = 0.0
+	principled_node.inputs['Roughness'].default_value = 0.0
+	principled_node.inputs['Anisotropic'].default_value = 0.0
+	principled_node.inputs['Anisotropic Rotation'].default_value = 0.0
+	principled_node.inputs['Sheen'].default_value = 0.0
+	principled_node.inputs['Sheen Tint'].default_value = 0.5
+	principled_node.inputs['Clearcoat'].default_value = 0.5
+	principled_node.inputs['Clearcoat Roughness'].default_value = 0.030
+	principled_node.inputs['IOR'].default_value = 1.450
+	principled_node.inputs['Transmission'].default_value = 1.0
+
 def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(- 3.0, 0.0, 1.0))
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Left"
 	apply_subdivision_surface(current_object, 3)
-	left_mat = bpy.data.materials.new("Material_Left")
-	left_mat.use_nodes = True
-	nodes = left_mat.node_tree.nodes
-	links = left_mat.node_tree.links
+	mat = bpy.data.materials.new("Material_Left")
+	mat.use_nodes = True
+	nodes = mat.node_tree.nodes
+	links = mat.node_tree.links
 	reset_nodes(nodes)
 	output_node = nodes.new(type='ShaderNodeOutputMaterial')
 	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
+	set_principled_node_as_glass(principled_node)
 	links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
-	current_object.data.materials.append(left_mat)
+	current_object.data.materials.append(mat)
 
 	bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0))
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Center"
 	apply_subdivision_surface(current_object, 3)
+	mat = bpy.data.materials.new("Material_Center")
+	mat.use_nodes = True
+	nodes = mat.node_tree.nodes
+	links = mat.node_tree.links
+	reset_nodes(nodes)
+	output_node = nodes.new(type='ShaderNodeOutputMaterial')
+	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
+	set_principled_node_as_gold(principled_node)
+	links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+	current_object.data.materials.append(mat)
 
 	bpy.ops.mesh.primitive_monkey_add(location=(+ 3.0, 0.0, 1.0))
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Right"
 	apply_subdivision_surface(current_object, 3)
+	mat = bpy.data.materials.new("Material_Center")
+	mat.use_nodes = True
+	nodes = mat.node_tree.nodes
+	links = mat.node_tree.links
+	reset_nodes(nodes)
+	output_node = nodes.new(type='ShaderNodeOutputMaterial')
+	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
+	set_principled_node_as_rough_blue(principled_node)
+	links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+	current_object.data.materials.append(mat)
 
 	bpy.ops.mesh.primitive_plane_add(radius=10.0)
+	current_object = bpy.context.object
+	current_object.name = "Floor"
+	mat = bpy.data.materials.new("Material_Center")
+	mat.use_nodes = True
+	nodes = mat.node_tree.nodes
+	links = mat.node_tree.links
+	reset_nodes(nodes)
+	output_node = nodes.new(type='ShaderNodeOutputMaterial')
+	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
+	set_principled_node_as_ceramic(principled_node)
+	links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+	current_object.data.materials.append(mat)
 
 	return bpy.data.objects["Suzanne_Center"]
 
