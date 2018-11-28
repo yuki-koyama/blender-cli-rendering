@@ -29,6 +29,7 @@ Python scripts for rendering images using Blender from command-line interface.
 
 ### 03_ibl.py
 
+- Node-tree
 - Image-based lighting using an HDR image
 
 ### 04_principled_bsdf.py
