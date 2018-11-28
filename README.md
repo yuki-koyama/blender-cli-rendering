@@ -34,6 +34,8 @@ Python scripts for rendering images using Blender from command-line interface.
 ### 04_principled_bsdf.py
 
 - Principled BSDF
+- Denoising
+- Empty object as a target
 
 ## License
 
