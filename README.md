@@ -19,6 +19,8 @@ Python scripts for rendering images using Blender from command-line interface.
 
 - Cycles renderer
 
+![01_cube](docs/compressed/01_cube.jpg)
+
 ### 02_suzanne.py
 
 - Directional light
@@ -27,16 +29,22 @@ Python scripts for rendering images using Blender from command-line interface.
 - `TRACK_TO` constraint to achieve camera's _look-at_ behavior
 - Depth of field
 
+![02_suzanne](docs/compressed/02_suzanne.jpg)
+
 ### 03_ibl.py
 
 - Node-tree
 - Image-based lighting using an HDR image
+
+![03_ibl](docs/compressed/03_ibl.jpg)
 
 ### 04_principled_bsdf.py
 
 - Principled BSDF
 - Denoising
 - Empty object as a target
+
+![04_principled_bsdf](docs/compressed/04_principled_bsdf.jpg)
 
 ## License
 
