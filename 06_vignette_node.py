@@ -180,17 +180,39 @@ def set_background_light(world, hdri_path):
 	environment_texture_node.image = bpy.data.images.load(hdri_path)
 	node_tree.links.new(environment_texture_node.outputs["Color"], node_tree.nodes["Background"].inputs["Color"])
 
-def define_vignette_node(): # TODO
+def define_vignette_node():
 	group = bpy.data.node_groups.new(type="CompositorNodeTree", name="Vignette")
 
 	input_node = group.nodes.new("NodeGroupInput")
 	group.inputs.new("NodeSocketColor", "Image")
-	group.inputs.new("NodeSocketFloat", "Amount") # TODO: Set default/min/max values
+	group.inputs.new("NodeSocketFloat", "Amount")
+	group.inputs["Amount"].default_value = 0.5
+	group.inputs["Amount"].min_value = 0.0
+	group.inputs["Amount"].max_value = 1.0
+
+	lens_distortion_node = group.nodes.new(type="CompositorNodeLensdist")
+	lens_distortion_node.inputs["Distort"].default_value = 1.000
+
+	separate_rgba_node = group.nodes.new(type="CompositorNodeSepRGBA")
+
+	blur_node = group.nodes.new(type="CompositorNodeBlur")
+	blur_node.filter_type = 'FAST_GAUSS'
+	blur_node.size_x = 100
+	blur_node.size_y = 100
+
+	mix_node = group.nodes.new(type="CompositorNodeMixRGB")
+	mix_node.blend_type = 'MULTIPLY'
 
 	output_node = group.nodes.new("NodeGroupOutput")
 	group.outputs.new("NodeSocketColor", "Image")
 
-	group.links.new(input_node.outputs["Image"], output_node.inputs["Image"])
+	group.links.new(input_node.outputs["Amount"], mix_node.inputs["Fac"])
+	group.links.new(input_node.outputs["Image"], mix_node.inputs[1])
+	group.links.new(input_node.outputs["Image"], lens_distortion_node.inputs["Image"])
+	group.links.new(lens_distortion_node.outputs["Image"], separate_rgba_node.inputs["Image"])
+	group.links.new(separate_rgba_node.outputs["A"], blur_node.inputs["Image"])
+	group.links.new(blur_node.outputs["Image"], mix_node.inputs[2])
+	group.links.new(mix_node.outputs["Image"], output_node.inputs["Image"])
 
 def add_vignette_node(node_tree):
 	define_vignette_node()
@@ -218,7 +240,8 @@ def set_scene_composition(scene):
 
 	composite_node = scene.node_tree.nodes.new(type="CompositorNodeComposite")
 
-	scene.node_tree.links.new(render_layer_node.outputs['Image'], lens_distortion_node.inputs['Image'])
+	scene.node_tree.links.new(render_layer_node.outputs['Image'], vignette_node.inputs['Image'])
+	scene.node_tree.links.new(vignette_node.outputs['Image'], lens_distortion_node.inputs['Image'])
 	scene.node_tree.links.new(lens_distortion_node.outputs['Image'], glare_node.inputs['Image'])
 	scene.node_tree.links.new(glare_node.outputs['Image'], composite_node.inputs['Image'])
 
