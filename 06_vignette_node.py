@@ -196,9 +196,10 @@ def define_vignette_node():
 	separate_rgba_node = group.nodes.new(type="CompositorNodeSepRGBA")
 
 	blur_node = group.nodes.new(type="CompositorNodeBlur")
-	blur_node.filter_type = 'FAST_GAUSS'
-	blur_node.size_x = 100
-	blur_node.size_y = 100
+	blur_node.filter_type = 'GAUSS'
+	blur_node.size_x = 300
+	blur_node.size_y = 300
+	blur_node.use_extended_bounds = True
 
 	mix_node = group.nodes.new(type="CompositorNodeMixRGB")
 	mix_node.blend_type = 'MULTIPLY'
