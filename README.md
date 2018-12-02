@@ -55,6 +55,15 @@ Python scripts for rendering images using Blender from command-line interface.
 
 ![05_composition](docs/compressed/05_composition.jpg)
 
+### 06_vignette.py
+
+- Vignette
+- Color correction
+- Node group
+- Automatic arrangement of nodes in the node editor
+
+![06_vignette](docs/compressed/06_vignette.jpg)
+
 ## License
 
 Scripts in this repository use the Blender Python API, which is licensed under GNU General Public License (GPL). Thus, these scripts are considered as derivative works of a GPL-licensed work, so they are also licensed under GPL following the copyleft rule.
