@@ -1,4 +1,4 @@
-# blender --background --python 06_vignette_node.py -- </path/to/output/image> <resolution_percentage> <num_samples>
+# blender --background --python 06_vignette.py -- </path/to/output/image> <resolution_percentage> <num_samples>
 
 import bpy
 import sys
