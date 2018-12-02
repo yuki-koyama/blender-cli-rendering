@@ -14,6 +14,27 @@ def reset_nodes(nodes):
 	for node in nodes:
 		nodes.remove(node)
 
+def arrange_nodes(node_tree):
+	max_num_iters = 1000
+	epsilon = 1e-05
+	min_space = 50
+	factor = 0.5
+
+	# Gauss-Seidel-style iterations
+	for i in range(max_num_iters):
+		total_energy = 0.0
+		for link in node_tree.links:
+			x_from = link.from_node.location[0]
+			x_to = link.to_node.location[0]
+			w_from = link.from_node.width
+			current_space = x_to - x_from - w_from
+			deviation = max(0.0, min_space - current_space)
+			link.from_node.location[0] -= factor * (deviation / 2.0)
+			link.to_node.location[0] += factor * (deviation / 2.0)
+			total_energy += deviation * deviation
+		if total_energy < epsilon:
+			break
+
 def apply_subdivision_surface(target, level):
 	bpy.context.scene.objects.active = target
 	bpy.ops.object.modifier_add(type='SUBSURF')
@@ -176,9 +197,13 @@ def set_camera_lookat_target(camera, lookat_target):
 def set_background_light(world, hdri_path):
 	world.use_nodes = True
 	node_tree = world.node_tree
+
 	environment_texture_node = node_tree.nodes.new(type="ShaderNodeTexEnvironment")
 	environment_texture_node.image = bpy.data.images.load(hdri_path)
+
 	node_tree.links.new(environment_texture_node.outputs["Color"], node_tree.nodes["Background"].inputs["Color"])
+
+	arrange_nodes(node_tree)
 
 def define_vignette_node():
 	group = bpy.data.node_groups.new(type="CompositorNodeTree", name="Vignette")
@@ -215,10 +240,13 @@ def define_vignette_node():
 	group.links.new(blur_node.outputs["Image"], mix_node.inputs[2])
 	group.links.new(mix_node.outputs["Image"], output_node.inputs["Image"])
 
+	arrange_nodes(group)
+
 def add_vignette_node(node_tree):
 	define_vignette_node()
 
 	vignette_node = node_tree.nodes.new(type='CompositorNodeGroup')
+	vignette_node.name = "Vignette"
 	vignette_node.node_tree = bpy.data.node_groups['Vignette']
 
 	return vignette_node
@@ -250,6 +278,8 @@ def set_scene_composition(scene):
 	scene.node_tree.links.new(lens_distortion_node.outputs['Image'], color_correction_node.inputs['Image'])
 	scene.node_tree.links.new(color_correction_node.outputs['Image'], glare_node.inputs['Image'])
 	scene.node_tree.links.new(glare_node.outputs['Image'], composite_node.inputs['Image'])
+
+	arrange_nodes(scene.node_tree)
 
 def set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples):
 	scene.render.image_settings.file_format = 'PNG'
