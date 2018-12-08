@@ -113,6 +113,9 @@ def set_principled_node_as_glass(principled_node):
 	principled_node.inputs['IOR'].default_value = 1.450
 	principled_node.inputs['Transmission'].default_value = 1.0
 
+def create_texture_node(nodes):
+	return nodes.new(type='ShaderNodeTexture')
+
 def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(- 3.0, 0.0, 1.0))
 	current_object = bpy.context.object
