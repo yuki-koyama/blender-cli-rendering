@@ -132,6 +132,7 @@ def set_scene_objects():
 	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
 	set_principled_node_as_glass(principled_node)
 	links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+	arrange_nodes(mat.node_tree)
 	current_object.data.materials.append(mat)
 
 	bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0))
@@ -147,6 +148,7 @@ def set_scene_objects():
 	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
 	set_principled_node_as_gold(principled_node)
 	links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+	arrange_nodes(mat.node_tree)
 	current_object.data.materials.append(mat)
 
 	bpy.ops.mesh.primitive_monkey_add(location=(+ 3.0, 0.0, 1.0))
@@ -162,6 +164,7 @@ def set_scene_objects():
 	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
 	set_principled_node_as_rough_blue(principled_node)
 	links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+	arrange_nodes(mat.node_tree)
 	current_object.data.materials.append(mat)
 
 	bpy.ops.mesh.primitive_plane_add(radius=10.0)
@@ -176,6 +179,7 @@ def set_scene_objects():
 	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
 	set_principled_node_as_ceramic(principled_node)
 	links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+	arrange_nodes(mat.node_tree)
 	current_object.data.materials.append(mat)
 
 	bpy.ops.object.empty_add(location=(0.0, -0.75, 1.0))
