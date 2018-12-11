@@ -113,8 +113,8 @@ def set_principled_node_as_glass(principled_node):
 	principled_node.inputs['IOR'].default_value = 1.450
 	principled_node.inputs['Transmission'].default_value = 1.0
 
-def create_texture_node(nodes, is_color_data):
-	texture_node = nodes.new(type='ShaderNodeTexture')
+def create_texture_node(nodes, path, is_color_data):
+	texture_node = nodes.new(type='ShaderNodeTexImage')
 	texture_node.color_space = 'COLOR' if is_color_data else 'NONE'
 	return texture_node
 
