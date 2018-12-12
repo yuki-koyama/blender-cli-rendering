@@ -128,7 +128,7 @@ def create_texture_node(nodes, path, is_color_data):
 	return texture_node
 
 def set_scene_objects():
-	bpy.ops.mesh.primitive_monkey_add(location=(- 3.0, 0.0, 1.0))
+	bpy.ops.mesh.primitive_monkey_add(location=(- 3.0, 0.0, 1.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Left"
 	apply_subdivision_surface(current_object, 4)
@@ -144,7 +144,7 @@ def set_scene_objects():
 	arrange_nodes(mat.node_tree)
 	current_object.data.materials.append(mat)
 
-	bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0))
+	bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Center"
 	apply_subdivision_surface(current_object, 4)
@@ -160,7 +160,7 @@ def set_scene_objects():
 	arrange_nodes(mat.node_tree)
 	current_object.data.materials.append(mat)
 
-	bpy.ops.mesh.primitive_monkey_add(location=(+ 3.0, 0.0, 1.0))
+	bpy.ops.mesh.primitive_monkey_add(location=(+ 3.0, 0.0, 1.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Right"
 	apply_subdivision_surface(current_object, 4)
@@ -176,7 +176,7 @@ def set_scene_objects():
 	arrange_nodes(mat.node_tree)
 	current_object.data.materials.append(mat)
 
-	bpy.ops.mesh.primitive_plane_add(radius=10.0)
+	bpy.ops.mesh.primitive_plane_add(radius=10.0, calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Floor"
 	mat = bpy.data.materials.new("Material_Center")
