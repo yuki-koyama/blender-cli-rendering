@@ -154,14 +154,8 @@ def set_scene_objects():
 	apply_subdivision_surface(current_object, 4)
 	mat = bpy.data.materials.new("Material_Center")
 	mat.use_nodes = True
-	nodes = mat.node_tree.nodes
-	links = mat.node_tree.links
-	reset_nodes(nodes)
-	output_node = nodes.new(type='ShaderNodeOutputMaterial')
-	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
-	set_principled_node_as_gold(principled_node)
-	links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
-	arrange_nodes(mat.node_tree)
+	reset_nodes(mat.node_tree.nodes)
+	create_pbr_textured_nodes(mat.node_tree, color_texture_path="./assets/textures/[2K]Metal07/Metal07_col.jpg", metallic_texture_path="./assets/textures/[2K]Metal07/Metal07_met.jpg", roughness_texture_path="./assets/textures/[2K]Metal07/Metal07_rgh.jpg", normal_texture_path="./assets/textures/[2K]Metal07/Metal07_nrm.jpg", displacement_texture_path="./assets/textures/[2K]Metal07/Metal07_disp.jpg")
 	current_object.data.materials.append(mat)
 
 	bpy.ops.mesh.primitive_monkey_add(location=(+ 3.0, 0.0, 1.0), calc_uvs=True)
@@ -170,14 +164,8 @@ def set_scene_objects():
 	apply_subdivision_surface(current_object, 4)
 	mat = bpy.data.materials.new("Material_Right")
 	mat.use_nodes = True
-	nodes = mat.node_tree.nodes
-	links = mat.node_tree.links
-	reset_nodes(nodes)
-	output_node = nodes.new(type='ShaderNodeOutputMaterial')
-	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
-	set_principled_node_as_rough_blue(principled_node)
-	links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
-	arrange_nodes(mat.node_tree)
+	reset_nodes(mat.node_tree.nodes)
+	create_pbr_textured_nodes(mat.node_tree, color_texture_path="./assets/textures/[2K]Fabric02/fabric02_col.jpg", roughness_texture_path="./assets/textures/[2K]Fabric02/fabric02_rgh.jpg", normal_texture_path="./assets/textures/[2K]Fabric02/fabric02_nrm.jpg", displacement_texture_path="./assets/textures/[2K]Fabric02/fabric02_disp.jpg")
 	current_object.data.materials.append(mat)
 
 	bpy.ops.mesh.primitive_plane_add(radius=10.0, calc_uvs=True)
@@ -185,14 +173,8 @@ def set_scene_objects():
 	current_object.name = "Floor"
 	mat = bpy.data.materials.new("Material_Plane")
 	mat.use_nodes = True
-	nodes = mat.node_tree.nodes
-	links = mat.node_tree.links
-	reset_nodes(nodes)
-	output_node = nodes.new(type='ShaderNodeOutputMaterial')
-	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
-	set_principled_node_as_ceramic(principled_node)
-	links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
-	arrange_nodes(mat.node_tree)
+	reset_nodes(mat.node_tree.nodes)
+	create_pbr_textured_nodes(mat.node_tree, color_texture_path="./assets/textures/[2K]Marble01/Marble01_col.jpg", roughness_texture_path="./assets/textures/[2K]Marble01/Marble01_rgh.jpg", normal_texture_path="./assets/textures/[2K]Marble01/Marble01_nrm.jpg", displacement_texture_path="./assets/textures/[2K]Marble01/Marble01_disp.jpg")
 	current_object.data.materials.append(mat)
 
 	bpy.ops.object.empty_add(location=(0.0, -0.75, 1.0))
