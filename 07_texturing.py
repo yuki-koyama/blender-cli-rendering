@@ -95,23 +95,6 @@ def set_principled_node_as_gold(principled_node):
 	principled_node.inputs['IOR'].default_value = 1.450
 	principled_node.inputs['Transmission'].default_value = 0.0
 
-def set_principled_node_as_glass(principled_node):
-	principled_node.inputs['Base Color'].default_value = (0.92, 0.92, 0.95, 1.0)
-	principled_node.inputs['Subsurface'].default_value = 0.0
-	principled_node.inputs['Subsurface Color'].default_value = (0.3, 0.1, 0.1, 1.0)
-	principled_node.inputs['Subsurface Radius'].default_value = (1.0, 1.0, 1.0)
-	principled_node.inputs['Metallic'].default_value = 0.0
-	principled_node.inputs['Specular'].default_value = 0.5
-	principled_node.inputs['Specular Tint'].default_value = 0.0
-	principled_node.inputs['Roughness'].default_value = 0.0
-	principled_node.inputs['Anisotropic'].default_value = 0.0
-	principled_node.inputs['Anisotropic Rotation'].default_value = 0.0
-	principled_node.inputs['Sheen'].default_value = 0.0
-	principled_node.inputs['Sheen Tint'].default_value = 0.5
-	principled_node.inputs['Clearcoat'].default_value = 0.5
-	principled_node.inputs['Clearcoat Roughness'].default_value = 0.030
-	principled_node.inputs['IOR'].default_value = 1.450
-	principled_node.inputs['Transmission'].default_value = 1.0
 
 def create_texture_node(nodes, path, is_color_data):
 	# Instantiate a new texture image node
@@ -138,8 +121,17 @@ def set_scene_objects():
 	reset_nodes(nodes)
 	output_node = nodes.new(type='ShaderNodeOutputMaterial')
 	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
-	set_principled_node_as_glass(principled_node)
+	col_texture_node = create_texture_node(nodes, "./assets/textures/[2K]Leather05/Leather05_col.jpg", True)
+	rgh_texture_node = create_texture_node(nodes, "./assets/textures/[2K]Leather05/Leather05_rgh.jpg", False)
+	disp_texture_node = create_texture_node(nodes, "./assets/textures/[2K]Leather05/Leather05_disp.jpg", False)
+	nrm_texture_node = create_texture_node(nodes, "./assets/textures/[2K]Leather05/Leather05_nrm.jpg", False)
+	normal_map_node = nodes.new(type='ShaderNodeNormalMap')
+	links.new(col_texture_node.outputs['Color'], principled_node.inputs['Base Color'])
+	links.new(rgh_texture_node.outputs['Color'], principled_node.inputs['Roughness'])
+	links.new(nrm_texture_node.outputs['Color'], normal_map_node.inputs['Color'])
+	links.new(normal_map_node.outputs['Normal'], principled_node.inputs['Normal'])
 	links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+	links.new(disp_texture_node.outputs['Color'], output_node.inputs['Displacement'])
 	arrange_nodes(mat.node_tree)
 	current_object.data.materials.append(mat)
 
