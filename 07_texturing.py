@@ -95,7 +95,6 @@ def set_principled_node_as_gold(principled_node):
 	principled_node.inputs['IOR'].default_value = 1.450
 	principled_node.inputs['Transmission'].default_value = 0.0
 
-
 def create_texture_node(nodes, path, is_color_data):
 	# Instantiate a new texture image node
 	texture_node = nodes.new(type='ShaderNodeTexImage')
@@ -109,6 +108,25 @@ def create_texture_node(nodes, path, is_color_data):
 	# Return the node
 	return texture_node
 
+def create_pbr_textured_nodes(node_tree, color_texture_path="", metallic_texture_path="", roughness_texture_path="", normal_texture_path="", displacement_texture_path=""):
+	output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
+	principled_node = node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
+
+	col_texture_node = create_texture_node(node_tree.nodes, color_texture_path, True)
+	rgh_texture_node = create_texture_node(node_tree.nodes, roughness_texture_path, False)
+	disp_texture_node = create_texture_node(node_tree.nodes, displacement_texture_path, False)
+	nrm_texture_node = create_texture_node(node_tree.nodes, normal_texture_path, False)
+	normal_map_node = node_tree.nodes.new(type='ShaderNodeNormalMap')
+
+	node_tree.links.new(col_texture_node.outputs['Color'], principled_node.inputs['Base Color'])
+	node_tree.links.new(rgh_texture_node.outputs['Color'], principled_node.inputs['Roughness'])
+	node_tree.links.new(nrm_texture_node.outputs['Color'], normal_map_node.inputs['Color'])
+	node_tree.links.new(normal_map_node.outputs['Normal'], principled_node.inputs['Normal'])
+	node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+	node_tree.links.new(disp_texture_node.outputs['Color'], output_node.inputs['Displacement'])
+
+	arrange_nodes(node_tree)
+
 def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(- 3.0, 0.0, 1.0), calc_uvs=True)
 	current_object = bpy.context.object
@@ -116,23 +134,8 @@ def set_scene_objects():
 	apply_subdivision_surface(current_object, 4)
 	mat = bpy.data.materials.new("Material_Left")
 	mat.use_nodes = True
-	nodes = mat.node_tree.nodes
-	links = mat.node_tree.links
-	reset_nodes(nodes)
-	output_node = nodes.new(type='ShaderNodeOutputMaterial')
-	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
-	col_texture_node = create_texture_node(nodes, "./assets/textures/[2K]Leather05/Leather05_col.jpg", True)
-	rgh_texture_node = create_texture_node(nodes, "./assets/textures/[2K]Leather05/Leather05_rgh.jpg", False)
-	disp_texture_node = create_texture_node(nodes, "./assets/textures/[2K]Leather05/Leather05_disp.jpg", False)
-	nrm_texture_node = create_texture_node(nodes, "./assets/textures/[2K]Leather05/Leather05_nrm.jpg", False)
-	normal_map_node = nodes.new(type='ShaderNodeNormalMap')
-	links.new(col_texture_node.outputs['Color'], principled_node.inputs['Base Color'])
-	links.new(rgh_texture_node.outputs['Color'], principled_node.inputs['Roughness'])
-	links.new(nrm_texture_node.outputs['Color'], normal_map_node.inputs['Color'])
-	links.new(normal_map_node.outputs['Normal'], principled_node.inputs['Normal'])
-	links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
-	links.new(disp_texture_node.outputs['Color'], output_node.inputs['Displacement'])
-	arrange_nodes(mat.node_tree)
+	reset_nodes(mat.node_tree.nodes)
+	create_pbr_textured_nodes(mat.node_tree, color_texture_path="./assets/textures/[2K]Leather05/Leather05_col.jpg", roughness_texture_path="./assets/textures/[2K]Leather05/Leather05_rgh.jpg", normal_texture_path="./assets/textures/[2K]Leather05/Leather05_nrm.jpg", displacement_texture_path="./assets/textures/[2K]Leather05/Leather05_disp.jpg")
 	current_object.data.materials.append(mat)
 
 	bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0), calc_uvs=True)
