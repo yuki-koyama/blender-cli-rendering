@@ -118,8 +118,7 @@ def create_texture_node(nodes, path, is_color_data):
 	texture_node = nodes.new(type='ShaderNodeTexImage')
 
 	# Open an image and set it to the node
-	bpy.ops.image.open(filepath=path)
-	texture_node.image = bpy.data.images[-1]
+	texture_node.image = bpy.data.images.load(path)
 
 	# Set other parameters
 	texture_node.color_space = 'COLOR' if is_color_data else 'NONE'
