@@ -148,7 +148,7 @@ def set_scene_objects():
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Right"
 	apply_subdivision_surface(current_object, 4)
-	mat = bpy.data.materials.new("Material_Center")
+	mat = bpy.data.materials.new("Material_Right")
 	mat.use_nodes = True
 	nodes = mat.node_tree.nodes
 	links = mat.node_tree.links
@@ -162,7 +162,7 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_plane_add(radius=10.0)
 	current_object = bpy.context.object
 	current_object.name = "Floor"
-	mat = bpy.data.materials.new("Material_Center")
+	mat = bpy.data.materials.new("Material_Plane")
 	mat.use_nodes = True
 	nodes = mat.node_tree.nodes
 	links = mat.node_tree.links
