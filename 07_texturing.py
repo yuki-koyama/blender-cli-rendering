@@ -108,7 +108,14 @@ def create_texture_node(nodes, path, is_color_data):
 	# Return the node
 	return texture_node
 
-def create_pbr_textured_nodes(node_tree, color_texture_path="", metallic_texture_path="", roughness_texture_path="", normal_texture_path="", displacement_texture_path=""):
+def create_pbr_textured_nodes(
+	node_tree, 
+	color_texture_path="", 
+	metallic_texture_path="", 
+	roughness_texture_path="", 
+	normal_texture_path="", 
+	displacement_texture_path=""
+):
 	output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
 	principled_node = node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
 	node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
@@ -138,46 +145,86 @@ def create_pbr_textured_nodes(node_tree, color_texture_path="", metallic_texture
 	arrange_nodes(node_tree)
 
 def set_scene_objects():
-	bpy.ops.mesh.primitive_monkey_add(location=(- 3.0, 0.0, 1.0), calc_uvs=True)
+	bpy.ops.mesh.primitive_monkey_add(location=(- 1.8, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Left"
 	apply_subdivision_surface(current_object, 4)
 	mat = bpy.data.materials.new("Material_Left")
 	mat.use_nodes = True
 	reset_nodes(mat.node_tree.nodes)
-	create_pbr_textured_nodes(mat.node_tree, color_texture_path="./assets/textures/[2K]Leather05/Leather05_col.jpg", roughness_texture_path="./assets/textures/[2K]Leather05/Leather05_rgh.jpg", normal_texture_path="./assets/textures/[2K]Leather05/Leather05_nrm.jpg", displacement_texture_path="./assets/textures/[2K]Leather05/Leather05_disp.jpg")
+	create_pbr_textured_nodes(
+		mat.node_tree, 
+		color_texture_path="./assets/textures/[2K]Leather05/Leather05_col.jpg", 
+		roughness_texture_path="./assets/textures/[2K]Leather05/Leather05_rgh.jpg", 
+		normal_texture_path="./assets/textures/[2K]Leather05/Leather05_nrm.jpg", 
+		displacement_texture_path="./assets/textures/[2K]Leather05/Leather05_disp.jpg"
+	)
 	current_object.data.materials.append(mat)
 
-	bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0), calc_uvs=True)
+	bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Center"
 	apply_subdivision_surface(current_object, 4)
 	mat = bpy.data.materials.new("Material_Center")
 	mat.use_nodes = True
 	reset_nodes(mat.node_tree.nodes)
-	create_pbr_textured_nodes(mat.node_tree, color_texture_path="./assets/textures/[2K]Metal07/Metal07_col.jpg", metallic_texture_path="./assets/textures/[2K]Metal07/Metal07_met.jpg", roughness_texture_path="./assets/textures/[2K]Metal07/Metal07_rgh.jpg", normal_texture_path="./assets/textures/[2K]Metal07/Metal07_nrm.jpg", displacement_texture_path="./assets/textures/[2K]Metal07/Metal07_disp.jpg")
+	create_pbr_textured_nodes(
+		mat.node_tree, 
+		color_texture_path="./assets/textures/[2K]Metal07/Metal07_col.jpg", 
+		metallic_texture_path="./assets/textures/[2K]Metal07/Metal07_met.jpg", 
+		roughness_texture_path="./assets/textures/[2K]Metal07/Metal07_rgh.jpg", 
+		normal_texture_path="./assets/textures/[2K]Metal07/Metal07_nrm.jpg", 
+		displacement_texture_path="./assets/textures/[2K]Metal07/Metal07_disp.jpg"
+	)
 	current_object.data.materials.append(mat)
 
-	bpy.ops.mesh.primitive_monkey_add(location=(+ 3.0, 0.0, 1.0), calc_uvs=True)
+	bpy.ops.mesh.primitive_monkey_add(location=(+ 1.8, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Right"
 	apply_subdivision_surface(current_object, 4)
 	mat = bpy.data.materials.new("Material_Right")
 	mat.use_nodes = True
 	reset_nodes(mat.node_tree.nodes)
-	create_pbr_textured_nodes(mat.node_tree, color_texture_path="./assets/textures/[2K]Fabric02/fabric02_col.jpg", roughness_texture_path="./assets/textures/[2K]Fabric02/fabric02_rgh.jpg", normal_texture_path="./assets/textures/[2K]Fabric02/fabric02_nrm.jpg", displacement_texture_path="./assets/textures/[2K]Fabric02/fabric02_disp.jpg")
+	create_pbr_textured_nodes(
+		mat.node_tree,
+		color_texture_path="./assets/textures/[2K]Fabric02/fabric02_col.jpg",
+		roughness_texture_path="./assets/textures/[2K]Fabric02/fabric02_rgh.jpg",
+		normal_texture_path="./assets/textures/[2K]Fabric02/fabric02_nrm.jpg",
+		displacement_texture_path="./assets/textures/[2K]Fabric02/fabric02_disp.jpg"
+	)
 	current_object.data.materials.append(mat)
 
-	bpy.ops.mesh.primitive_plane_add(radius=10.0, calc_uvs=True)
+	bpy.ops.mesh.primitive_plane_add(radius=6.0, calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Floor"
 	mat = bpy.data.materials.new("Material_Plane")
 	mat.use_nodes = True
 	reset_nodes(mat.node_tree.nodes)
-	create_pbr_textured_nodes(mat.node_tree, color_texture_path="./assets/textures/[2K]Marble01/Marble01_col.jpg", roughness_texture_path="./assets/textures/[2K]Marble01/Marble01_rgh.jpg", normal_texture_path="./assets/textures/[2K]Marble01/Marble01_nrm.jpg", displacement_texture_path="./assets/textures/[2K]Marble01/Marble01_disp.jpg")
+	create_pbr_textured_nodes(
+		mat.node_tree,
+		color_texture_path="./assets/textures/[2K]Marble01/Marble01_col.jpg",
+		roughness_texture_path="./assets/textures/[2K]Marble01/Marble01_rgh.jpg",
+		normal_texture_path="./assets/textures/[2K]Marble01/Marble01_nrm.jpg",
+		displacement_texture_path="./assets/textures/[2K]Marble01/Marble01_disp.jpg"
+	)
 	current_object.data.materials.append(mat)
 
-	bpy.ops.object.empty_add(location=(0.0, -0.75, 1.0))
+	bpy.ops.mesh.primitive_plane_add(radius=6.0, location=(0.0, 4.0, 0.0), rotation=(math.pi * 90.0 / 180.0, 0.0, 0.0), calc_uvs=True)
+	current_object = bpy.context.object
+	current_object.name = "Wall"
+	mat = bpy.data.materials.new("Material_Plane")
+	mat.use_nodes = True
+	reset_nodes(mat.node_tree.nodes)
+	create_pbr_textured_nodes(
+		mat.node_tree,
+		color_texture_path="./assets/textures/[2K]Marble01/Marble01_col.jpg",
+		roughness_texture_path="./assets/textures/[2K]Marble01/Marble01_rgh.jpg",
+		normal_texture_path="./assets/textures/[2K]Marble01/Marble01_nrm.jpg",
+		displacement_texture_path="./assets/textures/[2K]Marble01/Marble01_disp.jpg"
+	)
+	current_object.data.materials.append(mat)
+
+	bpy.ops.object.empty_add(location=(0.0, -0.70, 1.0))
 	focus_target = bpy.context.object
 	return focus_target
 
@@ -185,10 +232,10 @@ def set_camera_params(camera, dof_target):
 	camera.data.sensor_fit = 'HORIZONTAL'
 	camera.data.sensor_width = 36.0
 	camera.data.sensor_height = 24.0
-	camera.data.lens = 50
+	camera.data.lens = 72
 	camera.data.dof_object = dof_target
 	camera.data.cycles.aperture_type = 'RADIUS'
-	camera.data.cycles.aperture_size = 0.180
+	camera.data.cycles.aperture_size = 0.100
 	camera.data.cycles.aperture_blades = 6
 
 def set_camera_lookat_target(camera, lookat_target):
@@ -264,7 +311,7 @@ def set_scene_composition(scene):
 	vignette_node = add_vignette_node(scene.node_tree)
 
 	lens_distortion_node = scene.node_tree.nodes.new(type="CompositorNodeLensdist")
-	lens_distortion_node.inputs["Distort"].default_value = - 0.050
+	lens_distortion_node.inputs["Distort"].default_value = - 0.040
 	lens_distortion_node.inputs["Dispersion"].default_value = 0.050
 
 	color_correction_node = scene.node_tree.nodes.new(type="CompositorNodeColorCorrection")
@@ -314,7 +361,7 @@ reset_scene()
 focus_target = set_scene_objects()
 
 ## Camera
-bpy.ops.object.camera_add(view_align=False, location=[0.0, - 15.0, 2.0])
+bpy.ops.object.camera_add(view_align=False, location=[0.0, - 14.0, 2.0])
 camera = bpy.context.object
 
 set_camera_lookat_target(camera, focus_target)
