@@ -71,6 +71,17 @@ Python scripts for rendering images using Blender from command-line interface.
 
 ![07_texturing](docs/compressed/07_texturing.jpg)
 
+## For Docker Users
+
+Thanks to the fact that Blender can run on Linux without displays as a command line tool, it is straightforward to run all the above scripts using Docker.
+```
+git clone https://github.com/yuki-koyama/blender-cli-rendering.git
+cd blender-cli-rendering
+docker build -t blender-cli-rendering .
+docker run -v /absolute/path/to/output/directory:/home/out blender-cli-rendering
+```
+Note that it is necessary to replace `/absolute/path/to/output/directory` with an appropriate path.
+
 ## License
 
 Scripts in this repository use the Blender Python API, which is licensed under GNU General Public License (GPL). Thus, these scripts are considered as derivative works of a GPL-licensed work, so they are also licensed under GPL following the copyleft rule.
