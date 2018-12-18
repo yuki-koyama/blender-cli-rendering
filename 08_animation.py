@@ -319,6 +319,12 @@ set_background_light(world, hdri_path)
 ## Composition
 set_scene_composition(scene)
 
+# Animation
+
+bpy.context.scene.frame_start = 1
+bpy.context.scene.frame_end = 48
+bpy.context.scene.frame_current = 1
+
 # Render Setting
 set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples)
 
