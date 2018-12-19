@@ -289,6 +289,12 @@ def set_scene_renderer(scene, resolution_percentage, output_file_path, camera, n
 	scene.render.layers[0].cycles.use_denoising = True
 	scene.camera = camera
 
+def set_frames(scene, fps=24, frame_start=1, frame_end=48, frame_current=1):
+	scene.render.fps = fps
+	scene.frame_start = frame_start
+	scene.frame_end = frame_end
+	scene.frame_current = frame_current
+
 # Args
 output_file_path = str(sys.argv[sys.argv.index('--') + 1])
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
@@ -321,13 +327,11 @@ set_background_light(world, hdri_path)
 set_scene_composition(scene)
 
 # Animation
-
-bpy.context.scene.frame_start = 1
-bpy.context.scene.frame_end = 48
-bpy.context.scene.frame_current = 1
+set_frames(scene, fps=24, frame_start=1, frame_end=48)
+scene.render.use_motion_blur = True
 
 # Render Setting
 set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples)
 
 # Render
-bpy.ops.render.render(animation=False, write_still=True)
+bpy.ops.render.render(animation=True)
