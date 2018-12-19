@@ -1,5 +1,5 @@
 # blender --background --python 08_animation.py -- </path/to/output/directory>/<name> <resolution_percentage> <num_samples>
-# ffmpeg ffmpeg -i </path/to/output/directory>/<name>%04d.png -pix_fmt yuv420p -r 24 out.mp4
+# ffmpeg -i </path/to/output/directory>/<name>%04d.png -pix_fmt yuv420p -r 24 out.mp4
 
 import bpy
 import sys
