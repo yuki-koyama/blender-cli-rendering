@@ -109,6 +109,19 @@ def set_scene_objects():
 	)
 	current_object.data.materials.append(mat)
 
+	# Keyframes
+	current_object.location = (0.0, 0.0, 0.2)
+	current_object.scale = (0.0, 0.0, 0.0)
+	current_object.rotation_euler = (0.0, 0.0, - math.pi * (360.0 * 3.0 + 60.0) / 180.0)
+	current_object.keyframe_insert(data_path='location', frame=4)
+	current_object.keyframe_insert(data_path='scale', frame=4)
+	current_object.keyframe_insert(data_path='rotation_euler', frame=4)
+	current_object.location = (0.0, 0.0, 1.0)
+	current_object.scale = (1.0, 1.0, 1.0)
+	current_object.rotation_euler = (0.0, 0.0, - math.pi * 60.0 / 180.0)
+	current_object.keyframe_insert(data_path='location', frame=42)
+	current_object.keyframe_insert(data_path='scale', frame=42)
+	current_object.keyframe_insert(data_path='rotation_euler', frame=42)
 
 	bpy.ops.mesh.primitive_plane_add(radius=6.0, calc_uvs=True)
 	current_object = bpy.context.object
