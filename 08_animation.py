@@ -92,22 +92,6 @@ def create_pbr_textured_nodes(
 	arrange_nodes(node_tree)
 
 def set_scene_objects():
-	bpy.ops.mesh.primitive_monkey_add(location=(- 1.8, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
-	current_object = bpy.context.object
-	current_object.name = "Suzanne_Left"
-	apply_subdivision_surface(current_object, 4)
-	mat = bpy.data.materials.new("Material_Left")
-	mat.use_nodes = True
-	reset_nodes(mat.node_tree.nodes)
-	create_pbr_textured_nodes(
-		mat.node_tree, 
-		color_texture_path="./assets/textures/[2K]Leather05/Leather05_col.jpg", 
-		roughness_texture_path="./assets/textures/[2K]Leather05/Leather05_rgh.jpg", 
-		normal_texture_path="./assets/textures/[2K]Leather05/Leather05_nrm.jpg", 
-		displacement_texture_path="./assets/textures/[2K]Leather05/Leather05_disp.jpg"
-	)
-	current_object.data.materials.append(mat)
-
 	bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Center"
@@ -125,40 +109,10 @@ def set_scene_objects():
 	)
 	current_object.data.materials.append(mat)
 
-	bpy.ops.mesh.primitive_monkey_add(location=(+ 1.8, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
-	current_object = bpy.context.object
-	current_object.name = "Suzanne_Right"
-	apply_subdivision_surface(current_object, 4)
-	mat = bpy.data.materials.new("Material_Right")
-	mat.use_nodes = True
-	reset_nodes(mat.node_tree.nodes)
-	create_pbr_textured_nodes(
-		mat.node_tree,
-		color_texture_path="./assets/textures/[2K]Fabric02/fabric02_col.jpg",
-		roughness_texture_path="./assets/textures/[2K]Fabric02/fabric02_rgh.jpg",
-		normal_texture_path="./assets/textures/[2K]Fabric02/fabric02_nrm.jpg",
-		displacement_texture_path="./assets/textures/[2K]Fabric02/fabric02_disp.jpg"
-	)
-	current_object.data.materials.append(mat)
 
 	bpy.ops.mesh.primitive_plane_add(radius=6.0, calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Floor"
-	mat = bpy.data.materials.new("Material_Plane")
-	mat.use_nodes = True
-	reset_nodes(mat.node_tree.nodes)
-	create_pbr_textured_nodes(
-		mat.node_tree,
-		color_texture_path="./assets/textures/[2K]Marble01/Marble01_col.jpg",
-		roughness_texture_path="./assets/textures/[2K]Marble01/Marble01_rgh.jpg",
-		normal_texture_path="./assets/textures/[2K]Marble01/Marble01_nrm.jpg",
-		displacement_texture_path="./assets/textures/[2K]Marble01/Marble01_disp.jpg"
-	)
-	current_object.data.materials.append(mat)
-
-	bpy.ops.mesh.primitive_plane_add(radius=6.0, location=(0.0, 4.0, 0.0), rotation=(math.pi * 90.0 / 180.0, 0.0, 0.0), calc_uvs=True)
-	current_object = bpy.context.object
-	current_object.name = "Wall"
 	mat = bpy.data.materials.new("Material_Plane")
 	mat.use_nodes = True
 	reset_nodes(mat.node_tree.nodes)
