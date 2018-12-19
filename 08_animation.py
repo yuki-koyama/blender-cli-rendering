@@ -209,7 +209,7 @@ def define_vignette_node():
 	input_node = group.nodes.new("NodeGroupInput")
 	group.inputs.new("NodeSocketColor", "Image")
 	group.inputs.new("NodeSocketFloat", "Amount")
-	group.inputs["Amount"].default_value = 0.5
+	group.inputs["Amount"].default_value = 0.2
 	group.inputs["Amount"].min_value = 0.0
 	group.inputs["Amount"].max_value = 1.0
 
@@ -258,7 +258,7 @@ def set_scene_composition(scene):
 	vignette_node = add_vignette_node(scene.node_tree)
 
 	lens_distortion_node = scene.node_tree.nodes.new(type="CompositorNodeLensdist")
-	lens_distortion_node.inputs["Distort"].default_value = - 0.040
+	lens_distortion_node.inputs["Distort"].default_value = - 0.020
 	lens_distortion_node.inputs["Dispersion"].default_value = 0.050
 
 	color_correction_node = scene.node_tree.nodes.new(type="CompositorNodeColorCorrection")
