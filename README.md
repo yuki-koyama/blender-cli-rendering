@@ -71,6 +71,13 @@ Python scripts for rendering images using Blender from command-line interface.
 
 ![07_texturing](docs/compressed/07_texturing.jpg)
 
+### 08_animation.py
+
+- Keyframing
+- Motion blur
+
+![08_animation](docs/compressed/08_animation.gif)
+
 ## For Docker Users
 
 Thanks to the fact that Blender can run on Linux without displays as a command line tool, it is straightforward to run all the above scripts using Docker.
