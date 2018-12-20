@@ -246,7 +246,7 @@ def set_scene_composition(scene):
 
 	arrange_nodes(scene.node_tree)
 
-def set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples):
+def set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_motion_blur=False):
 	scene.render.image_settings.file_format = 'PNG'
 	scene.render.resolution_percentage = resolution_percentage
 	scene.render.engine = 'CYCLES'
@@ -255,8 +255,9 @@ def set_scene_renderer(scene, resolution_percentage, output_file_path, camera, n
 	scene.cycles.samples = num_samples
 	scene.render.layers[0].cycles.use_denoising = True
 	scene.camera = camera
+	scene.render.use_motion_blur = use_motion_blur
 
-def set_frames(scene, fps=24, frame_start=1, frame_end=48, frame_current=1):
+def set_animation(scene, fps=24, frame_start=1, frame_end=48, frame_current=1):
 	scene.render.fps = fps
 	scene.frame_start = frame_start
 	scene.frame_end = frame_end
@@ -293,12 +294,11 @@ set_background_light(world, hdri_path)
 ## Composition
 set_scene_composition(scene)
 
-# Animation
-set_frames(scene, fps=24, frame_start=1, frame_end=48)
-scene.render.use_motion_blur = True
+# Animation Setting
+set_animation(scene, fps=24, frame_start=1, frame_end=48)
 
 # Render Setting
-set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples)
+set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_motion_blur=True)
 
 # Render
 bpy.ops.render.render(animation=True)
