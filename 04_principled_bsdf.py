@@ -14,11 +14,10 @@ def reset_nodes(nodes):
 	for node in nodes:
 		nodes.remove(node)
 
-def apply_subdivision_surface(target, level):
-	bpy.context.scene.objects.active = target
-	bpy.ops.object.modifier_add(type='SUBSURF')
-	bpy.context.object.modifiers["Subsurf"].levels = level
-	bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Subsurf")
+def add_subdivision_surface_modifier(target_object, level):
+	modifier = target_object.modifiers.new(name="Subsurf", type='SUBSURF')
+	modifier.levels = level
+	modifier.render_levels = level
 
 def set_principled_node_as_rough_blue(principled_node):
 	principled_node.inputs['Base Color'].default_value = (0.1, 0.2, 0.6, 1.0)
@@ -96,7 +95,7 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(- 3.0, 0.0, 1.0))
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Left"
-	apply_subdivision_surface(current_object, 4)
+	add_subdivision_surface_modifier(current_object, 4)
 	mat = bpy.data.materials.new("Material_Left")
 	mat.use_nodes = True
 	nodes = mat.node_tree.nodes
@@ -111,7 +110,7 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0))
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Center"
-	apply_subdivision_surface(current_object, 4)
+	add_subdivision_surface_modifier(current_object, 4)
 	mat = bpy.data.materials.new("Material_Center")
 	mat.use_nodes = True
 	nodes = mat.node_tree.nodes
@@ -126,7 +125,7 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(+ 3.0, 0.0, 1.0))
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Right"
-	apply_subdivision_surface(current_object, 4)
+	add_subdivision_surface_modifier(current_object, 4)
 	mat = bpy.data.materials.new("Material_Right")
 	mat.use_nodes = True
 	nodes = mat.node_tree.nodes

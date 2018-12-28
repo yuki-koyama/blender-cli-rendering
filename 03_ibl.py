@@ -10,11 +10,10 @@ def reset_scene():
 	for item in bpy.data.objects:
 		bpy.data.objects.remove(item)
 
-def apply_subdivision_surface(target, level):
-	bpy.context.scene.objects.active = target
-	bpy.ops.object.modifier_add(type='SUBSURF')
-	bpy.context.object.modifiers["Subsurf"].levels = level
-	bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Subsurf")
+def add_subdivision_surface_modifier(target_object, level):
+	modifier = target_object.modifiers.new(name="Subsurf", type='SUBSURF')
+	modifier.levels = level
+	modifier.render_levels = level
 
 def set_scene_objects():
 	num_suzannes = 7
@@ -22,7 +21,7 @@ def set_scene_objects():
 		bpy.ops.mesh.primitive_monkey_add(location=((index - (num_suzannes - 1) / 2) * 3.0, 0.0, 1.0))
 		current_object = bpy.context.object
 		current_object.name = "Suzanne" + str(index)
-		apply_subdivision_surface(current_object, 3)
+		add_subdivision_surface_modifier(current_object, 3)
 	bpy.ops.mesh.primitive_plane_add(radius=10.0)
 	return bpy.data.objects["Suzanne" + str(int((num_suzannes - 1) / 2))]
 

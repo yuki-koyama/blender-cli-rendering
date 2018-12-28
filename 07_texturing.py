@@ -35,11 +35,10 @@ def arrange_nodes(node_tree):
 		if total_energy < epsilon:
 			break
 
-def apply_subdivision_surface(target, level):
-	bpy.context.scene.objects.active = target
-	bpy.ops.object.modifier_add(type='SUBSURF')
-	bpy.context.object.modifiers["Subsurf"].levels = level
-	bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Subsurf")
+def add_subdivision_surface_modifier(target_object, level):
+	modifier = target_object.modifiers.new(name="Subsurf", type='SUBSURF')
+	modifier.levels = level
+	modifier.render_levels = level
 
 def create_texture_node(nodes, path, is_color_data):
 	# Instantiate a new texture image node
@@ -94,7 +93,7 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(- 1.8, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Left"
-	apply_subdivision_surface(current_object, 4)
+	add_subdivision_surface_modifier(current_object, 4)
 	mat = bpy.data.materials.new("Material_Left")
 	mat.use_nodes = True
 	reset_nodes(mat.node_tree.nodes)
@@ -110,7 +109,7 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Center"
-	apply_subdivision_surface(current_object, 4)
+	add_subdivision_surface_modifier(current_object, 4)
 	mat = bpy.data.materials.new("Material_Center")
 	mat.use_nodes = True
 	reset_nodes(mat.node_tree.nodes)
@@ -127,7 +126,7 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(+ 1.8, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Right"
-	apply_subdivision_surface(current_object, 4)
+	add_subdivision_surface_modifier(current_object, 4)
 	mat = bpy.data.materials.new("Material_Right")
 	mat.use_nodes = True
 	reset_nodes(mat.node_tree.nodes)
