@@ -1,4 +1,4 @@
-# blender --background --python 03_ibl.py -- </path/to/output/image> <resolution_percentage>
+# blender --background --python 03_ibl.py -- </path/to/output/image> <resolution_percentage> <num_samples>
 
 import bpy
 import sys
@@ -60,10 +60,10 @@ def set_scene_renderer(scene, resolution_percentage, output_file_path, camera, n
 
 output_file_path = str(sys.argv[sys.argv.index('--') + 1])
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
+num_samples = int(sys.argv[sys.argv.index('--') + 3])
 
 # Parameters
 
-num_samples = 512
 hdri_path = "./assets/HDRIs/green_point_park_2k.hdr"
 
 # Scene Building
