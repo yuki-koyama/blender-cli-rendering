@@ -187,11 +187,10 @@ def set_camera_params(camera, dof_target):
 	camera.data.cycles.aperture_blades = 6
 
 def set_camera_lookat_target(camera, lookat_target):
-	bpy.context.scene.objects.active = camera
-	bpy.ops.object.constraint_add(type='TRACK_TO')
-	camera.constraints["Track To"].target = lookat_target
-	camera.constraints["Track To"].track_axis = 'TRACK_NEGATIVE_Z'
-	camera.constraints["Track To"].up_axis = 'UP_Y'
+	constraint = camera.constraints.new(type='TRACK_TO')
+	constraint.target = lookat_target
+	constraint.track_axis = 'TRACK_NEGATIVE_Z'
+	constraint.up_axis = 'UP_Y'
 
 def set_background_light(world, hdri_path):
 	world.use_nodes = True
