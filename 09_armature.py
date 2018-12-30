@@ -90,37 +90,11 @@ def create_pbr_textured_nodes(
 
 	arrange_nodes(node_tree)
 
-def set_scene_objects():
-	bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
-	current_object = bpy.context.object
-	current_object.name = "Suzanne_Center"
-	add_subdivision_surface_modifier(current_object, 4)
-	mat = bpy.data.materials.new("Material_Center")
-	mat.use_nodes = True
-	reset_nodes(mat.node_tree.nodes)
-	create_pbr_textured_nodes(
-		mat.node_tree, 
-		color_texture_path="./assets/textures/[2K]Metal07/Metal07_col.jpg", 
-		metallic_texture_path="./assets/textures/[2K]Metal07/Metal07_met.jpg", 
-		roughness_texture_path="./assets/textures/[2K]Metal07/Metal07_rgh.jpg", 
-		normal_texture_path="./assets/textures/[2K]Metal07/Metal07_nrm.jpg", 
-		displacement_texture_path="./assets/textures/[2K]Metal07/Metal07_disp.jpg"
-	)
-	current_object.data.materials.append(mat)
+def create_skinned_object():
+	bpy.ops.object.add(type='ARMATURE', enter_editmode=True, location=(0.0, 0.0, 0.0))
 
-	# Keyframes
-	current_object.location = (0.0, 0.0, 0.2)
-	current_object.scale = (0.0, 0.0, 0.0)
-	current_object.rotation_euler = (0.0, 0.0, - math.pi * (360.0 * 3.0 + 60.0) / 180.0)
-	current_object.keyframe_insert(data_path='location', frame=4)
-	current_object.keyframe_insert(data_path='scale', frame=4)
-	current_object.keyframe_insert(data_path='rotation_euler', frame=4)
-	current_object.location = (0.0, 0.0, 1.0)
-	current_object.scale = (1.0, 1.0, 1.0)
-	current_object.rotation_euler = (0.0, 0.0, - math.pi * 60.0 / 180.0)
-	current_object.keyframe_insert(data_path='location', frame=42)
-	current_object.keyframe_insert(data_path='scale', frame=42)
-	current_object.keyframe_insert(data_path='rotation_euler', frame=42)
+def set_scene_objects():
+	create_skinned_object()
 
 	bpy.ops.mesh.primitive_plane_add(radius=6.0, calc_uvs=True)
 	current_object = bpy.context.object
