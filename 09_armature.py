@@ -92,6 +92,15 @@ def create_pbr_textured_nodes(
 
 def create_skinned_object():
 	bpy.ops.object.add(type='ARMATURE', enter_editmode=True, location=(0.0, 0.0, 0.0))
+	armature = bpy.context.object
+	bone1 = armature.data.edit_bones.new('Bone1')
+	bone1.head = (0.0, 0.0, 0.0)
+	bone1.tail = (0.0, 0.0, 1.0)
+	bone2 = armature.data.edit_bones.new('Bone2')
+	bone2.parent = bone1
+	bone2.use_connect = True
+	bone2.tail = (0.0, 0.0, 2.0)
+	bpy.ops.object.mode_set(mode='OBJECT')
 
 def set_scene_objects():
 	create_skinned_object()
