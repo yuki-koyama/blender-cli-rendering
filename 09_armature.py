@@ -125,6 +125,7 @@ def create_skinned_object():
 	# Object mode
 	bpy.ops.object.mode_set(mode='OBJECT')
 
+	# Mesh
 	bpy.ops.mesh.primitive_cube_add(location=(0.0, 0.0, 1.0), calc_uvs=True)
 	cube = bpy.context.object
 	cube.name = "Cuboid"
@@ -132,14 +133,36 @@ def create_skinned_object():
 	add_subdivision_surface_modifier(cube, 3, is_simple=True)
 	add_subdivision_surface_modifier(cube, 3, is_simple=False)
 	set_smooth_shading(cube)
+	mat = bpy.data.materials.new("Metal07")
+	mat.use_nodes = True
+	reset_nodes(mat.node_tree.nodes)
+	create_pbr_textured_nodes(
+		mat.node_tree, 
+		color_texture_path="./assets/textures/[2K]Metal07/Metal07_col.jpg", 
+		metallic_texture_path="./assets/textures/[2K]Metal07/Metal07_met.jpg", 
+		roughness_texture_path="./assets/textures/[2K]Metal07/Metal07_rgh.jpg", 
+		normal_texture_path="./assets/textures/[2K]Metal07/Metal07_nrm.jpg", 
+		displacement_texture_path="./assets/textures/[2K]Metal07/Metal07_disp.jpg"
+	)
+	cube.data.materials.append(mat)
+
+	# Set the armature as the parent of the cube using the "Automatic Weight" armature option
+	bpy.ops.object.select_all(action='DESELECT')
+	cube.select = True
+	armature.select = True
+	bpy.context.scene.objects.active = armature
+	bpy.ops.object.parent_set(type='ARMATURE_AUTO')
+
+	return armature
 
 def set_scene_objects():
-	create_skinned_object()
+	current_object = create_skinned_object()
+	current_object.rotation_euler = (0.0, 0.0, math.pi * 60.0 / 180.0)
 
 	bpy.ops.mesh.primitive_plane_add(radius=6.0, calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Floor"
-	mat = bpy.data.materials.new("Material_Plane")
+	mat = bpy.data.materials.new("Marble01")
 	mat.use_nodes = True
 	reset_nodes(mat.node_tree.nodes)
 	create_pbr_textured_nodes(
@@ -151,7 +174,7 @@ def set_scene_objects():
 	)
 	current_object.data.materials.append(mat)
 
-	bpy.ops.object.empty_add(location=(0.0, -0.70, 1.0))
+	bpy.ops.object.empty_add(location=(0.0, 0.0, 1.0))
 	focus_target = bpy.context.object
 	return focus_target
 
@@ -294,7 +317,7 @@ reset_scene()
 focus_target = set_scene_objects()
 
 ## Camera
-bpy.ops.object.camera_add(view_align=False, location=[0.0, - 14.0, 2.0])
+bpy.ops.object.camera_add(view_align=False, location=[0.0, - 12.0, 2.0])
 camera = bpy.context.object
 
 set_camera_lookat_target(camera, focus_target)
