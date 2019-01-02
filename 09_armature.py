@@ -36,10 +36,11 @@ def arrange_nodes(node_tree):
 		if total_energy < epsilon:
 			break
 
-def add_subdivision_surface_modifier(target_object, level):
+def add_subdivision_surface_modifier(target_object, level, is_simple=False):
 	modifier = target_object.modifiers.new(name="Subsurf", type='SUBSURF')
 	modifier.levels = level
 	modifier.render_levels = level
+	modifier.subdivision_type = 'SIMPLE' if is_simple else 'CATMULL_CLARK'
 
 def create_texture_node(nodes, path, is_color_data):
 	# Instantiate a new texture image node
