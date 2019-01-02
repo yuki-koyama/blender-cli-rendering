@@ -125,6 +125,14 @@ def create_skinned_object():
 	# Object mode
 	bpy.ops.object.mode_set(mode='OBJECT')
 
+	bpy.ops.mesh.primitive_cube_add(location=(0.0, 0.0, 1.0), calc_uvs=True)
+	cube = bpy.context.object
+	cube.name = "Cuboid"
+	cube.scale = (0.5, 0.5, 1.0)
+	add_subdivision_surface_modifier(cube, 3, is_simple=True)
+	add_subdivision_surface_modifier(cube, 3, is_simple=False)
+	set_smooth_shading(cube)
+
 def set_scene_objects():
 	create_skinned_object()
 
