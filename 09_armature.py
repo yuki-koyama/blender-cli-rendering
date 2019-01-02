@@ -42,6 +42,10 @@ def add_subdivision_surface_modifier(target_object, level, is_simple=False):
 	modifier.render_levels = level
 	modifier.subdivision_type = 'SIMPLE' if is_simple else 'CATMULL_CLARK'
 
+def set_smooth_shading(target_object):
+	for poly in target_object.data.polygons:
+		poly.use_smooth = True
+
 def create_texture_node(nodes, path, is_color_data):
 	# Instantiate a new texture image node
 	texture_node = nodes.new(type='ShaderNodeTexImage')
