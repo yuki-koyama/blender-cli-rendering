@@ -91,6 +91,7 @@ def create_pbr_textured_nodes(
 	arrange_nodes(node_tree)
 
 def create_skinned_object():
+	# Edit mode
 	bpy.ops.object.add(type='ARMATURE', enter_editmode=True, location=(0.0, 0.0, 0.0))
 	armature = bpy.context.object
 	bone1 = armature.data.edit_bones.new('Bone1')
@@ -100,6 +101,23 @@ def create_skinned_object():
 	bone2.parent = bone1
 	bone2.use_connect = True
 	bone2.tail = (0.0, 0.0, 2.0)
+
+	# Pose mode
+	bpy.ops.object.mode_set(mode='POSE')
+	bone2 = armature.pose.bones['Bone2']
+	bone2.rotation_mode = 'XYZ'
+	bone2.rotation_euler = (0.0, 0.0, 0.0)
+	bone2.keyframe_insert(data_path='rotation_euler', frame=4)
+	bone2.rotation_euler = (+ math.pi * 30.0 / 180.0, 0.0, 0.0)
+	bone2.keyframe_insert(data_path='rotation_euler', frame=12)
+	bone2.rotation_euler = (- math.pi * 30.0 / 180.0, 0.0, 0.0)
+	bone2.keyframe_insert(data_path='rotation_euler', frame=20)
+	bone2.rotation_euler = (+ math.pi * 30.0 / 180.0, 0.0, 0.0)
+	bone2.keyframe_insert(data_path='rotation_euler', frame=28)
+	bone2.rotation_euler = (0.0, 0.0, 0.0)
+	bone2.keyframe_insert(data_path='rotation_euler', frame=36)
+
+	# Object mode
 	bpy.ops.object.mode_set(mode='OBJECT')
 
 def set_scene_objects():
@@ -276,7 +294,7 @@ set_background_light(world, hdri_path)
 set_scene_composition(scene)
 
 # Animation Setting
-set_animation(scene, fps=24, frame_start=1, frame_end=48)
+set_animation(scene, fps=24, frame_start=1, frame_end=40)
 
 # Render Setting
 set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_motion_blur=True)
