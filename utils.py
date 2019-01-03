@@ -19,6 +19,17 @@ def build_environmental_light(world, hdri_path):
 
 	arrange_nodes(node_tree)
 
+def set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_denoising=True, use_motion_blur=False):
+	scene.render.image_settings.file_format = 'PNG'
+	scene.render.resolution_percentage = resolution_percentage
+	scene.render.engine = 'CYCLES'
+	scene.render.filepath = output_file_path
+	scene.render.use_freestyle = False
+	scene.cycles.samples = num_samples
+	scene.render.layers[0].cycles.use_denoising = use_denoising
+	scene.camera = camera
+	scene.render.use_motion_blur = use_motion_blur
+
 # Modifiers
 
 def add_subdivision_surface_modifier(mesh, level, is_simple=False):

@@ -32,15 +32,6 @@ def set_camera_params(camera, dof_target):
 	camera.data.cycles.aperture_type = 'RADIUS'
 	camera.data.cycles.aperture_size = 0.2
 
-def set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples):
-	scene.render.image_settings.file_format = 'PNG'
-	scene.render.resolution_percentage = resolution_percentage
-	scene.render.engine = 'CYCLES'
-	scene.render.filepath = output_file_path
-	scene.render.use_freestyle = False
-	scene.cycles.samples = num_samples
-	scene.camera = camera
-
 # Args
 output_file_path = str(sys.argv[sys.argv.index('--') + 1])
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
@@ -70,7 +61,7 @@ set_camera_params(camera, center_suzanne)
 utils.build_environmental_light(world, hdri_path)
 
 # Render Setting
-set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples)
+utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples)
 
 # Rendering
 bpy.ops.render.render(animation=False, write_still=True)
