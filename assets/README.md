@@ -67,3 +67,12 @@
 - Author: Greg Zaal
 - License: CC0
 - URL: <https://hdrihaven.com/hdri/?h=old_depot>
+
+## Motion Capture Data
+
+### Michael Jackson Styled Motions - Start Hop Stop
+
+- File name: 131_03.bvh
+- Author: CMU Graphics Lab
+- License: See <http://mocap.cs.cmu.edu/>
+- URL: <https://sites.google.com/a/cgspeed.com/cgspeed/motion-capture/3dsmax-friendly-release-of-cmu-motion-database>
