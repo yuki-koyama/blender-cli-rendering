@@ -62,6 +62,22 @@ def generate_bone_mesh(radius, length):
 
 	return vertices, faces
 
+def create_mesh_from_pydata(scene, vertices, faces, mesh_name, object_name, use_smooth=True):
+	# Add a new mesh and set vertices and faces
+	# In this case, it does not require to set edges
+	# After manipulating mesh data, update() needs to be called
+	new_mesh = bpy.data.meshes.new(mesh_name)
+	new_mesh.from_pydata(vertices, [], faces)
+	new_mesh.update()
+
+	new_object = bpy.data.objects.new(mesh_name, new_mesh)
+	scene.objects.link(new_object)
+
+	if use_smooth:
+		set_smooth_shading(new_object)
+
+	return new_object
+
 def create_armature_mesh(scene, armature_object, mesh_name):
 	assert armature_object.type == 'ARMATURE', 'Error'
 	assert len(armature_object.data.bones) != 0, 'Error'
@@ -90,14 +106,7 @@ def create_armature_mesh(scene, armature_object, mesh_name):
 			else:
 				faces.append((face[0] + vertex_index_offset, face[1] + vertex_index_offset, face[2] + vertex_index_offset, face[3] + vertex_index_offset))
 
-	# Add a new mesh and set vertices and faces
-	# In this case, it does not require to set edges
-	# After manipulating mesh data, update() needs to be called
-	new_mesh = bpy.data.meshes.new(mesh_name)
-	new_mesh.from_pydata(vertices, [], faces)
-	new_mesh.update()
-
-	new_object = bpy.data.objects.new(mesh_name, new_mesh)
+	new_object = create_mesh_from_pydata(scene, vertices, faces, mesh_name, mesh_name)
 	new_object.matrix_world = armature_object.matrix_world
 
 	for vertex_group in vertex_groups:
@@ -109,10 +118,6 @@ def create_armature_mesh(scene, armature_object, mesh_name):
 
 	utils.add_subdivision_surface_modifier(new_object, 1, is_simple=True)
 	utils.add_subdivision_surface_modifier(new_object, 2, is_simple=False)
-
-	set_smooth_shading(new_object)
-
-	scene.objects.link(new_object)
 
 	# Set the armature as the parent of the new object
 	bpy.ops.object.select_all(action='DESELECT')
