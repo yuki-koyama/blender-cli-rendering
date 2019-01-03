@@ -129,35 +129,18 @@ def create_armature_mesh(scene, armature_object, mesh_name):
 	return new_object
 
 def create_armature_from_bvh(scene, bvh_path):
-	# Edit mode
-	bpy.ops.object.add(type='ARMATURE', enter_editmode=True, location=(0.0, 0.0, 0.0))
+	bpy.ops.import_anim.bvh(
+		filepath=bvh_path, 
+		axis_forward='-Z', 
+		axis_up='Y', 
+		target='ARMATURE', 
+		global_scale=0.056444, 
+		frame_start=1, 
+		use_fps_scale=True, 
+		update_scene_fps=False, 
+		update_scene_duration=False
+	)
 	armature = bpy.context.object
-	bone1 = armature.data.edit_bones.new('Bone1')
-	bone1.head = (0.0, 0.0, 0.0)
-	bone1.tail = (0.0, 0.0, 1.0)
-	bone2 = armature.data.edit_bones.new('Bone2')
-	bone2.parent = bone1
-	bone2.use_connect = True
-	bone2.tail = (0.0, 0.0, 2.0)
-
-	# Pose mode
-	bpy.ops.object.mode_set(mode='POSE')
-	bone2 = armature.pose.bones['Bone2']
-	bone2.rotation_mode = 'XYZ'
-	bone2.rotation_euler = (0.0, 0.0, 0.0)
-	bone2.keyframe_insert(data_path='rotation_euler', frame=4)
-	bone2.rotation_euler = (+ math.pi * 30.0 / 180.0, 0.0, 0.0)
-	bone2.keyframe_insert(data_path='rotation_euler', frame=12)
-	bone2.rotation_euler = (- math.pi * 30.0 / 180.0, 0.0, 0.0)
-	bone2.keyframe_insert(data_path='rotation_euler', frame=20)
-	bone2.rotation_euler = (+ math.pi * 30.0 / 180.0, 0.0, 0.0)
-	bone2.keyframe_insert(data_path='rotation_euler', frame=28)
-	bone2.rotation_euler = (0.0, 0.0, 0.0)
-	bone2.keyframe_insert(data_path='rotation_euler', frame=36)
-
-	# Object mode
-	bpy.ops.object.mode_set(mode='OBJECT')
-
 	return armature
 
 def build_scene(scene):
