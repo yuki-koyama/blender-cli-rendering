@@ -78,6 +78,13 @@ Python scripts for rendering images using Blender from command-line interface.
 
 ![08_animation](docs/compressed/08_animation.gif)
 
+### 09_armature.py
+
+- Skeletal animation
+- Skinning
+
+![09_armature](docs/compressed/09_armature.gif)
+
 ## For Docker Users
 
 Thanks to the fact that Blender can run on Linux without displays as a command line tool, it is straightforward to run all the above scripts using Docker.
