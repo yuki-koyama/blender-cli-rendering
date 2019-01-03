@@ -16,11 +16,11 @@ def reset_scene():
 		bpy.data.objects.remove(item)
 
 def set_smooth_shading(target_object):
-	for poly in target_object.data.polygons:
-		poly.use_smooth = True
+	for polygon in target_object.data.polygons:
+		polygon.use_smooth = True
 
-def add_rigid_vertex_group(object, name, vertex_indices):
-	new_vertex_group = object.vertex_groups.new(name)
+def add_rigid_vertex_group(target_object, name, vertex_indices):
+	new_vertex_group = target_object.vertex_groups.new(name)
 	for vertex_index in vertex_indices:
 		new_vertex_group.add([ vertex_index ], 1.0, 'REPLACE')
 
@@ -109,6 +109,8 @@ def create_armature_mesh(scene, armature_object, mesh_name):
 
 	utils.add_subdivision_surface_modifier(new_object, 1, is_simple=True)
 	utils.add_subdivision_surface_modifier(new_object, 2, is_simple=False)
+
+	set_smooth_shading(new_object)
 
 	scene.objects.link(new_object)
 
