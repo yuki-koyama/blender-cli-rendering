@@ -163,13 +163,6 @@ def set_camera_params(camera, dof_target):
 	camera.data.cycles.aperture_size = 0.180
 	camera.data.cycles.aperture_blades = 6
 
-def set_background_light(world, hdri_path):
-	world.use_nodes = True
-	node_tree = world.node_tree
-	environment_texture_node = node_tree.nodes.new(type="ShaderNodeTexEnvironment")
-	environment_texture_node.image = bpy.data.images.load(hdri_path)
-	node_tree.links.new(environment_texture_node.outputs["Color"], node_tree.nodes["Background"].inputs["Color"])
-
 def set_scene_composition(scene):
 	scene.use_nodes = True
 	reset_nodes(scene.node_tree.nodes)
@@ -201,30 +194,24 @@ def set_scene_renderer(scene, resolution_percentage, output_file_path, camera, n
 	scene.camera = camera
 
 # Args
-
 output_file_path = str(sys.argv[sys.argv.index('--') + 1])
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
 num_samples = int(sys.argv[sys.argv.index('--') + 3])
 
 # Parameters
-
 hdri_path = "./assets/HDRIs/green_point_park_2k.hdr"
 
 # Scene Building
-
 scene = bpy.data.scenes["Scene"]
 world = scene.world
 
 ## Reset
-
 reset_scene()
 
 ## Suzannes
-
 focus_target = set_scene_objects()
 
 ## Camera
-
 bpy.ops.object.camera_add(view_align=False, location=[0.0, - 15.0, 2.0])
 camera = bpy.context.object
 
@@ -232,17 +219,13 @@ utils.add_track_to_constraint(camera, focus_target)
 set_camera_params(camera, focus_target)
 
 ## Lights
-
-set_background_light(world, hdri_path)
+utils.build_environmental_light(world, hdri_path)
 
 ## Composition
-
 set_scene_composition(scene)
 
 # Render Setting
-
 set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples)
 
 # Rendering
-
 bpy.ops.render.render(animation=False, write_still=True)

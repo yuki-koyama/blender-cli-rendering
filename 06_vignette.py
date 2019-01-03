@@ -163,17 +163,6 @@ def set_camera_params(camera, dof_target):
 	camera.data.cycles.aperture_size = 0.180
 	camera.data.cycles.aperture_blades = 6
 
-def set_background_light(world, hdri_path):
-	world.use_nodes = True
-	node_tree = world.node_tree
-
-	environment_texture_node = node_tree.nodes.new(type="ShaderNodeTexEnvironment")
-	environment_texture_node.image = bpy.data.images.load(hdri_path)
-
-	node_tree.links.new(environment_texture_node.outputs["Color"], node_tree.nodes["Background"].inputs["Color"])
-
-	utils.arrange_nodes(node_tree)
-
 def define_vignette_node():
 	group = bpy.data.node_groups.new(type="CompositorNodeTree", name="Vignette")
 
@@ -286,7 +275,7 @@ utils.add_track_to_constraint(camera, focus_target)
 set_camera_params(camera, focus_target)
 
 ## Lights
-set_background_light(world, hdri_path)
+utils.build_environmental_light(world, hdri_path)
 
 ## Composition
 set_scene_composition(scene)

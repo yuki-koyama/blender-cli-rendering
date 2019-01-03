@@ -1,5 +1,24 @@
 import bpy
 
+# Scene
+
+def set_animation(scene, fps=24, frame_start=1, frame_end=48, frame_current=1):
+	scene.render.fps = fps
+	scene.frame_start = frame_start
+	scene.frame_end = frame_end
+	scene.frame_current = frame_current
+
+def build_environmental_light(world, hdri_path):
+	world.use_nodes = True
+	node_tree = world.node_tree
+
+	environment_texture_node = node_tree.nodes.new(type="ShaderNodeTexEnvironment")
+	environment_texture_node.image = bpy.data.images.load(hdri_path)
+
+	node_tree.links.new(environment_texture_node.outputs["Color"], node_tree.nodes["Background"].inputs["Color"])
+
+	arrange_nodes(node_tree)
+
 # Modifiers
 
 def add_subdivision_surface_modifier(mesh, level, is_simple=False):

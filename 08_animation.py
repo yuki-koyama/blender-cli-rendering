@@ -79,17 +79,6 @@ def set_camera_params(camera, dof_target):
 	camera.data.cycles.aperture_size = 0.100
 	camera.data.cycles.aperture_blades = 6
 
-def set_background_light(world, hdri_path):
-	world.use_nodes = True
-	node_tree = world.node_tree
-
-	environment_texture_node = node_tree.nodes.new(type="ShaderNodeTexEnvironment")
-	environment_texture_node.image = bpy.data.images.load(hdri_path)
-
-	node_tree.links.new(environment_texture_node.outputs["Color"], node_tree.nodes["Background"].inputs["Color"])
-
-	utils.arrange_nodes(node_tree)
-
 def define_vignette_node():
 	group = bpy.data.node_groups.new(type="CompositorNodeTree", name="Vignette")
 
@@ -177,12 +166,6 @@ def set_scene_renderer(scene, resolution_percentage, output_file_path, camera, n
 	scene.camera = camera
 	scene.render.use_motion_blur = use_motion_blur
 
-def set_animation(scene, fps=24, frame_start=1, frame_end=48, frame_current=1):
-	scene.render.fps = fps
-	scene.frame_start = frame_start
-	scene.frame_end = frame_end
-	scene.frame_current = frame_current
-
 # Args
 output_file_path = str(sys.argv[sys.argv.index('--') + 1])
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
@@ -209,13 +192,13 @@ utils.add_track_to_constraint(camera, focus_target)
 set_camera_params(camera, focus_target)
 
 ## Lights
-set_background_light(world, hdri_path)
+utils.build_environmental_light(world, hdri_path)
 
 ## Composition
 set_scene_composition(scene)
 
 # Animation Setting
-set_animation(scene, fps=24, frame_start=1, frame_end=48)
+utils.set_animation(scene, fps=24, frame_start=1, frame_end=48)
 
 # Render Setting
 set_scene_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_motion_blur=True)

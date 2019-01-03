@@ -39,22 +39,18 @@ def set_scene_renderer(scene, resolution_percentage, output_file_path, camera):
 	scene.camera = camera
 
 # Args
-
 output_file_path = str(sys.argv[sys.argv.index('--') + 1])
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
 
 # Scene Building
 
 ## Reset
-
 reset_scene()
 
 ## Suzannes
-
 center_suzanne = set_scene_objects()
 
 ## Camera
-
 bpy.ops.object.camera_add(view_align=False, location=[10.0, - 7.0, 0.0])
 camera = bpy.context.object
 
@@ -62,14 +58,11 @@ utils.add_track_to_constraint(camera, center_suzanne)
 set_camera_params(camera, center_suzanne)
 
 ## Lights
-
 bpy.ops.object.lamp_add(type='SUN', location=[0.0, 0.0, 0.0], rotation=[0.0, math.pi * 0.5, - math.pi * 0.1])
 
 # Render Setting
-
 scene = bpy.data.scenes["Scene"]
 set_scene_renderer(scene, resolution_percentage, output_file_path, camera)
 
 # Rendering
-
 bpy.ops.render.render(animation=False, write_still=True)
