@@ -30,6 +30,84 @@ def set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, 
 	scene.camera = camera
 	scene.render.use_motion_blur = use_motion_blur
 
+# Composition
+
+def define_vignette_node():
+	group = bpy.data.node_groups.new(type="CompositorNodeTree", name="Vignette")
+
+	input_node = group.nodes.new("NodeGroupInput")
+	group.inputs.new("NodeSocketColor", "Image")
+	group.inputs.new("NodeSocketFloat", "Amount")
+	group.inputs["Amount"].default_value = 0.2
+	group.inputs["Amount"].min_value = 0.0
+	group.inputs["Amount"].max_value = 1.0
+
+	lens_distortion_node = group.nodes.new(type="CompositorNodeLensdist")
+	lens_distortion_node.inputs["Distort"].default_value = 1.000
+
+	separate_rgba_node = group.nodes.new(type="CompositorNodeSepRGBA")
+
+	blur_node = group.nodes.new(type="CompositorNodeBlur")
+	blur_node.filter_type = 'GAUSS'
+	blur_node.size_x = 300
+	blur_node.size_y = 300
+	blur_node.use_extended_bounds = True
+
+	mix_node = group.nodes.new(type="CompositorNodeMixRGB")
+	mix_node.blend_type = 'MULTIPLY'
+
+	output_node = group.nodes.new("NodeGroupOutput")
+	group.outputs.new("NodeSocketColor", "Image")
+
+	group.links.new(input_node.outputs["Amount"], mix_node.inputs["Fac"])
+	group.links.new(input_node.outputs["Image"], mix_node.inputs[1])
+	group.links.new(input_node.outputs["Image"], lens_distortion_node.inputs["Image"])
+	group.links.new(lens_distortion_node.outputs["Image"], separate_rgba_node.inputs["Image"])
+	group.links.new(separate_rgba_node.outputs["A"], blur_node.inputs["Image"])
+	group.links.new(blur_node.outputs["Image"], mix_node.inputs[2])
+	group.links.new(mix_node.outputs["Image"], output_node.inputs["Image"])
+
+	arrange_nodes(group)
+
+def create_vignette_node(node_tree):
+	define_vignette_node()
+
+	vignette_node = node_tree.nodes.new(type='CompositorNodeGroup')
+	vignette_node.name = "Vignette"
+	vignette_node.node_tree = bpy.data.node_groups['Vignette']
+
+	return vignette_node
+
+def build_scene_composition(scene):
+	scene.use_nodes = True
+	clean_nodes(scene.node_tree.nodes)
+
+	render_layer_node = scene.node_tree.nodes.new(type="CompositorNodeRLayers")
+
+	vignette_node = create_vignette_node(scene.node_tree)
+
+	lens_distortion_node = scene.node_tree.nodes.new(type="CompositorNodeLensdist")
+	lens_distortion_node.inputs["Distort"].default_value = - 0.020
+	lens_distortion_node.inputs["Dispersion"].default_value = 0.050
+
+	color_correction_node = scene.node_tree.nodes.new(type="CompositorNodeColorCorrection")
+	color_correction_node.master_saturation = 1.10
+	color_correction_node.master_gain = 1.10
+
+	glare_node = scene.node_tree.nodes.new(type="CompositorNodeGlare")
+	glare_node.glare_type = 'FOG_GLOW'
+	glare_node.quality = 'HIGH'
+
+	composite_node = scene.node_tree.nodes.new(type="CompositorNodeComposite")
+
+	scene.node_tree.links.new(render_layer_node.outputs['Image'], vignette_node.inputs['Image'])
+	scene.node_tree.links.new(vignette_node.outputs['Image'], lens_distortion_node.inputs['Image'])
+	scene.node_tree.links.new(lens_distortion_node.outputs['Image'], color_correction_node.inputs['Image'])
+	scene.node_tree.links.new(color_correction_node.outputs['Image'], glare_node.inputs['Image'])
+	scene.node_tree.links.new(glare_node.outputs['Image'], composite_node.inputs['Image'])
+
+	arrange_nodes(scene.node_tree)
+
 # Modifiers
 
 def add_subdivision_surface_modifier(mesh, level, is_simple=False):
@@ -98,6 +176,10 @@ def build_pbr_textured_nodes(
 	arrange_nodes(node_tree)
 
 # Misc.
+
+def clean_nodes(nodes):
+	for node in nodes:
+		nodes.remove(node)
 
 def arrange_nodes(node_tree):
 	max_num_iters = 1000

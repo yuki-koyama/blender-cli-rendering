@@ -13,10 +13,6 @@ def reset_scene():
 	for item in bpy.data.objects:
 		bpy.data.objects.remove(item)
 
-def reset_nodes(nodes):
-	for node in nodes:
-		nodes.remove(node)
-
 def set_principled_node_as_rough_blue(principled_node):
 	principled_node.inputs['Base Color'].default_value = (0.1, 0.2, 0.6, 1.0)
 	principled_node.inputs['Subsurface'].default_value = 0.0
@@ -98,7 +94,7 @@ def set_scene_objects():
 	mat.use_nodes = True
 	nodes = mat.node_tree.nodes
 	links = mat.node_tree.links
-	reset_nodes(nodes)
+	utils.clean_nodes(nodes)
 	output_node = nodes.new(type='ShaderNodeOutputMaterial')
 	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
 	set_principled_node_as_glass(principled_node)
@@ -113,7 +109,7 @@ def set_scene_objects():
 	mat.use_nodes = True
 	nodes = mat.node_tree.nodes
 	links = mat.node_tree.links
-	reset_nodes(nodes)
+	utils.clean_nodes(nodes)
 	output_node = nodes.new(type='ShaderNodeOutputMaterial')
 	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
 	set_principled_node_as_gold(principled_node)
@@ -128,7 +124,7 @@ def set_scene_objects():
 	mat.use_nodes = True
 	nodes = mat.node_tree.nodes
 	links = mat.node_tree.links
-	reset_nodes(nodes)
+	utils.clean_nodes(nodes)
 	output_node = nodes.new(type='ShaderNodeOutputMaterial')
 	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
 	set_principled_node_as_rough_blue(principled_node)
@@ -142,7 +138,7 @@ def set_scene_objects():
 	mat.use_nodes = True
 	nodes = mat.node_tree.nodes
 	links = mat.node_tree.links
-	reset_nodes(nodes)
+	utils.clean_nodes(nodes)
 	output_node = nodes.new(type='ShaderNodeOutputMaterial')
 	principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
 	set_principled_node_as_ceramic(principled_node)
