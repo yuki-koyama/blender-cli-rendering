@@ -3,8 +3,11 @@
 import bpy
 import sys
 import math
+import os
 
-# Functions
+sys.path.append(os.getcwd())
+
+import utils
 
 def reset_scene():
 	for item in bpy.data.objects:
@@ -34,11 +37,6 @@ def arrange_nodes(node_tree):
 			total_energy += deviation * deviation
 		if total_energy < epsilon:
 			break
-
-def add_subdivision_surface_modifier(target_object, level):
-	modifier = target_object.modifiers.new(name="Subsurf", type='SUBSURF')
-	modifier.levels = level
-	modifier.render_levels = level
 
 def create_texture_node(nodes, path, is_color_data):
 	# Instantiate a new texture image node
@@ -93,7 +91,7 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(- 1.8, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Left"
-	add_subdivision_surface_modifier(current_object, 4)
+	utils.add_subdivision_surface_modifier(current_object, 4)
 	mat = bpy.data.materials.new("Material_Left")
 	mat.use_nodes = True
 	reset_nodes(mat.node_tree.nodes)
@@ -109,7 +107,7 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Center"
-	add_subdivision_surface_modifier(current_object, 4)
+	utils.add_subdivision_surface_modifier(current_object, 4)
 	mat = bpy.data.materials.new("Material_Center")
 	mat.use_nodes = True
 	reset_nodes(mat.node_tree.nodes)
@@ -126,7 +124,7 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(+ 1.8, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Right"
-	add_subdivision_surface_modifier(current_object, 4)
+	utils.add_subdivision_surface_modifier(current_object, 4)
 	mat = bpy.data.materials.new("Material_Right")
 	mat.use_nodes = True
 	reset_nodes(mat.node_tree.nodes)
@@ -182,12 +180,6 @@ def set_camera_params(camera, dof_target):
 	camera.data.cycles.aperture_type = 'RADIUS'
 	camera.data.cycles.aperture_size = 0.100
 	camera.data.cycles.aperture_blades = 6
-
-def set_camera_lookat_target(camera, lookat_target):
-	constraint = camera.constraints.new(type='TRACK_TO')
-	constraint.target = lookat_target
-	constraint.track_axis = 'TRACK_NEGATIVE_Z'
-	constraint.up_axis = 'UP_Y'
 
 def set_background_light(world, hdri_path):
 	world.use_nodes = True
@@ -308,7 +300,7 @@ focus_target = set_scene_objects()
 bpy.ops.object.camera_add(view_align=False, location=[0.0, - 14.0, 2.0])
 camera = bpy.context.object
 
-set_camera_lookat_target(camera, focus_target)
+utils.add_track_to_constraint(camera, focus_target)
 set_camera_params(camera, focus_target)
 
 ## Lights

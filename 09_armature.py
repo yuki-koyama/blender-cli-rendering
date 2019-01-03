@@ -4,8 +4,11 @@
 import bpy
 import sys
 import math
+import os
 
-# Functions
+sys.path.append(os.getcwd())
+
+import utils
 
 def reset_scene():
 	for item in bpy.data.objects:
@@ -35,12 +38,6 @@ def arrange_nodes(node_tree):
 			total_energy += deviation * deviation
 		if total_energy < epsilon:
 			break
-
-def add_subdivision_surface_modifier(target_object, level, is_simple=False):
-	modifier = target_object.modifiers.new(name="Subsurf", type='SUBSURF')
-	modifier.levels = level
-	modifier.render_levels = level
-	modifier.subdivision_type = 'SIMPLE' if is_simple else 'CATMULL_CLARK'
 
 def set_smooth_shading(target_object):
 	for poly in target_object.data.polygons:
@@ -130,8 +127,8 @@ def create_skinned_object():
 	cube = bpy.context.object
 	cube.name = "Cuboid"
 	cube.scale = (0.5, 0.5, 1.0)
-	add_subdivision_surface_modifier(cube, 3, is_simple=True)
-	add_subdivision_surface_modifier(cube, 3, is_simple=False)
+	utils.add_subdivision_surface_modifier(cube, 3, is_simple=True)
+	utils.add_subdivision_surface_modifier(cube, 3, is_simple=False)
 	set_smooth_shading(cube)
 	mat = bpy.data.materials.new("Metal07")
 	mat.use_nodes = True
@@ -320,7 +317,7 @@ focus_target = set_scene_objects()
 bpy.ops.object.camera_add(view_align=False, location=[0.0, - 12.0, 2.0])
 camera = bpy.context.object
 
-set_camera_lookat_target(camera, focus_target)
+utils.add_track_to_constraint(camera, focus_target)
 set_camera_params(camera, focus_target)
 
 ## Lights

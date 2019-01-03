@@ -3,17 +3,15 @@
 import bpy
 import sys
 import math
+import os
 
-# Functions
+sys.path.append(os.getcwd())
+
+import utils
 
 def reset_scene():
 	for item in bpy.data.objects:
 		bpy.data.objects.remove(item)
-
-def add_subdivision_surface_modifier(target_object, level):
-	modifier = target_object.modifiers.new(name="Subsurf", type='SUBSURF')
-	modifier.levels = level
-	modifier.render_levels = level
 
 def set_scene_objects():
 	num_suzannes = 7
@@ -21,7 +19,7 @@ def set_scene_objects():
 		bpy.ops.mesh.primitive_monkey_add(location=((index - (num_suzannes - 1) / 2) * 3.0, 0.0, 1.0))
 		current_object = bpy.context.object
 		current_object.name = "Suzanne" + str(index)
-		add_subdivision_surface_modifier(current_object, 3)
+		utils.add_subdivision_surface_modifier(current_object, 3)
 	bpy.ops.mesh.primitive_plane_add(radius=10.0)
 	return bpy.data.objects["Suzanne" + str(int((num_suzannes - 1) / 2))]
 
@@ -33,12 +31,6 @@ def set_camera_params(camera, dof_target):
 	camera.data.dof_object = dof_target
 	camera.data.cycles.aperture_type = 'RADIUS'
 	camera.data.cycles.aperture_size = 0.2
-
-def set_camera_lookat_target(camera, lookat_target):
-	constraint = camera.constraints.new(type='TRACK_TO')
-	constraint.target = lookat_target
-	constraint.track_axis = 'TRACK_NEGATIVE_Z'
-	constraint.up_axis = 'UP_Y'
 
 def set_background_light(world, hdri_path):
 	world.use_nodes = True
@@ -84,7 +76,7 @@ center_suzanne = set_scene_objects()
 bpy.ops.object.camera_add(view_align=False, location=[6.0, - 12.0, 2.0])
 camera = bpy.context.object
 
-set_camera_lookat_target(camera, center_suzanne)
+utils.add_track_to_constraint(camera, center_suzanne)
 set_camera_params(camera, center_suzanne)
 
 ## Lights
