@@ -162,8 +162,10 @@ def build_scene(scene):
 	)
 	current_object.data.materials.append(mat)
 
-	bpy.ops.object.empty_add(location=(0.0, 0.0, 1.0))
+	bpy.ops.object.empty_add(location=(0.0, 0.0, 0.9))
 	focus_target = bpy.context.object
+	utils.add_copy_location_constraint(copy_to_object=focus_target, copy_from_object=armature, use_x=True, use_y=True, use_z=False, bone_name='Hips')
+
 	return focus_target
 
 def set_camera_params(camera, dof_target):
@@ -191,13 +193,14 @@ world = scene.world
 ## Reset
 reset_scene()
 
-## Suzannes
+## Scene
 focus_target = build_scene(scene)
 
 ## Camera
-bpy.ops.object.camera_add(view_align=False, location=[0.0, - 12.0, 2.0])
+bpy.ops.object.camera_add(view_align=False, location=[0.0, - 8.0, 1.0])
 camera = bpy.context.object
 
+utils.add_copy_location_constraint(copy_to_object=camera, copy_from_object=focus_target, use_x=True, use_y=False, use_z=False)
 utils.add_track_to_constraint(camera, focus_target)
 set_camera_params(camera, focus_target)
 

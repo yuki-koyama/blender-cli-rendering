@@ -124,6 +124,15 @@ def add_track_to_constraint(camera, track_to_target):
 	constraint.track_axis = 'TRACK_NEGATIVE_Z'
 	constraint.up_axis = 'UP_Y'
 
+def add_copy_location_constraint(copy_to_object, copy_from_object, use_x, use_y, use_z, bone_name=''):
+	constraint = copy_to_object.constraints.new(type='COPY_LOCATION')
+	constraint.target = copy_from_object
+	constraint.use_x = use_x
+	constraint.use_y = use_y
+	constraint.use_z = use_z
+	if bone_name:
+		constraint.subtarget = bone_name
+
 # Node tree
 
 def create_texture_node(node_tree, path, is_color_data):
