@@ -138,7 +138,7 @@ def create_armature_from_bvh(scene, bvh_path):
 		frame_start=1, 
 		use_fps_scale=True, 
 		update_scene_fps=False, 
-		update_scene_duration=False
+		update_scene_duration=True
 	)
 	armature = bpy.context.object
 	return armature
