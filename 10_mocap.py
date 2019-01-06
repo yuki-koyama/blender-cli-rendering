@@ -194,8 +194,8 @@ def set_camera_params(camera, dof_target):
 	camera.data.sensor_height = 24.0
 	camera.data.lens = 72
 	camera.data.dof_object = dof_target
-	camera.data.cycles.aperture_type = 'RADIUS'
-	camera.data.cycles.aperture_size = 0.100
+	camera.data.cycles.aperture_type = 'FSTOP'
+	camera.data.cycles.aperture_fstop = 1.2
 	camera.data.cycles.aperture_blades = 6
 
 # Args
