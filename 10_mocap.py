@@ -149,8 +149,9 @@ def build_scene(scene):
 	utils.clean_nodes(mat.node_tree.nodes)
 	output_node = mat.node_tree.nodes.new(type='ShaderNodeOutputMaterial')
 	principled_node = mat.node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
-	principled_node.inputs['Base Color'].default_value = (0.0, 0.1, 0.6, 1.0)
+	principled_node.inputs['Base Color'].default_value = (0.0, 0.1, 0.7, 1.0)
 	principled_node.inputs['Metallic'].default_value = 0.9
+	principled_node.inputs['Roughness'].default_value = 0.1
 	mat.node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
 
 	armature = create_armature_from_bvh(scene, bvh_path='./assets/motion/102_01.bvh')
