@@ -184,7 +184,7 @@ def build_scene(scene):
 
 	bpy.ops.object.empty_add(location=(0.0, 0.0, 0.8))
 	focus_target = bpy.context.object
-	utils.add_copy_location_constraint(copy_to_object=focus_target, copy_from_object=armature, use_x=True, use_y=False, use_z=False, bone_name='Hips')
+	utils.add_copy_location_constraint(copy_to_object=focus_target, copy_from_object=armature, use_x=True, use_y=True, use_z=False, bone_name='Hips')
 
 	return focus_target
 
