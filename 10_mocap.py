@@ -145,7 +145,16 @@ def create_armature_from_bvh(scene, bvh_path):
 
 def build_scene(scene):
 	armature = create_armature_from_bvh(scene, bvh_path='./assets/motion/131_03.bvh')
-	create_armature_mesh(scene, armature, 'Mesh')
+	armature_mesh = create_armature_mesh(scene, armature, 'Mesh')
+	mat = bpy.data.materials.new("Marble01")
+	mat.use_nodes = True
+	utils.clean_nodes(mat.node_tree.nodes)
+	output_node = mat.node_tree.nodes.new(type='ShaderNodeOutputMaterial')
+	principled_node = mat.node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
+	principled_node.inputs['Base Color'].default_value = (0.0, 0.1, 0.6, 1.0)
+	principled_node.inputs['Metallic'].default_value = 0.9
+	mat.node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+	armature_mesh.data.materials.append(mat)
 
 	bpy.ops.mesh.primitive_plane_add(radius=6.0, calc_uvs=True)
 	current_object = bpy.context.object
