@@ -149,7 +149,7 @@ def build_scene(scene):
 	utils.clean_nodes(mat.node_tree.nodes)
 	output_node = mat.node_tree.nodes.new(type='ShaderNodeOutputMaterial')
 	principled_node = mat.node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
-	principled_node.inputs['Base Color'].default_value = (0.0, 0.1, 0.7, 1.0)
+	principled_node.inputs['Base Color'].default_value = (0.1, 0.2, 0.7, 1.0)
 	principled_node.inputs['Metallic'].default_value = 0.9
 	principled_node.inputs['Roughness'].default_value = 0.1
 	mat.node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
@@ -180,7 +180,7 @@ def build_scene(scene):
 	current_object = bpy.context.object
 	current_object.name = "Wall"
 	current_object.data.materials.append(mat)
-	current_object.location = (0.0, 4.0, 0.0)
+	current_object.location = (0.0, 6.0, 0.0)
 	current_object.rotation_euler = (0.5 * math.pi, 0.0, 0.0)
 
 	bpy.ops.object.empty_add(location=(0.0, 0.0, 0.8))
@@ -190,14 +190,15 @@ def build_scene(scene):
 	return focus_target
 
 def set_camera_params(camera, dof_target):
+	# Simulate Sony's FE 85mm F1.4 GM
 	camera.data.sensor_fit = 'HORIZONTAL'
 	camera.data.sensor_width = 36.0
 	camera.data.sensor_height = 24.0
-	camera.data.lens = 72
+	camera.data.lens = 85
 	camera.data.dof_object = dof_target
 	camera.data.cycles.aperture_type = 'FSTOP'
-	camera.data.cycles.aperture_fstop = 1.2
-	camera.data.cycles.aperture_blades = 6
+	camera.data.cycles.aperture_fstop = 1.4
+	camera.data.cycles.aperture_blades = 11
 
 # Args
 output_file_path = str(sys.argv[sys.argv.index('--') + 1])
@@ -221,7 +222,7 @@ utils.set_animation(scene, fps=24, frame_start=1, frame_end=40)
 focus_target = build_scene(scene)
 
 ## Camera
-bpy.ops.object.camera_add(view_align=False, location=[0.0, - 8.0, 1.0])
+bpy.ops.object.camera_add(view_align=False, location=[0.0, - 10.0, 1.0])
 camera = bpy.context.object
 
 utils.add_copy_location_constraint(copy_to_object=camera, copy_from_object=focus_target, use_x=True, use_y=False, use_z=False)
