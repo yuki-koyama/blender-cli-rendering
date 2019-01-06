@@ -144,7 +144,7 @@ def create_armature_from_bvh(scene, bvh_path):
 	return armature
 
 def build_scene(scene):
-	armature = create_armature_from_bvh(scene, bvh_path='./assets/motion/131_03.bvh')
+	armature = create_armature_from_bvh(scene, bvh_path='./assets/motion/102_01.bvh')
 	armature_mesh = create_armature_mesh(scene, armature, 'Mesh')
 	mat = bpy.data.materials.new("Marble01")
 	mat.use_nodes = True
