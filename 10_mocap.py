@@ -144,9 +144,7 @@ def create_armature_from_bvh(scene, bvh_path):
 	return armature
 
 def build_scene(scene):
-	armature = create_armature_from_bvh(scene, bvh_path='./assets/motion/102_01.bvh')
-	armature_mesh = create_armature_mesh(scene, armature, 'Mesh')
-	mat = bpy.data.materials.new("Marble01")
+	mat = bpy.data.materials.new("BlueMetal")
 	mat.use_nodes = True
 	utils.clean_nodes(mat.node_tree.nodes)
 	output_node = mat.node_tree.nodes.new(type='ShaderNodeOutputMaterial')
@@ -154,22 +152,35 @@ def build_scene(scene):
 	principled_node.inputs['Base Color'].default_value = (0.0, 0.1, 0.6, 1.0)
 	principled_node.inputs['Metallic'].default_value = 0.9
 	mat.node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+
+	armature = create_armature_from_bvh(scene, bvh_path='./assets/motion/102_01.bvh')
+	armature_mesh = create_armature_mesh(scene, armature, 'Mesh')
 	armature_mesh.data.materials.append(mat)
 
-	bpy.ops.mesh.primitive_plane_add(radius=6.0, calc_uvs=True)
-	current_object = bpy.context.object
-	current_object.name = "Floor"
-	mat = bpy.data.materials.new("Marble01")
+	mat = bpy.data.materials.new("Concrete07")
 	mat.use_nodes = True
 	utils.clean_nodes(mat.node_tree.nodes)
 	utils.build_pbr_textured_nodes(
 		mat.node_tree,
-		color_texture_path="./assets/textures/[2K]Marble01/Marble01_col.jpg",
-		roughness_texture_path="./assets/textures/[2K]Marble01/Marble01_rgh.jpg",
-		normal_texture_path="./assets/textures/[2K]Marble01/Marble01_nrm.jpg",
-		displacement_texture_path="./assets/textures/[2K]Marble01/Marble01_disp.jpg"
+		color_texture_path="./assets/textures/[2K]Concrete07/Concrete07_col.jpg",
+		roughness_texture_path="./assets/textures/[2K]Concrete07/Concrete07_rgh.jpg",
+		normal_texture_path="./assets/textures/[2K]Concrete07/Concrete07_nrm.jpg",
+		displacement_texture_path="./assets/textures/[2K]Concrete07/Concrete07_disp.jpg",
+		ambient_occlusion_texture_path="./assets/textures/[2K]Concrete07/Concrete07_ao.jpg",
+		scale=(0.25, 0.25, 0.25)
 	)
+
+	bpy.ops.mesh.primitive_plane_add(radius=8.0, calc_uvs=True)
+	current_object = bpy.context.object
+	current_object.name = "Floor"
 	current_object.data.materials.append(mat)
+
+	bpy.ops.mesh.primitive_plane_add(radius=8.0, calc_uvs=True)
+	current_object = bpy.context.object
+	current_object.name = "Wall"
+	current_object.data.materials.append(mat)
+	current_object.location = (0.0, 4.0, 0.0)
+	current_object.rotation_euler = (0.5 * math.pi, 0.0, 0.0)
 
 	bpy.ops.object.empty_add(location=(0.0, 0.0, 0.8))
 	focus_target = bpy.context.object
