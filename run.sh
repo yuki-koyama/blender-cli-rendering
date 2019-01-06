@@ -13,3 +13,4 @@ blender --background --python ./06_vignette.py -- ./out/06_vignette.png ${RESOLU
 blender --background --python ./07_texturing.py -- ./out/07_texturing.png ${RESOLUTION} ${SAMPLINGS}
 blender --background --python ./08_animation.py -- ./out/08/frame ${RESOLUTION} ${SAMPLINGS} && ffmpeg -r 24 -i ./out/08/frame%04d.png -pix_fmt yuv420p ./out/08_animation.mp4
 blender --background --python ./09_armature.py -- ./out/09/frame ${RESOLUTION} ${SAMPLINGS} && ffmpeg -r 24 -i ./out/09/frame%04d.png -pix_fmt yuv420p ./out/09_armature.mp4
+blender --background --python ./10_mocap.py -- ./out/10/frame ${RESOLUTION} ${SAMPLINGS} && ffmpeg -r 24 -i ./out/10/frame%04d.png -pix_fmt yuv420p ./out/10_mocap.mp4

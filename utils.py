@@ -30,6 +30,17 @@ def set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, 
 	scene.camera = camera
 	scene.render.use_motion_blur = use_motion_blur
 
+def set_camera_params(camera, focus_target):
+	# Simulate Sony's FE 85mm F1.4 GM
+	camera.data.sensor_fit = 'HORIZONTAL'
+	camera.data.sensor_width = 36.0
+	camera.data.sensor_height = 24.0
+	camera.data.lens = 85
+	camera.data.dof_object = focus_target
+	camera.data.cycles.aperture_type = 'FSTOP'
+	camera.data.cycles.aperture_fstop = 1.4
+	camera.data.cycles.aperture_blades = 11
+
 # Composition
 
 def define_vignette_node():
@@ -124,6 +135,15 @@ def add_track_to_constraint(camera, track_to_target):
 	constraint.track_axis = 'TRACK_NEGATIVE_Z'
 	constraint.up_axis = 'UP_Y'
 
+def add_copy_location_constraint(copy_to_object, copy_from_object, use_x, use_y, use_z, bone_name=''):
+	constraint = copy_to_object.constraints.new(type='COPY_LOCATION')
+	constraint.target = copy_from_object
+	constraint.use_x = use_x
+	constraint.use_y = use_y
+	constraint.use_z = use_z
+	if bone_name:
+		constraint.subtarget = bone_name
+
 # Node tree
 
 def create_texture_node(node_tree, path, is_color_data):
@@ -145,32 +165,54 @@ def build_pbr_textured_nodes(
 	metallic_texture_path="", 
 	roughness_texture_path="", 
 	normal_texture_path="", 
-	displacement_texture_path=""
+	displacement_texture_path="",
+	ambient_occlusion_texture_path="",
+	scale=(1.0, 1.0, 1.0)
 ):
 	output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
 	principled_node = node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
 	node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
 
+	coord_node = node_tree.nodes.new(type='ShaderNodeTexCoord')
+	mapping_node = node_tree.nodes.new(type='ShaderNodeMapping')
+	mapping_node.vector_type = 'TEXTURE'
+	mapping_node.scale = scale
+	node_tree.links.new(coord_node.outputs['Generated'], mapping_node.inputs['Vector'])
+
 	if color_texture_path != "":
 		texture_node = create_texture_node(node_tree, color_texture_path, True)
-		node_tree.links.new(texture_node.outputs['Color'], principled_node.inputs['Base Color'])
+		node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
+		if ambient_occlusion_texture_path != "":
+			ao_texture_node = create_texture_node(node_tree, ambient_occlusion_texture_path, False)
+			node_tree.links.new(mapping_node.outputs['Vector'], ao_texture_node.inputs['Vector'])
+			mix_node = node_tree.nodes.new(type='ShaderNodeMixRGB')
+			mix_node.blend_type = 'MULTIPLY'
+			node_tree.links.new(texture_node.outputs['Color'], mix_node.inputs['Color1'])
+			node_tree.links.new(ao_texture_node.outputs['Color'], mix_node.inputs['Color2'])
+			node_tree.links.new(mix_node.outputs['Color'], principled_node.inputs['Base Color'])
+		else:
+			node_tree.links.new(texture_node.outputs['Color'], principled_node.inputs['Base Color'])
 
 	if metallic_texture_path != "":
 		texture_node = create_texture_node(node_tree, metallic_texture_path, False)
+		node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
 		node_tree.links.new(texture_node.outputs['Color'], principled_node.inputs['Metallic'])
 
 	if roughness_texture_path != "":
 		texture_node = create_texture_node(node_tree, roughness_texture_path, False)
+		node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
 		node_tree.links.new(texture_node.outputs['Color'], principled_node.inputs['Roughness'])
 
 	if normal_texture_path != "":
 		texture_node = create_texture_node(node_tree, normal_texture_path, False)
+		node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
 		normal_map_node = node_tree.nodes.new(type='ShaderNodeNormalMap')
 		node_tree.links.new(texture_node.outputs['Color'], normal_map_node.inputs['Color'])
 		node_tree.links.new(normal_map_node.outputs['Normal'], principled_node.inputs['Normal'])
 
 	if displacement_texture_path != "":
 		texture_node = create_texture_node(node_tree, displacement_texture_path, False)
+		node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
 		node_tree.links.new(texture_node.outputs['Color'], output_node.inputs['Displacement'])
 
 	arrange_nodes(node_tree)

@@ -85,6 +85,15 @@ Python scripts for rendering images using Blender from command-line interface.
 
 ![09_armature](docs/compressed/09_armature.gif)
 
+### 10_mocap.py
+
+- Mesh creation from Python data
+- BVH data import
+- Texture tiling
+- Camera following
+
+![10_mocap](docs/compressed/10_mocap.gif)
+
 ## For Docker Users
 
 Thanks to the fact that Blender can run on Linux without displays as a command line tool, it is straightforward to run all the above scripts using Docker.
