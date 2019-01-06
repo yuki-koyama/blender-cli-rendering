@@ -193,6 +193,9 @@ world = scene.world
 ## Reset
 reset_scene()
 
+# Animation Setting
+utils.set_animation(scene, fps=24, frame_start=1, frame_end=40)
+
 ## Scene
 focus_target = build_scene(scene)
 
@@ -209,9 +212,6 @@ utils.build_environmental_light(world, hdri_path)
 
 ## Composition
 utils.build_scene_composition(scene)
-
-# Animation Setting
-utils.set_animation(scene, fps=24, frame_start=1, frame_end=40)
 
 # Render Setting
 utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_denoising=True, use_motion_blur=True)
