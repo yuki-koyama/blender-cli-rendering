@@ -154,32 +154,54 @@ def build_pbr_textured_nodes(
 	metallic_texture_path="", 
 	roughness_texture_path="", 
 	normal_texture_path="", 
-	displacement_texture_path=""
+	displacement_texture_path="",
+	ambient_occlusion_texture_path="",
+	scale=(1.0, 1.0, 1.0)
 ):
 	output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
 	principled_node = node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
 	node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
 
+	coord_node = node_tree.nodes.new(type='ShaderNodeTexCoord')
+	mapping_node = node_tree.nodes.new(type='ShaderNodeMapping')
+	mapping_node.vector_type = 'TEXTURE'
+	mapping_node.scale = scale
+	node_tree.links.new(coord_node.outputs['Generated'], mapping_node.inputs['Vector'])
+
 	if color_texture_path != "":
 		texture_node = create_texture_node(node_tree, color_texture_path, True)
-		node_tree.links.new(texture_node.outputs['Color'], principled_node.inputs['Base Color'])
+		node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
+		if ambient_occlusion_texture_path != "":
+			ao_texture_node = create_texture_node(node_tree, ambient_occlusion_texture_path, False)
+			node_tree.links.new(mapping_node.outputs['Vector'], ao_texture_node.inputs['Vector'])
+			mix_node = node_tree.nodes.new(type='ShaderNodeMixRGB')
+			mix_node.blend_type = 'MULTIPLY'
+			node_tree.links.new(texture_node.outputs['Color'], mix_node.inputs['Color1'])
+			node_tree.links.new(ao_texture_node.outputs['Color'], mix_node.inputs['Color2'])
+			node_tree.links.new(mix_node.outputs['Color'], principled_node.inputs['Base Color'])
+		else:
+			node_tree.links.new(texture_node.outputs['Color'], principled_node.inputs['Base Color'])
 
 	if metallic_texture_path != "":
 		texture_node = create_texture_node(node_tree, metallic_texture_path, False)
+		node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
 		node_tree.links.new(texture_node.outputs['Color'], principled_node.inputs['Metallic'])
 
 	if roughness_texture_path != "":
 		texture_node = create_texture_node(node_tree, roughness_texture_path, False)
+		node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
 		node_tree.links.new(texture_node.outputs['Color'], principled_node.inputs['Roughness'])
 
 	if normal_texture_path != "":
 		texture_node = create_texture_node(node_tree, normal_texture_path, False)
+		node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
 		normal_map_node = node_tree.nodes.new(type='ShaderNodeNormalMap')
 		node_tree.links.new(texture_node.outputs['Color'], normal_map_node.inputs['Color'])
 		node_tree.links.new(normal_map_node.outputs['Normal'], principled_node.inputs['Normal'])
 
 	if displacement_texture_path != "":
 		texture_node = create_texture_node(node_tree, displacement_texture_path, False)
+		node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
 		node_tree.links.new(texture_node.outputs['Color'], output_node.inputs['Displacement'])
 
 	arrange_nodes(node_tree)
