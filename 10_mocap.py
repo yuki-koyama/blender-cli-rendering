@@ -153,6 +153,7 @@ def build_scene(scene):
 	principled_node.inputs['Metallic'].default_value = 0.9
 	principled_node.inputs['Roughness'].default_value = 0.1
 	mat.node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+	utils.arrange_nodes(mat.node_tree)
 
 	armature = create_armature_from_bvh(scene, bvh_path='./assets/motion/102_01.bvh')
 	armature_mesh = create_armature_mesh(scene, armature, 'Mesh')
@@ -189,17 +190,6 @@ def build_scene(scene):
 
 	return focus_target
 
-def set_camera_params(camera, dof_target):
-	# Simulate Sony's FE 85mm F1.4 GM
-	camera.data.sensor_fit = 'HORIZONTAL'
-	camera.data.sensor_width = 36.0
-	camera.data.sensor_height = 24.0
-	camera.data.lens = 85
-	camera.data.dof_object = dof_target
-	camera.data.cycles.aperture_type = 'FSTOP'
-	camera.data.cycles.aperture_fstop = 1.4
-	camera.data.cycles.aperture_blades = 11
-
 # Args
 output_file_path = str(sys.argv[sys.argv.index('--') + 1])
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
@@ -227,7 +217,7 @@ camera = bpy.context.object
 
 utils.add_copy_location_constraint(copy_to_object=camera, copy_from_object=focus_target, use_x=True, use_y=False, use_z=False)
 utils.add_track_to_constraint(camera, focus_target)
-set_camera_params(camera, focus_target)
+utils.set_camera_params(camera, focus_target)
 
 ## Lights
 utils.build_environmental_light(world, hdri_path)

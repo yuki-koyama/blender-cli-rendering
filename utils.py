@@ -30,6 +30,17 @@ def set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, 
 	scene.camera = camera
 	scene.render.use_motion_blur = use_motion_blur
 
+def set_camera_params(camera, focus_target):
+	# Simulate Sony's FE 85mm F1.4 GM
+	camera.data.sensor_fit = 'HORIZONTAL'
+	camera.data.sensor_width = 36.0
+	camera.data.sensor_height = 24.0
+	camera.data.lens = 85
+	camera.data.dof_object = focus_target
+	camera.data.cycles.aperture_type = 'FSTOP'
+	camera.data.cycles.aperture_fstop = 1.4
+	camera.data.cycles.aperture_blades = 11
+
 # Composition
 
 def define_vignette_node():
