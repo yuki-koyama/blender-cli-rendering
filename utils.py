@@ -1,6 +1,9 @@
 import bpy
+import mathutils
 
+################################################################################
 # Scene
+################################################################################
 
 def set_animation(scene, fps=24, frame_start=1, frame_end=48, frame_current=1):
 	scene.render.fps = fps
@@ -41,7 +44,9 @@ def set_camera_params(camera, focus_target):
 	camera.data.cycles.aperture_fstop = 1.4
 	camera.data.cycles.aperture_blades = 11
 
+################################################################################
 # Composition
+################################################################################
 
 def define_vignette_node_group():
 	group = bpy.data.node_groups.new(type="CompositorNodeTree", name="Vignette")
@@ -119,7 +124,9 @@ def build_scene_composition(scene):
 
 	arrange_nodes(scene.node_tree)
 
+################################################################################
 # Modifiers
+################################################################################
 
 def add_subdivision_surface_modifier(mesh, level, is_simple=False):
 	modifier = mesh.modifiers.new(name="Subsurf", type='SUBSURF')
@@ -127,7 +134,9 @@ def add_subdivision_surface_modifier(mesh, level, is_simple=False):
 	modifier.render_levels = level
 	modifier.subdivision_type = 'SIMPLE' if is_simple else 'CATMULL_CLARK'
 
+################################################################################
 # Constraints
+################################################################################
 
 def add_track_to_constraint(camera, track_to_target):
 	constraint = camera.constraints.new(type='TRACK_TO')
@@ -144,7 +153,9 @@ def add_copy_location_constraint(copy_to_object, copy_from_object, use_x, use_y,
 	if bone_name:
 		constraint.subtarget = bone_name
 
-# Node tree
+################################################################################
+# Shading
+################################################################################
 
 def create_texture_node(node_tree, path, is_color_data):
 	# Instantiate a new texture image node
@@ -217,7 +228,126 @@ def build_pbr_textured_nodes(
 
 	arrange_nodes(node_tree)
 
+################################################################################
+# Armature
+################################################################################
+
+def create_armature_mesh(scene, armature_object, mesh_name):
+	assert armature_object.type == 'ARMATURE', 'Error'
+	assert len(armature_object.data.bones) != 0, 'Error'
+
+	def add_rigid_vertex_group(target_object, name, vertex_indices):
+		new_vertex_group = target_object.vertex_groups.new(name)
+		for vertex_index in vertex_indices:
+			new_vertex_group.add([ vertex_index ], 1.0, 'REPLACE')
+
+	def generate_bone_mesh_pydata(radius, length):
+		base_radius = radius
+		top_radius = 0.5 * radius
+
+		vertices = [
+			mathutils.Vector((- base_radius, 0.0, + base_radius)),
+			mathutils.Vector((+ base_radius, 0.0, + base_radius)),
+			mathutils.Vector((+ base_radius, 0.0, - base_radius)),
+			mathutils.Vector((- base_radius, 0.0, - base_radius)),
+
+			mathutils.Vector((- top_radius, length, + top_radius)),
+			mathutils.Vector((+ top_radius, length, + top_radius)),
+			mathutils.Vector((+ top_radius, length, - top_radius)),
+			mathutils.Vector((- top_radius, length, - top_radius)),
+
+			mathutils.Vector((0.0, - base_radius, 0.0)),
+			mathutils.Vector((0.0, length + top_radius, 0.0))
+		]
+
+		faces = [
+			(8, 1, 0),
+			(8, 2, 1),
+			(8, 3, 2),
+			(8, 0, 3),
+
+			(9, 4, 5),
+			(9, 5, 6),
+			(9, 6, 7),
+			(9, 7, 4),
+
+			(0, 1, 5, 4),
+			(1, 2, 6, 5),
+			(2, 3, 7, 6),
+			(3, 0, 4, 7)
+		]
+
+		return vertices, faces
+
+	armature_data = armature_object.data
+
+	vertices = []
+	faces = []
+	vertex_groups = []
+
+	for bone in armature_data.bones:
+		radius = 0.10 * (0.10 + bone.length)
+		temp_vertices, temp_faces = generate_bone_mesh_pydata(radius, bone.length)
+
+		vertex_index_offset = len(vertices)
+
+		temp_vertex_group = { 'name': bone.name, 'vertex_indices': [] }
+		for local_index, vertex in enumerate(temp_vertices):
+			vertices.append(bone.matrix_local * vertex)
+			temp_vertex_group['vertex_indices'].append(local_index + vertex_index_offset)
+		vertex_groups.append(temp_vertex_group)
+
+		for face in temp_faces:
+			if len(face) == 3:
+				faces.append((face[0] + vertex_index_offset, face[1] + vertex_index_offset, face[2] + vertex_index_offset))
+			else:
+				faces.append((face[0] + vertex_index_offset, face[1] + vertex_index_offset, face[2] + vertex_index_offset, face[3] + vertex_index_offset))
+
+	new_object = create_mesh_from_pydata(scene, vertices, faces, mesh_name, mesh_name)
+	new_object.matrix_world = armature_object.matrix_world
+
+	for vertex_group in vertex_groups:
+		add_rigid_vertex_group(new_object, vertex_group['name'], vertex_group['vertex_indices'])
+
+	armature_modifier = new_object.modifiers.new('Armature', 'ARMATURE')
+	armature_modifier.object = armature_object
+	armature_modifier.use_vertex_groups = True
+
+	add_subdivision_surface_modifier(new_object, 1, is_simple=True)
+	add_subdivision_surface_modifier(new_object, 2, is_simple=False)
+
+	# Set the armature as the parent of the new object
+	bpy.ops.object.select_all(action='DESELECT')
+	new_object.select = True
+	armature_object.select = True
+	bpy.context.scene.objects.active = armature_object
+	bpy.ops.object.parent_set(type='OBJECT')
+
+	return new_object
+
+################################################################################
+# Mesh
+################################################################################
+
+def create_mesh_from_pydata(scene, vertices, faces, mesh_name, object_name, use_smooth=True):
+	# Add a new mesh and set vertices and faces
+	# In this case, it does not require to set edges
+	# After manipulating mesh data, update() needs to be called
+	new_mesh = bpy.data.meshes.new(mesh_name)
+	new_mesh.from_pydata(vertices, [], faces)
+	new_mesh.update()
+
+	new_object = bpy.data.objects.new(mesh_name, new_mesh)
+	scene.objects.link(new_object)
+
+	if use_smooth:
+		set_smooth_shading(new_object)
+
+	return new_object
+
+################################################################################
 # Misc.
+################################################################################
 
 def set_smooth_shading(target_object):
 	for polygon in target_object.data.polygons:
