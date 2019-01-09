@@ -10,10 +10,6 @@ sys.path.append(os.getcwd())
 
 import utils
 
-def set_smooth_shading(target_object):
-	for poly in target_object.data.polygons:
-		poly.use_smooth = True
-
 def create_skinned_object():
 	# Edit mode
 	bpy.ops.object.add(type='ARMATURE', enter_editmode=True, location=(0.0, 0.0, 0.0))
@@ -51,7 +47,7 @@ def create_skinned_object():
 	cube.scale = (0.5, 0.5, 1.0)
 	utils.add_subdivision_surface_modifier(cube, 3, is_simple=True)
 	utils.add_subdivision_surface_modifier(cube, 3, is_simple=False)
-	set_smooth_shading(cube)
+	utils.set_smooth_shading(cube)
 	mat = bpy.data.materials.new("Metal07")
 	mat.use_nodes = True
 	utils.clean_nodes(mat.node_tree.nodes)

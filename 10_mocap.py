@@ -11,10 +11,6 @@ sys.path.append(os.getcwd())
 
 import utils
 
-def set_smooth_shading(target_object):
-	for polygon in target_object.data.polygons:
-		polygon.use_smooth = True
-
 def add_rigid_vertex_group(target_object, name, vertex_indices):
 	new_vertex_group = target_object.vertex_groups.new(name)
 	for vertex_index in vertex_indices:
@@ -70,7 +66,7 @@ def create_mesh_from_pydata(scene, vertices, faces, mesh_name, object_name, use_
 	scene.objects.link(new_object)
 
 	if use_smooth:
-		set_smooth_shading(new_object)
+		utils.set_smooth_shading(new_object)
 
 	return new_object
 

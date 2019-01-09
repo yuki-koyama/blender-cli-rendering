@@ -219,6 +219,10 @@ def build_pbr_textured_nodes(
 
 # Misc.
 
+def set_smooth_shading(target_object):
+	for polygon in target_object.data.polygons:
+		polygon.use_smooth = True
+
 def clean_objects():
 	for item in bpy.data.objects:
 		bpy.data.objects.remove(item)
