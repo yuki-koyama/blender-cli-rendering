@@ -20,7 +20,7 @@ def add_rigid_vertex_group(target_object, name, vertex_indices):
 	for vertex_index in vertex_indices:
 		new_vertex_group.add([ vertex_index ], 1.0, 'REPLACE')
 
-def generate_bone_mesh(radius, length):
+def generate_bone_mesh_pydata(radius, length):
 	base_radius = radius
 	top_radius = 0.5 * radius
 
@@ -86,7 +86,7 @@ def create_armature_mesh(scene, armature_object, mesh_name):
 
 	for bone in armature_data.bones:
 		radius = 0.10 * (0.10 + bone.length)
-		temp_vertices, temp_faces = generate_bone_mesh(radius, bone.length)
+		temp_vertices, temp_faces = generate_bone_mesh_pydata(radius, bone.length)
 
 		vertex_index_offset = len(vertices)
 
