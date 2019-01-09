@@ -9,10 +9,6 @@ sys.path.append(os.getcwd())
 
 import utils
 
-def reset_scene():
-	for item in bpy.data.objects:
-		bpy.data.objects.remove(item)
-
 def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(- 1.8, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
 	current_object = bpy.context.object
@@ -120,7 +116,7 @@ scene = bpy.data.scenes["Scene"]
 world = scene.world
 
 ## Reset
-reset_scene()
+utils.clean_objects()
 
 ## Suzannes
 focus_target = set_scene_objects()

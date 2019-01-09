@@ -9,10 +9,6 @@ sys.path.append(os.getcwd())
 
 import utils
 
-def reset_scene():
-	for item in bpy.data.objects:
-		bpy.data.objects.remove(item)
-
 def set_scene_objects():
 	num_suzannes = 7
 	for index in range(num_suzannes):
@@ -45,7 +41,7 @@ scene = bpy.data.scenes["Scene"]
 world = scene.world
 
 ## Reset
-reset_scene()
+utils.clean_objects()
 
 ## Suzannes
 center_suzanne = set_scene_objects()

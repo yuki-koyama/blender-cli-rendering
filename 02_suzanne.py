@@ -9,10 +9,6 @@ sys.path.append(os.getcwd())
 
 import utils
 
-def reset_scene():
-	for item in bpy.data.objects:
-		bpy.data.objects.remove(item)
-
 def set_scene_objects():
 	num_suzannes = 15
 	for index in range(num_suzannes):
@@ -38,7 +34,7 @@ num_samples = int(sys.argv[sys.argv.index('--') + 3])
 # Scene Building
 
 ## Reset
-reset_scene()
+utils.clean_objects()
 
 ## Suzannes
 center_suzanne = set_scene_objects()

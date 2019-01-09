@@ -10,10 +10,6 @@ sys.path.append(os.getcwd())
 
 import utils
 
-def reset_scene():
-	for item in bpy.data.objects:
-		bpy.data.objects.remove(item)
-
 def set_smooth_shading(target_object):
 	for poly in target_object.data.polygons:
 		poly.use_smooth = True
@@ -124,7 +120,7 @@ scene = bpy.data.scenes["Scene"]
 world = scene.world
 
 ## Reset
-reset_scene()
+utils.clean_objects()
 
 ## Suzannes
 focus_target = set_scene_objects()

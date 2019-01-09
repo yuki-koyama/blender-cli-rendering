@@ -219,6 +219,10 @@ def build_pbr_textured_nodes(
 
 # Misc.
 
+def clean_objects():
+	for item in bpy.data.objects:
+		bpy.data.objects.remove(item)
+
 def clean_nodes(nodes):
 	for node in nodes:
 		nodes.remove(node)
