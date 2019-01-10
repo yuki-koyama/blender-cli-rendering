@@ -48,7 +48,7 @@ def set_camera_params(camera, focus_target):
 # Composition
 ################################################################################
 
-def define_vignette_node_group():
+def add_vignette_node_group():
 	group = bpy.data.node_groups.new(type="CompositorNodeTree", name="Vignette")
 
 	input_node = group.nodes.new("NodeGroupInput")
@@ -85,12 +85,14 @@ def define_vignette_node_group():
 
 	arrange_nodes(group)
 
+	return group
+
 def create_vignette_node(node_tree):
-	define_vignette_node_group()
+	vignette_node_group = add_vignette_node_group()
 
 	vignette_node = node_tree.nodes.new(type='CompositorNodeGroup')
 	vignette_node.name = "Vignette"
-	vignette_node.node_tree = bpy.data.node_groups['Vignette']
+	vignette_node.node_tree = vignette_node_group
 
 	return vignette_node
 
