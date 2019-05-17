@@ -94,6 +94,14 @@ Python scripts for rendering images using Blender from command-line interface.
 
 ![10_mocap](docs/compressed/10_mocap.gif)
 
+### 11_mesh_visualization.py
+
+- Wireframe
+- Vertex colors
+- Transparent background
+
+![11_mesh_visualization](docs/compressed/11_mesh_visualization.jpg)
+
 ## For Docker Users
 
 Thanks to the fact that Blender can run on Linux without displays as a command line tool, it is straightforward to run all the above scripts using Docker.
