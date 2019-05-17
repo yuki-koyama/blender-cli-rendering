@@ -64,11 +64,8 @@ set_camera_params(camera, focus_target)
 ## Lights
 utils.build_environmental_light(world, hdri_path)
 
-## Composition
-utils.build_scene_composition(scene)
-
 # Render Setting
-utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_denoising=True)
+utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_denoising=True, use_transparent_bg=True)
 
 # Render
 bpy.ops.render.render(animation=False, write_still=True)

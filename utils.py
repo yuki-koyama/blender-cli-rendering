@@ -22,7 +22,7 @@ def build_environmental_light(world, hdri_path):
 
 	arrange_nodes(node_tree)
 
-def set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_denoising=True, use_motion_blur=False):
+def set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_denoising=True, use_motion_blur=False, use_transparent_bg=False):
 	scene.render.image_settings.file_format = 'PNG'
 	scene.render.resolution_percentage = resolution_percentage
 	scene.render.engine = 'CYCLES'
@@ -32,6 +32,7 @@ def set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, 
 	scene.render.layers[0].cycles.use_denoising = use_denoising
 	scene.camera = camera
 	scene.render.use_motion_blur = use_motion_blur
+	scene.cycles.film_transparent = use_transparent_bg
 
 def set_camera_params(camera, focus_target):
 	# Simulate Sony's FE 85mm F1.4 GM
@@ -173,11 +174,11 @@ def create_texture_node(node_tree, path, is_color_data):
 	return texture_node
 
 def build_pbr_textured_nodes(
-	node_tree, 
-	color_texture_path="", 
-	metallic_texture_path="", 
-	roughness_texture_path="", 
-	normal_texture_path="", 
+	node_tree,
+	color_texture_path="",
+	metallic_texture_path="",
+	roughness_texture_path="",
+	normal_texture_path="",
 	displacement_texture_path="",
 	ambient_occlusion_texture_path="",
 	scale=(1.0, 1.0, 1.0)
