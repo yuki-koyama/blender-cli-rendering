@@ -10,6 +10,8 @@ sys.path.append(os.getcwd())
 import utils
 
 def set_scene_objects():
+	bpy.ops.mesh.primitive_plane_add(location=(0.0, 0.0, - 1.0), radius=100)
+
 	bpy.ops.mesh.primitive_ico_sphere_add()
 	current_object = bpy.context.object
 	mat = bpy.data.materials.new("Material_Visualization")
@@ -46,7 +48,7 @@ def set_camera_params(camera, dof_target):
 	camera.data.lens = 72
 	camera.data.dof_object = dof_target
 	camera.data.cycles.aperture_type = 'RADIUS'
-	camera.data.cycles.aperture_size = 0.100
+	camera.data.cycles.aperture_size = 0.0
 	camera.data.cycles.aperture_blades = 6
 
 # Args
