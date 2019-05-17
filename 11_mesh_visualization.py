@@ -19,10 +19,23 @@ def set_scene_objects():
 
 	output_node = mat.node_tree.nodes.new(type='ShaderNodeOutputMaterial')
 	principled_node = mat.node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
-	mat.node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+	rgb_node = mat.node_tree.nodes.new(type='ShaderNodeRGB')
+	mix_node = mat.node_tree.nodes.new(type='ShaderNodeMixShader')
+	wire_node = mat.node_tree.nodes.new(type='ShaderNodeWireframe')
+	wire_mat_node = mat.node_tree.nodes.new(type='ShaderNodeBsdfDiffuse')
+
+	rgb_node.outputs['Color'].default_value = (0.1, 0.1, 0.1, 1.0)
+
+	mat.node_tree.links.new(principled_node.outputs['BSDF'], mix_node.inputs[1])
+	mat.node_tree.links.new(rgb_node.outputs['Color'], wire_mat_node.inputs['Color'])
+	mat.node_tree.links.new(wire_mat_node.outputs['BSDF'], mix_node.inputs[2])
+	mat.node_tree.links.new(wire_node.outputs['Fac'], mix_node.inputs['Fac'])
+	mat.node_tree.links.new(mix_node.outputs['Shader'], output_node.inputs['Surface'])
 
 	bpy.ops.object.empty_add(location=(0.0, 0.0, 0.0))
 	focus_target = bpy.context.object
+
+	utils.arrange_nodes(mat.node_tree)
 
 	return focus_target
 
