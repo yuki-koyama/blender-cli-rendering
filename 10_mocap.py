@@ -50,7 +50,7 @@ def build_scene(scene):
 		roughness_texture_path="./assets/textures/[2K]Concrete07/Concrete07_rgh.jpg",
 		normal_texture_path="./assets/textures/[2K]Concrete07/Concrete07_nrm.jpg",
 		displacement_texture_path="./assets/textures/[2K]Concrete07/Concrete07_disp.jpg",
-		ambient_occlusion_texture_path="./assets/textures/[2K]Concrete07/Concrete07_ao.jpg",
+		ambient_occlusion_texture_path="./assets/textures/[2K]Concrete07/Concrete07_AO.jpg",
 		scale=(0.25, 0.25, 0.25)
 	)
 
