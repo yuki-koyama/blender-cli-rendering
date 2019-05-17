@@ -4,30 +4,43 @@ import bpy
 import sys
 import math
 import os
+import random
 
 sys.path.append(os.getcwd())
 
 import utils
 
+def get_random_numbers(length):
+	numbers = []
+	for i in range(length):
+		numbers.append(random.random())
+	return numbers
+
+def get_color(x):
+	colors = [
+		(0.776470, 0.894117, 0.545098),
+		(0.482352, 0.788235, 0.435294),
+		(0.137254, 0.603921, 0.231372),
+	]
+
+	a = x * (len(colors) - 1)
+	t = a - math.floor(a);
+	c0 = colors[math.floor(a)];
+	c1 = colors[math.ceil(a)];
+
+	return ((1.0 - t) * c0[0] + t * c1[0], (1.0 - t) * c0[1] + t * c1[1], (1.0 - t) * c0[2] + t * c1[2])
+
 def set_scene_objects():
 	bpy.ops.mesh.primitive_plane_add(location=(0.0, 0.0, - 1.0), radius=100)
 
-	bpy.ops.mesh.primitive_ico_sphere_add()
+	bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3)
 	current_object = bpy.context.object
-
-	colors = [
-		(1.0, 0.0, 0.0),
-		(1.0, 1.0, 0.0),
-		(0.0, 1.0, 0.0),
-		(0.0, 1.0, 1.0),
-		(0.0, 0.0, 1.0),
-		(0.0, 0.0, 0.0),
-	]
 
 	mesh = current_object.data
 	mesh.vertex_colors.new(name='Col')
+	random_numbers = get_random_numbers(len(mesh.vertex_colors['Col'].data))
 	for index, vertex_color in enumerate(mesh.vertex_colors['Col'].data):
-		vertex_color.color = colors[(index // 3) %  len(colors)]
+		vertex_color.color = get_color(random_numbers[index // 3])
 
 	mat = bpy.data.materials.new("Material_Visualization")
 	mat.use_nodes = True
