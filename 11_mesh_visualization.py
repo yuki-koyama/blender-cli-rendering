@@ -14,6 +14,21 @@ def set_scene_objects():
 
 	bpy.ops.mesh.primitive_ico_sphere_add()
 	current_object = bpy.context.object
+
+	colors = [
+		(1.0, 0.0, 0.0),
+		(1.0, 1.0, 0.0),
+		(0.0, 1.0, 0.0),
+		(0.0, 1.0, 1.0),
+		(0.0, 0.0, 1.0),
+		(0.0, 0.0, 0.0),
+	]
+
+	mesh = current_object.data
+	mesh.vertex_colors.new(name='Col')
+	for index, vertex_color in enumerate(mesh.vertex_colors['Col'].data):
+		vertex_color.color = colors[(index // 3) %  len(colors)]
+
 	mat = bpy.data.materials.new("Material_Visualization")
 	mat.use_nodes = True
 	utils.clean_nodes(mat.node_tree.nodes)
@@ -25,9 +40,12 @@ def set_scene_objects():
 	mix_node = mat.node_tree.nodes.new(type='ShaderNodeMixShader')
 	wire_node = mat.node_tree.nodes.new(type='ShaderNodeWireframe')
 	wire_mat_node = mat.node_tree.nodes.new(type='ShaderNodeBsdfDiffuse')
+	attrib_node = mat.node_tree.nodes.new(type='ShaderNodeAttribute')
 
+	attrib_node.attribute_name = 'Col'
 	rgb_node.outputs['Color'].default_value = (0.1, 0.1, 0.1, 1.0)
 
+	mat.node_tree.links.new(attrib_node.outputs['Color'], principled_node.inputs['Base Color'])
 	mat.node_tree.links.new(principled_node.outputs['BSDF'], mix_node.inputs[1])
 	mat.node_tree.links.new(rgb_node.outputs['Color'], wire_mat_node.inputs['Color'])
 	mat.node_tree.links.new(wire_mat_node.outputs['BSDF'], mix_node.inputs[2])
