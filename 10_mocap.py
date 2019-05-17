@@ -1,4 +1,4 @@
-# blender --background --python 10_mocap.py -- </path/to/output/directory>/<name> <resolution_percentage> <num_samples>
+# blender --background --python 10_mocap.py -- </path/to/input/bvh> </path/to/output/directory>/<name> <resolution_percentage> <num_samples>
 # ffmpeg -r 24 -i </path/to/output/directory>/<name>%04d.png -pix_fmt yuv420p out.mp4
 
 import bpy
@@ -12,20 +12,20 @@ import utils
 
 def create_armature_from_bvh(scene, bvh_path):
 	bpy.ops.import_anim.bvh(
-		filepath=bvh_path, 
-		axis_forward='-Z', 
-		axis_up='Y', 
-		target='ARMATURE', 
-		global_scale=0.056444, 
-		frame_start=1, 
-		use_fps_scale=True, 
-		update_scene_fps=False, 
+		filepath=bvh_path,
+		axis_forward='-Z',
+		axis_up='Y',
+		target='ARMATURE',
+		global_scale=0.056444,
+		frame_start=1,
+		use_fps_scale=True,
+		update_scene_fps=False,
 		update_scene_duration=True
 	)
 	armature = bpy.context.object
 	return armature
 
-def build_scene(scene):
+def build_scene(scene, input_bvh_path):
 	mat = bpy.data.materials.new("BlueMetal")
 	mat.use_nodes = True
 	utils.clean_nodes(mat.node_tree.nodes)
@@ -37,7 +37,7 @@ def build_scene(scene):
 	mat.node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
 	utils.arrange_nodes(mat.node_tree)
 
-	armature = create_armature_from_bvh(scene, bvh_path='./assets/motion/102_01.bvh')
+	armature = create_armature_from_bvh(scene, bvh_path=input_bvh_path)
 	armature_mesh = utils.create_armature_mesh(scene, armature, 'Mesh')
 	armature_mesh.data.materials.append(mat)
 
@@ -73,9 +73,10 @@ def build_scene(scene):
 	return focus_target
 
 # Args
-output_file_path = str(sys.argv[sys.argv.index('--') + 1])
-resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
-num_samples = int(sys.argv[sys.argv.index('--') + 3])
+input_bvh_path = str(sys.argv[sys.argv.index('--') + 1])         # "./assets/motion/102_01.bvh"
+output_file_path = str(sys.argv[sys.argv.index('--') + 2])       # "./"
+resolution_percentage = int(sys.argv[sys.argv.index('--') + 3])  # 100
+num_samples = int(sys.argv[sys.argv.index('--') + 4])            # 128
 
 # Parameters
 hdri_path = "./assets/HDRIs/green_point_park_2k.hdr"
@@ -88,10 +89,10 @@ world = scene.world
 utils.clean_objects()
 
 # Animation Setting
-utils.set_animation(scene, fps=24, frame_start=1, frame_end=40)
+utils.set_animation(scene, fps=24, frame_start=1, frame_end=40)  # frame_end will be overriden later
 
 ## Scene
-focus_target = build_scene(scene)
+focus_target = build_scene(scene, input_bvh_path)
 
 ## Camera
 bpy.ops.object.camera_add(view_align=False, location=[0.0, - 10.0, 1.0])
