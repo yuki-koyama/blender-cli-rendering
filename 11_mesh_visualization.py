@@ -31,17 +31,21 @@ def get_color(x):
 	return ((1.0 - t) * c0[0] + t * c1[0], (1.0 - t) * c0[1] + t * c1[1], (1.0 - t) * c0[2] + t * c1[2])
 
 def set_scene_objects():
+	# Instantiate a floor plane
 	bpy.ops.mesh.primitive_plane_add(location=(0.0, 0.0, - 1.0), radius=100)
 
+	# Instantiate a triangle mesh
 	bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3)
 	current_object = bpy.context.object
 
+	# Assign random colors for each triangle
 	mesh = current_object.data
 	mesh.vertex_colors.new(name='Col')
 	random_numbers = get_random_numbers(len(mesh.vertex_colors['Col'].data))
 	for index, vertex_color in enumerate(mesh.vertex_colors['Col'].data):
 		vertex_color.color = get_color(random_numbers[index // 3])
 
+	# Setup a material with wireframe visualization and per-face colors
 	mat = bpy.data.materials.new("Material_Visualization")
 	mat.use_nodes = True
 	utils.clean_nodes(mat.node_tree.nodes)
@@ -65,10 +69,10 @@ def set_scene_objects():
 	mat.node_tree.links.new(wire_node.outputs['Fac'], mix_node.inputs['Fac'])
 	mat.node_tree.links.new(mix_node.outputs['Shader'], output_node.inputs['Surface'])
 
-	bpy.ops.object.empty_add(location=(0.0, 0.0, 0.0))
-	focus_target = bpy.context.object
-
 	utils.arrange_nodes(mat.node_tree)
+
+	bpy.ops.object.empty_add(location=(0.0, - 0.8, 0.0))
+	focus_target = bpy.context.object
 
 	return focus_target
 
@@ -79,7 +83,7 @@ def set_camera_params(camera, dof_target):
 	camera.data.lens = 72
 	camera.data.dof_object = dof_target
 	camera.data.cycles.aperture_type = 'RADIUS'
-	camera.data.cycles.aperture_size = 0.0
+	camera.data.cycles.aperture_size = 0.100
 	camera.data.cycles.aperture_blades = 6
 
 # Args
