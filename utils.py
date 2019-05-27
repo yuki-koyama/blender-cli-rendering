@@ -348,6 +348,12 @@ def create_mesh_from_pydata(scene, vertices, faces, mesh_name, object_name, use_
 
 	return new_object
 
+def create_cached_mesh_from_alembic(file_path, name):
+	bpy.ops.wm.alembic_import(filepath=file_path, as_background_job=False)
+	bpy.context.active_object.name = name
+
+	return bpy.context.active_object
+
 ################################################################################
 # Misc.
 ################################################################################
