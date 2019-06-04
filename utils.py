@@ -176,8 +176,8 @@ def create_texture_node(node_tree, path, is_color_data):
 def build_pbr_nodes(
 	node_tree,
 	base_color=(0.6, 0.6, 0.6, 1.0),
-	specular=0.5,
 	metallic=0.0,
+	specular=0.5,
 	roughness=0.5,
 	sheen=0.0
 ):
