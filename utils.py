@@ -173,6 +173,44 @@ def create_texture_node(node_tree, path, is_color_data):
 	# Return the node
 	return texture_node
 
+def set_principled_node(
+	principled_node,
+	base_color=(0.6, 0.6, 0.6, 1.0),
+	subsurface=0.0,
+	subsurface_color=(0.8, 0.8, 0.8, 1.0),
+	subsurface_radius=(1.0, 0.2, 0.1),
+	metallic=0.0,
+	specular=0.5,
+	specular_tint=0.0,
+	roughness=0.5,
+	anisotropic=0.0,
+	anisotropic_rotation=0.0,
+	sheen=0.0,
+	sheen_tint=0.5,
+	clearcoat=0.0,
+	clearcoat_roughness=0.03,
+	ior=1.45,
+	transmission=0.0,
+	transmission_roughness=0.0
+):
+	principled_node.inputs['Base Color'].default_value = base_color
+	principled_node.inputs['Subsurface'].default_value = subsurface
+	principled_node.inputs['Subsurface Color'].default_value = subsurface_color
+	principled_node.inputs['Subsurface Radius'].default_value = subsurface_radius
+	principled_node.inputs['Metallic'].default_value = metallic
+	principled_node.inputs['Specular'].default_value = specular
+	principled_node.inputs['Specular Tint'].default_value = specular_tint
+	principled_node.inputs['Roughness'].default_value = roughness
+	principled_node.inputs['Anisotropic'].default_value = anisotropic
+	principled_node.inputs['Anisotropic Rotation'].default_value = anisotropic_rotation
+	principled_node.inputs['Sheen'].default_value = sheen
+	principled_node.inputs['Sheen Tint'].default_value = sheen_tint
+	principled_node.inputs['Clearcoat'].default_value = clearcoat
+	principled_node.inputs['Clearcoat Roughness'].default_value = clearcoat_roughness
+	principled_node.inputs['IOR'].default_value = ior
+	principled_node.inputs['Transmission'].default_value = transmission
+	principled_node.inputs['Transmission Roughness'].default_value = transmission_roughness
+
 def build_pbr_nodes(
 	node_tree,
 	base_color=(0.6, 0.6, 0.6, 1.0),
@@ -185,11 +223,14 @@ def build_pbr_nodes(
 	principled_node = node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
 	node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
 
-	principled_node.inputs['Base Color'].default_value = base_color
-	principled_node.inputs['Specular'].default_value = specular
-	principled_node.inputs['Metallic'].default_value = metallic
-	principled_node.inputs['Roughness'].default_value = roughness
-	principled_node.inputs['Sheen'].default_value = sheen
+	set_principled_node(
+		principled_node=principled_node,
+		base_color=base_color,
+		metallic=metallic,
+		specular=specular,
+		roughness=roughness,
+		sheen=sheen
+	)
 
 	arrange_nodes(node_tree)
 
