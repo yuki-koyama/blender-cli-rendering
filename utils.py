@@ -173,6 +173,26 @@ def create_texture_node(node_tree, path, is_color_data):
 	# Return the node
 	return texture_node
 
+def build_pbr_nodes(
+	node_tree,
+	base_color=(0.6, 0.6, 0.6, 1.0),
+	specular=0.5,
+	metallic=0.0,
+	roughness=0.5,
+	sheen=0.0
+):
+	output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
+	principled_node = node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
+	node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+
+	principled_node.inputs['Base Color'].default_value = base_color
+	principled_node.inputs['Specular'].default_value = specular
+	principled_node.inputs['Metallic'].default_value = metallic
+	principled_node.inputs['Roughness'].default_value = roughness
+	principled_node.inputs['Sheen'].default_value = sheen
+
+	arrange_nodes(node_tree)
+
 def build_pbr_textured_nodes(
 	node_tree,
 	color_texture_path="",
