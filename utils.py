@@ -310,31 +310,37 @@ def create_armature_mesh(scene, armature_object, mesh_name):
 		top_radius = 0.5 * radius
 
 		vertices = [
+			# Cross section of the base part
 			mathutils.Vector((- base_radius, 0.0, + base_radius)),
 			mathutils.Vector((+ base_radius, 0.0, + base_radius)),
 			mathutils.Vector((+ base_radius, 0.0, - base_radius)),
 			mathutils.Vector((- base_radius, 0.0, - base_radius)),
 
+			# Cross section of the top part
 			mathutils.Vector((- top_radius, length, + top_radius)),
 			mathutils.Vector((+ top_radius, length, + top_radius)),
 			mathutils.Vector((+ top_radius, length, - top_radius)),
 			mathutils.Vector((- top_radius, length, - top_radius)),
 
+			# End points
 			mathutils.Vector((0.0, - base_radius, 0.0)),
 			mathutils.Vector((0.0, length + top_radius, 0.0))
 		]
 
 		faces = [
+			# End point for the base part
 			(8, 1, 0),
 			(8, 2, 1),
 			(8, 3, 2),
 			(8, 0, 3),
 
+			# End point for the top part
 			(9, 4, 5),
 			(9, 5, 6),
 			(9, 6, 7),
 			(9, 7, 4),
 
+			# Side faces
 			(0, 1, 5, 4),
 			(1, 2, 6, 5),
 			(2, 3, 7, 6),
