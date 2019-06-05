@@ -13,15 +13,16 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(- 1.8, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Left"
-	utils.add_subdivision_surface_modifier(current_object, 4)
+	utils.set_smooth_shading(current_object)
+	utils.add_subdivision_surface_modifier(current_object, 3)
 	mat = bpy.data.materials.new("Material_Left")
 	mat.use_nodes = True
 	utils.clean_nodes(mat.node_tree.nodes)
 	utils.build_pbr_textured_nodes(
-		mat.node_tree, 
-		color_texture_path="./assets/textures/[2K]Leather05/Leather05_col.jpg", 
-		roughness_texture_path="./assets/textures/[2K]Leather05/Leather05_rgh.jpg", 
-		normal_texture_path="./assets/textures/[2K]Leather05/Leather05_nrm.jpg", 
+		mat.node_tree,
+		color_texture_path="./assets/textures/[2K]Leather05/Leather05_col.jpg",
+		roughness_texture_path="./assets/textures/[2K]Leather05/Leather05_rgh.jpg",
+		normal_texture_path="./assets/textures/[2K]Leather05/Leather05_nrm.jpg",
 		displacement_texture_path="./assets/textures/[2K]Leather05/Leather05_disp.jpg"
 	)
 	current_object.data.materials.append(mat)
@@ -29,16 +30,17 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Center"
-	utils.add_subdivision_surface_modifier(current_object, 4)
+	utils.set_smooth_shading(current_object)
+	utils.add_subdivision_surface_modifier(current_object, 3)
 	mat = bpy.data.materials.new("Material_Center")
 	mat.use_nodes = True
 	utils.clean_nodes(mat.node_tree.nodes)
 	utils.build_pbr_textured_nodes(
-		mat.node_tree, 
-		color_texture_path="./assets/textures/[2K]Metal07/Metal07_col.jpg", 
-		metallic_texture_path="./assets/textures/[2K]Metal07/Metal07_met.jpg", 
-		roughness_texture_path="./assets/textures/[2K]Metal07/Metal07_rgh.jpg", 
-		normal_texture_path="./assets/textures/[2K]Metal07/Metal07_nrm.jpg", 
+		mat.node_tree,
+		color_texture_path="./assets/textures/[2K]Metal07/Metal07_col.jpg",
+		metallic_texture_path="./assets/textures/[2K]Metal07/Metal07_met.jpg",
+		roughness_texture_path="./assets/textures/[2K]Metal07/Metal07_rgh.jpg",
+		normal_texture_path="./assets/textures/[2K]Metal07/Metal07_nrm.jpg",
 		displacement_texture_path="./assets/textures/[2K]Metal07/Metal07_disp.jpg"
 	)
 	current_object.data.materials.append(mat)
@@ -46,7 +48,8 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(+ 1.8, 0.0, 1.0), rotation=(0.0, 0.0, - math.pi * 60.0 / 180.0), calc_uvs=True)
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Right"
-	utils.add_subdivision_surface_modifier(current_object, 4)
+	utils.set_smooth_shading(current_object)
+	utils.add_subdivision_surface_modifier(current_object, 3)
 	mat = bpy.data.materials.new("Material_Right")
 	mat.use_nodes = True
 	utils.clean_nodes(mat.node_tree.nodes)

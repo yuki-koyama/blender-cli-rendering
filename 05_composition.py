@@ -56,7 +56,8 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(- 3.0, 0.0, 1.0))
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Left"
-	utils.add_subdivision_surface_modifier(current_object, 4)
+	utils.set_smooth_shading(current_object)
+	utils.add_subdivision_surface_modifier(current_object, 3)
 	mat = bpy.data.materials.new("Material_Left")
 	mat.use_nodes = True
 	nodes = mat.node_tree.nodes
@@ -71,7 +72,8 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0))
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Center"
-	utils.add_subdivision_surface_modifier(current_object, 4)
+	utils.set_smooth_shading(current_object)
+	utils.add_subdivision_surface_modifier(current_object, 3)
 	mat = bpy.data.materials.new("Material_Center")
 	mat.use_nodes = True
 	nodes = mat.node_tree.nodes
@@ -86,7 +88,8 @@ def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(+ 3.0, 0.0, 1.0))
 	current_object = bpy.context.object
 	current_object.name = "Suzanne_Right"
-	utils.add_subdivision_surface_modifier(current_object, 4)
+	utils.set_smooth_shading(current_object)
+	utils.add_subdivision_surface_modifier(current_object, 3)
 	mat = bpy.data.materials.new("Material_Right")
 	mat.use_nodes = True
 	nodes = mat.node_tree.nodes
