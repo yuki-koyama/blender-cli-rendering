@@ -13,7 +13,7 @@ def set_animation(scene, fps=24, frame_start=1, frame_end=48, frame_current=1):
     scene.frame_current = frame_current
 
 
-def build_environmental_light(world, hdri_path):
+def build_environmental_light(world, hdri_path, rotation=0.0):
     world.use_nodes = True
     node_tree = world.node_tree
 
@@ -21,6 +21,15 @@ def build_environmental_light(world, hdri_path):
         type="ShaderNodeTexEnvironment")
     environment_texture_node.image = bpy.data.images.load(hdri_path)
 
+    mapping_node = node_tree.nodes.new(type="ShaderNodeMapping")
+    mapping_node.rotation[2] = rotation
+
+    tex_coord_node = node_tree.nodes.new(type="ShaderNodeTexCoord")
+
+    node_tree.links.new(tex_coord_node.outputs["Generated"],
+                        mapping_node.inputs["Vector"])
+    node_tree.links.new(mapping_node.outputs["Vector"],
+                        environment_texture_node.inputs["Vector"])
     node_tree.links.new(environment_texture_node.outputs["Color"],
                         node_tree.nodes["Background"].inputs["Color"])
 
