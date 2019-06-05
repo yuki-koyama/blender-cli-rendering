@@ -2,7 +2,8 @@ Warning: the following requirements are not fully satisfied in the current scrip
 
 ## Formatting
 
-- Tab indent
+- Follow PEP8 as much as possible
+  - 4-space indentation
 
 ## Naming Conventions
 
