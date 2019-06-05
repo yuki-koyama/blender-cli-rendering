@@ -10,76 +10,47 @@ sys.path.append(os.getcwd())
 import utils
 
 def set_principled_node_as_rough_blue(principled_node):
-	principled_node.inputs['Base Color'].default_value = (0.1, 0.2, 0.6, 1.0)
-	principled_node.inputs['Subsurface'].default_value = 0.0
-	principled_node.inputs['Subsurface Color'].default_value = (0.9, 0.9, 0.9, 1.0)
-	principled_node.inputs['Subsurface Radius'].default_value = (1.0, 1.0, 1.0)
-	principled_node.inputs['Metallic'].default_value = 0.5
-	principled_node.inputs['Specular'].default_value = 0.5
-	principled_node.inputs['Specular Tint'].default_value = 0.0
-	principled_node.inputs['Roughness'].default_value = 0.9
-	principled_node.inputs['Anisotropic'].default_value = 0.0
-	principled_node.inputs['Anisotropic Rotation'].default_value = 0.0
-	principled_node.inputs['Sheen'].default_value = 0.0
-	principled_node.inputs['Sheen Tint'].default_value = 0.5
-	principled_node.inputs['Clearcoat'].default_value = 0.0
-	principled_node.inputs['Clearcoat Roughness'].default_value = 0.030
-	principled_node.inputs['IOR'].default_value = 1.450
-	principled_node.inputs['Transmission'].default_value = 0.0
+	utils.set_principled_node(
+		principled_node=principled_node,
+		base_color=(0.1, 0.2, 0.6, 1.0),
+		metallic=0.5,
+		specular=0.5,
+		roughness=0.9,
+	)
 
 def set_principled_node_as_ceramic(principled_node):
-	principled_node.inputs['Base Color'].default_value = (0.8, 0.8, 0.8, 1.0)
-	principled_node.inputs['Subsurface'].default_value = 0.1
-	principled_node.inputs['Subsurface Color'].default_value = (0.9, 0.9, 0.9, 1.0)
-	principled_node.inputs['Subsurface Radius'].default_value = (1.0, 1.0, 1.0)
-	principled_node.inputs['Metallic'].default_value = 0.2
-	principled_node.inputs['Specular'].default_value = 0.5
-	principled_node.inputs['Specular Tint'].default_value = 0.0
-	principled_node.inputs['Roughness'].default_value = 0.0
-	principled_node.inputs['Anisotropic'].default_value = 0.0
-	principled_node.inputs['Anisotropic Rotation'].default_value = 0.0
-	principled_node.inputs['Sheen'].default_value = 0.0
-	principled_node.inputs['Sheen Tint'].default_value = 0.5
-	principled_node.inputs['Clearcoat'].default_value = 0.9
-	principled_node.inputs['Clearcoat Roughness'].default_value = 0.030
-	principled_node.inputs['IOR'].default_value = 1.450
-	principled_node.inputs['Transmission'].default_value = 0.0
+	utils.set_principled_node(
+		principled_node=principled_node,
+		base_color=(0.8, 0.8, 0.8, 1.0),
+		subsurface=0.1,
+		subsurface_color=(0.9, 0.9, 0.9, 1.0),
+		subsurface_radius=(1.0, 1.0, 1.0),
+		metallic=0.2,
+		specular=0.5,
+		roughness=0.0,
+	)
 
 def set_principled_node_as_gold(principled_node):
-	principled_node.inputs['Base Color'].default_value = (1.00, 0.75, 0.35, 1.0)
-	principled_node.inputs['Subsurface'].default_value = 0.0
-	principled_node.inputs['Subsurface Color'].default_value = (0.3, 0.1, 0.1, 1.0)
-	principled_node.inputs['Subsurface Radius'].default_value = (1.0, 1.0, 1.0)
-	principled_node.inputs['Metallic'].default_value = 1.0
-	principled_node.inputs['Specular'].default_value = 0.5
-	principled_node.inputs['Specular Tint'].default_value = 0.0
-	principled_node.inputs['Roughness'].default_value = 0.0
-	principled_node.inputs['Anisotropic'].default_value = 0.0
-	principled_node.inputs['Anisotropic Rotation'].default_value = 0.0
-	principled_node.inputs['Sheen'].default_value = 0.0
-	principled_node.inputs['Sheen Tint'].default_value = 0.5
-	principled_node.inputs['Clearcoat'].default_value = 0.5
-	principled_node.inputs['Clearcoat Roughness'].default_value = 0.030
-	principled_node.inputs['IOR'].default_value = 1.450
-	principled_node.inputs['Transmission'].default_value = 0.0
+	utils.set_principled_node(
+		principled_node=principled_node,
+		base_color=(1.00, 0.75, 0.35, 1.0),
+		metallic=1.0,
+		specular=0.5,
+		roughness=0.0,
+	)
 
 def set_principled_node_as_glass(principled_node):
-	principled_node.inputs['Base Color'].default_value = (0.92, 0.92, 0.95, 1.0)
-	principled_node.inputs['Subsurface'].default_value = 0.0
-	principled_node.inputs['Subsurface Color'].default_value = (0.3, 0.1, 0.1, 1.0)
-	principled_node.inputs['Subsurface Radius'].default_value = (1.0, 1.0, 1.0)
-	principled_node.inputs['Metallic'].default_value = 0.0
-	principled_node.inputs['Specular'].default_value = 0.5
-	principled_node.inputs['Specular Tint'].default_value = 0.0
-	principled_node.inputs['Roughness'].default_value = 0.0
-	principled_node.inputs['Anisotropic'].default_value = 0.0
-	principled_node.inputs['Anisotropic Rotation'].default_value = 0.0
-	principled_node.inputs['Sheen'].default_value = 0.0
-	principled_node.inputs['Sheen Tint'].default_value = 0.5
-	principled_node.inputs['Clearcoat'].default_value = 0.5
-	principled_node.inputs['Clearcoat Roughness'].default_value = 0.030
-	principled_node.inputs['IOR'].default_value = 1.450
-	principled_node.inputs['Transmission'].default_value = 1.0
+	utils.set_principled_node(
+		principled_node=principled_node,
+		base_color=(0.92, 0.92, 0.95, 1.0),
+		metallic=0.0,
+		specular=0.5,
+		roughness=0.0,
+		clearcoat=0.5,
+		clearcoat_roughness=0.030,
+		ior=1.45,
+		transmission=1.0
+	)
 
 def set_scene_objects():
 	bpy.ops.mesh.primitive_monkey_add(location=(- 3.0, 0.0, 1.0))
