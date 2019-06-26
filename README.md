@@ -102,6 +102,12 @@ Python scripts for rendering images using Blender from command-line interface.
 
 ![11_mesh_visualization](docs/compressed/11_mesh_visualization.jpg)
 
+### 12_split_tone.py
+
+- Split Tone
+
+![12_split_tone](docs/compressed/12_split_tone.gif)
+
 ## For Docker Users
 
 Thanks to the fact that Blender can run on Linux without displays as a command line tool, it is straightforward to run all the above scripts using Docker.
