@@ -73,6 +73,128 @@ def set_camera_params(camera, focus_target):
 ################################################################################
 
 
+def add_split_tone_node_group():
+    group = bpy.data.node_groups.new(type="CompositorNodeTree",
+                                     name="SplitToneSub")
+
+    input_node = group.nodes.new("NodeGroupInput")
+    group.inputs.new("NodeSocketColor", "Image")
+    group.inputs.new("NodeSocketFloat", "Hue")
+    group.inputs.new("NodeSocketFloat", "Saturation")
+
+    solid_node = group.nodes.new(type="CompositorNodeCombHSVA")
+    solid_node.inputs["S"].default_value = 1.0
+    solid_node.inputs["V"].default_value = 1.0
+    solid_node.inputs["A"].default_value = 1.0
+
+    input_sep_node = group.nodes.new(type="CompositorNodeSepHSVA")
+
+    overlay_node = group.nodes.new(type="CompositorNodeMixRGB")
+    overlay_node.blend_type = 'OVERLAY'
+
+    overlay_sep_node = group.nodes.new(type="CompositorNodeSepHSVA")
+
+    comb_node = group.nodes.new(type="CompositorNodeCombHSVA")
+
+    output_node = group.nodes.new("NodeGroupOutput")
+    group.outputs.new("NodeSocketColor", "Image")
+
+    group.links.new(input_node.outputs["Hue"], solid_node.inputs["H"])
+    group.links.new(input_node.outputs["Saturation"],
+                    overlay_node.inputs["Fac"])
+    group.links.new(input_node.outputs["Image"], overlay_node.inputs[1])
+    group.links.new(solid_node.outputs["Image"], overlay_node.inputs[2])
+    group.links.new(overlay_node.outputs["Image"],
+                    overlay_sep_node.inputs["Image"])
+    group.links.new(input_node.outputs["Image"],
+                    input_sep_node.inputs["Image"])
+    group.links.new(overlay_sep_node.outputs["H"], comb_node.inputs["H"])
+    group.links.new(overlay_sep_node.outputs["S"], comb_node.inputs["S"])
+    group.links.new(input_sep_node.outputs["V"], comb_node.inputs["V"])
+    group.links.new(input_sep_node.outputs["A"], comb_node.inputs["A"])
+    group.links.new(comb_node.outputs["Image"], output_node.inputs["Image"])
+
+    arrange_nodes(group)
+
+    # --------------------------------------------------------------------------
+
+    group = bpy.data.node_groups.new(type="CompositorNodeTree",
+                                     name="SplitTone")
+
+    input_node = group.nodes.new("NodeGroupInput")
+
+    def set_socket_value_range(socket,
+                               default_value=0.0,
+                               min_value=0.0,
+                               max_value=1.0):
+        socket.default_value = default_value
+        socket.min_value = min_value
+        socket.max_value = max_value
+
+    group.inputs.new("NodeSocketColor", "Image")
+    group.inputs.new("NodeSocketFloat", "HighlightsHue")
+    group.inputs.new("NodeSocketFloat", "HighlightsSaturation")
+    group.inputs.new("NodeSocketFloat", "ShadowsHue")
+    group.inputs.new("NodeSocketFloat", "ShadowsSaturation")
+    group.inputs.new("NodeSocketFloatFactor", "Balance")
+
+    set_socket_value_range(group.inputs["HighlightsHue"])
+    set_socket_value_range(group.inputs["HighlightsSaturation"])
+    set_socket_value_range(group.inputs["ShadowsHue"])
+    set_socket_value_range(group.inputs["ShadowsSaturation"])
+    set_socket_value_range(group.inputs["Balance"], default_value=0.5)
+
+    input_sep_node = group.nodes.new(type="CompositorNodeSepHSVA")
+
+    multiply_node = group.nodes.new(type="CompositorNodeMath")
+    multiply_node.inputs[1].default_value = 2.0
+    multiply_node.operation = 'MULTIPLY'
+    multiply_node.use_clamp = False
+
+    power_node = group.nodes.new(type="CompositorNodeMath")
+    power_node.operation = 'POWER'
+    power_node.use_clamp = True
+
+    shadows_node = group.nodes.new(type='CompositorNodeGroup')
+    shadows_node.name = "Shadows"
+    shadows_node.node_tree = bpy.data.node_groups["SplitToneSub"]
+
+    highlights_node = group.nodes.new(type='CompositorNodeGroup')
+    highlights_node.name = "Highlights"
+    highlights_node.node_tree = bpy.data.node_groups["SplitToneSub"]
+
+    comb_node = group.nodes.new(type="CompositorNodeMixRGB")
+    comb_node.use_clamp = False
+
+    output_node = group.nodes.new("NodeGroupOutput")
+    group.outputs.new("NodeSocketColor", "Image")
+
+    group.links.new(input_node.outputs["Image"],
+                    input_sep_node.inputs["Image"])
+    group.links.new(input_node.outputs["Image"], shadows_node.inputs["Image"])
+    group.links.new(input_node.outputs["ShadowsHue"],
+                    shadows_node.inputs["Hue"])
+    group.links.new(input_node.outputs["ShadowsSaturation"],
+                    shadows_node.inputs["Saturation"])
+    group.links.new(input_node.outputs["Image"],
+                    highlights_node.inputs["Image"])
+    group.links.new(input_node.outputs["HighlightsHue"],
+                    highlights_node.inputs["Hue"])
+    group.links.new(input_node.outputs["HighlightsSaturation"],
+                    highlights_node.inputs["Saturation"])
+    group.links.new(input_node.outputs["Balance"], multiply_node.inputs[0])
+    group.links.new(input_sep_node.outputs["V"], power_node.inputs[0])
+    group.links.new(multiply_node.outputs["Value"], power_node.inputs[1])
+    group.links.new(power_node.outputs["Value"], comb_node.inputs["Fac"])
+    group.links.new(shadows_node.outputs["Image"], comb_node.inputs[1])
+    group.links.new(highlights_node.outputs["Image"], comb_node.inputs[2])
+    group.links.new(comb_node.outputs["Image"], output_node.inputs["Image"])
+
+    arrange_nodes(group)
+
+    return group
+
+
 def add_vignette_node_group():
     group = bpy.data.node_groups.new(type="CompositorNodeTree",
                                      name="Vignette")
@@ -116,14 +238,24 @@ def add_vignette_node_group():
     return group
 
 
+def create_split_tone_node(node_tree):
+    split_tone_node_group = add_split_tone_node_group()
+
+    node = node_tree.nodes.new(type='CompositorNodeGroup')
+    node.name = "SplitTone"
+    node.node_tree = split_tone_node_group
+
+    return node
+
+
 def create_vignette_node(node_tree):
     vignette_node_group = add_vignette_node_group()
 
-    vignette_node = node_tree.nodes.new(type='CompositorNodeGroup')
-    vignette_node.name = "Vignette"
-    vignette_node.node_tree = vignette_node_group
+    node = node_tree.nodes.new(type='CompositorNodeGroup')
+    node.name = "Vignette"
+    node.node_tree = vignette_node_group
 
-    return vignette_node
+    return node
 
 
 def build_scene_composition(scene):
@@ -144,6 +276,8 @@ def build_scene_composition(scene):
     color_correction_node.master_saturation = 1.10
     color_correction_node.master_gain = 1.10
 
+    split_tone_node = create_split_tone_node(scene.node_tree)
+
     glare_node = scene.node_tree.nodes.new(type="CompositorNodeGlare")
     glare_node.glare_type = 'FOG_GLOW'
     glare_node.quality = 'HIGH'
@@ -157,6 +291,8 @@ def build_scene_composition(scene):
     scene.node_tree.links.new(lens_distortion_node.outputs['Image'],
                               color_correction_node.inputs['Image'])
     scene.node_tree.links.new(color_correction_node.outputs['Image'],
+                              split_tone_node.inputs['Image'])
+    scene.node_tree.links.new(split_tone_node.outputs['Image'],
                               glare_node.inputs['Image'])
     scene.node_tree.links.new(glare_node.outputs['Image'],
                               composite_node.inputs['Image'])
