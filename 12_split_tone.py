@@ -4,7 +4,6 @@ import bpy
 import sys
 import math
 import os
-import random
 
 sys.path.append(os.getcwd())
 
