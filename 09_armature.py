@@ -9,6 +9,7 @@ import os
 sys.path.append(os.getcwd())
 
 import utils
+import assets
 
 
 def create_skinned_object():
@@ -54,14 +55,7 @@ def create_skinned_object():
     mat = bpy.data.materials.new("Metal07")
     mat.use_nodes = True
     utils.clean_nodes(mat.node_tree.nodes)
-    utils.build_pbr_textured_nodes(
-        mat.node_tree,
-        color_texture_path="./assets/textures/[2K]Metal07/Metal07_col.jpg",
-        metallic_texture_path="./assets/textures/[2K]Metal07/Metal07_met.jpg",
-        roughness_texture_path="./assets/textures/[2K]Metal07/Metal07_rgh.jpg",
-        normal_texture_path="./assets/textures/[2K]Metal07/Metal07_nrm.jpg",
-        displacement_texture_path=
-        "./assets/textures/[2K]Metal07/Metal07_disp.jpg")
+    assets.build_pbr_textured_nodes(mat.node_tree, "Metal07")
     cube.data.materials.append(mat)
 
     # Set the armature as the parent of the cube using the "Automatic Weight" armature option
@@ -84,14 +78,7 @@ def set_scene_objects():
     mat = bpy.data.materials.new("Marble01")
     mat.use_nodes = True
     utils.clean_nodes(mat.node_tree.nodes)
-    utils.build_pbr_textured_nodes(
-        mat.node_tree,
-        color_texture_path="./assets/textures/[2K]Marble01/Marble01_col.jpg",
-        roughness_texture_path=
-        "./assets/textures/[2K]Marble01/Marble01_rgh.jpg",
-        normal_texture_path="./assets/textures/[2K]Marble01/Marble01_nrm.jpg",
-        displacement_texture_path=
-        "./assets/textures/[2K]Marble01/Marble01_disp.jpg")
+    assets.build_pbr_textured_nodes(mat.node_tree, "Marble01")
     current_object.data.materials.append(mat)
 
     bpy.ops.object.empty_add(location=(0.0, 0.0, 1.0))

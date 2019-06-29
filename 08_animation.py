@@ -9,6 +9,7 @@ import os
 sys.path.append(os.getcwd())
 
 import utils
+import assets
 
 
 def set_scene_objects():
@@ -23,14 +24,7 @@ def set_scene_objects():
     mat = bpy.data.materials.new("Material_Center")
     mat.use_nodes = True
     utils.clean_nodes(mat.node_tree.nodes)
-    utils.build_pbr_textured_nodes(
-        mat.node_tree,
-        color_texture_path="./assets/textures/[2K]Metal07/Metal07_col.jpg",
-        metallic_texture_path="./assets/textures/[2K]Metal07/Metal07_met.jpg",
-        roughness_texture_path="./assets/textures/[2K]Metal07/Metal07_rgh.jpg",
-        normal_texture_path="./assets/textures/[2K]Metal07/Metal07_nrm.jpg",
-        displacement_texture_path=
-        "./assets/textures/[2K]Metal07/Metal07_disp.jpg")
+    assets.build_pbr_textured_nodes(mat.node_tree, "Metal07")
     current_object.data.materials.append(mat)
 
     # Keyframes
@@ -54,14 +48,7 @@ def set_scene_objects():
     mat = bpy.data.materials.new("Material_Plane")
     mat.use_nodes = True
     utils.clean_nodes(mat.node_tree.nodes)
-    utils.build_pbr_textured_nodes(
-        mat.node_tree,
-        color_texture_path="./assets/textures/[2K]Marble01/Marble01_col.jpg",
-        roughness_texture_path=
-        "./assets/textures/[2K]Marble01/Marble01_rgh.jpg",
-        normal_texture_path="./assets/textures/[2K]Marble01/Marble01_nrm.jpg",
-        displacement_texture_path=
-        "./assets/textures/[2K]Marble01/Marble01_disp.jpg")
+    assets.build_pbr_textured_nodes(mat.node_tree, "Marble01")
     current_object.data.materials.append(mat)
 
     bpy.ops.object.empty_add(location=(0.0, -0.70, 1.0))

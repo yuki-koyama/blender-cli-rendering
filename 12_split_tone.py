@@ -8,52 +8,10 @@ import os
 sys.path.append(os.getcwd())
 
 import utils
+import assets
 
 
 def set_scene_objects():
-
-    materials = {
-        "Leather05": {
-            "color": "./assets/textures/[2K]Leather05/Leather05_col.jpg",
-            "metallic": "",
-            "roughness": "./assets/textures/[2K]Leather05/Leather05_rgh.jpg",
-            "normal": "./assets/textures/[2K]Leather05/Leather05_nrm.jpg",
-            "displacement":
-            "./assets/textures/[2K]Leather05/Leather05_disp.jpg",
-        },
-        "Metal07": {
-            "color": "./assets/textures/[2K]Metal07/Metal07_col.jpg",
-            "metallic": "./assets/textures/[2K]Metal07/Metal07_met.jpg",
-            "roughness": "./assets/textures/[2K]Metal07/Metal07_rgh.jpg",
-            "normal": "./assets/textures/[2K]Metal07/Metal07_nrm.jpg",
-            "displacement": "./assets/textures/[2K]Metal07/Metal07_disp.jpg",
-        },
-        "Fabric02": {
-            "color": "./assets/textures/[2K]Fabric02/Fabric02_col.jpg",
-            "metallic": "",
-            "roughness": "./assets/textures/[2K]Fabric02/Fabric02_rgh.jpg",
-            "normal": "./assets/textures/[2K]Fabric02/Fabric02_nrm.jpg",
-            "displacement": "./assets/textures/[2K]Fabric02/Fabric02_disp.jpg",
-        },
-        "Marble01": {
-            "color": "./assets/textures/[2K]Marble01/Marble01_col.jpg",
-            "metallic": "",
-            "roughness": "./assets/textures/[2K]Marble01/Marble01_rgh.jpg",
-            "normal": "./assets/textures/[2K]Marble01/Marble01_nrm.jpg",
-            "displacement": "./assets/textures/[2K]Marble01/Marble01_disp.jpg",
-        },
-    }
-
-    def build_pbr_textured_nodes_from_material_name(node_tree, name):
-        utils.build_pbr_textured_nodes(
-            node_tree,
-            color_texture_path=materials[name]["color"],
-            metallic_texture_path=materials[name]["metallic"],
-            roughness_texture_path=materials[name]["roughness"],
-            normal_texture_path=materials[name]["normal"],
-            displacement_texture_path=materials[name]["displacement"],
-        )
-
     bpy.ops.mesh.primitive_monkey_add(location=(-1.8, 0.0, 1.0),
                                       rotation=(0.0, 0.0,
                                                 -math.pi * 60.0 / 180.0),
@@ -65,7 +23,7 @@ def set_scene_objects():
     mat = bpy.data.materials.new("Material_Left")
     mat.use_nodes = True
     utils.clean_nodes(mat.node_tree.nodes)
-    build_pbr_textured_nodes_from_material_name(mat.node_tree, "Leather05")
+    assets.build_pbr_textured_nodes(mat.node_tree, "Leather05")
     current_object.data.materials.append(mat)
 
     bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0),
@@ -79,7 +37,7 @@ def set_scene_objects():
     mat = bpy.data.materials.new("Material_Center")
     mat.use_nodes = True
     utils.clean_nodes(mat.node_tree.nodes)
-    build_pbr_textured_nodes_from_material_name(mat.node_tree, "Metal07")
+    assets.build_pbr_textured_nodes(mat.node_tree, "Metal07")
     current_object.data.materials.append(mat)
 
     bpy.ops.mesh.primitive_monkey_add(location=(+1.8, 0.0, 1.0),
@@ -93,7 +51,7 @@ def set_scene_objects():
     mat = bpy.data.materials.new("Material_Right")
     mat.use_nodes = True
     utils.clean_nodes(mat.node_tree.nodes)
-    build_pbr_textured_nodes_from_material_name(mat.node_tree, "Fabric02")
+    assets.build_pbr_textured_nodes(mat.node_tree, "Fabric02")
     current_object.data.materials.append(mat)
 
     bpy.ops.mesh.primitive_plane_add(radius=6.0, calc_uvs=True)
@@ -102,7 +60,7 @@ def set_scene_objects():
     mat = bpy.data.materials.new("Material_Plane")
     mat.use_nodes = True
     utils.clean_nodes(mat.node_tree.nodes)
-    build_pbr_textured_nodes_from_material_name(mat.node_tree, "Marble01")
+    assets.build_pbr_textured_nodes(mat.node_tree, "Marble01")
     current_object.data.materials.append(mat)
 
     bpy.ops.object.empty_add(location=(0.0, -0.70, 1.0))

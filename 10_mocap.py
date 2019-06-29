@@ -9,6 +9,7 @@ import os
 sys.path.append(os.getcwd())
 
 import utils
+import assets
 
 
 def create_armature_from_bvh(scene, bvh_path):
@@ -45,19 +46,8 @@ def build_scene(scene, input_bvh_path):
     mat = bpy.data.materials.new("Concrete07")
     mat.use_nodes = True
     utils.clean_nodes(mat.node_tree.nodes)
-    utils.build_pbr_textured_nodes(
-        mat.node_tree,
-        color_texture_path=
-        "./assets/textures/[2K]Concrete07/Concrete07_col.jpg",
-        roughness_texture_path=
-        "./assets/textures/[2K]Concrete07/Concrete07_rgh.jpg",
-        normal_texture_path=
-        "./assets/textures/[2K]Concrete07/Concrete07_nrm.jpg",
-        displacement_texture_path=
-        "./assets/textures/[2K]Concrete07/Concrete07_disp.jpg",
-        ambient_occlusion_texture_path=
-        "./assets/textures/[2K]Concrete07/Concrete07_AO.jpg",
-        scale=(0.25, 0.25, 0.25))
+    assets.build_pbr_textured_nodes(mat.node_tree, "Concrete07",
+                                    (0.25, 0.25, 0.25))
 
     bpy.ops.mesh.primitive_plane_add(radius=8.0, calc_uvs=True)
     current_object = bpy.context.object
