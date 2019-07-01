@@ -140,8 +140,7 @@ def build_scene_composition(scene):
 
     render_layer_node = scene.node_tree.nodes.new(type="CompositorNodeRLayers")
 
-    lens_distortion_node = scene.node_tree.nodes.new(
-        type="CompositorNodeLensdist")
+    lens_distortion_node = scene.node_tree.nodes.new(type="CompositorNodeLensdist")
     lens_distortion_node.inputs["Distort"].default_value = -0.050
     lens_distortion_node.inputs["Dispersion"].default_value = 0.050
 
@@ -151,12 +150,9 @@ def build_scene_composition(scene):
 
     composite_node = scene.node_tree.nodes.new(type="CompositorNodeComposite")
 
-    scene.node_tree.links.new(render_layer_node.outputs['Image'],
-                              lens_distortion_node.inputs['Image'])
-    scene.node_tree.links.new(lens_distortion_node.outputs['Image'],
-                              glare_node.inputs['Image'])
-    scene.node_tree.links.new(glare_node.outputs['Image'],
-                              composite_node.inputs['Image'])
+    scene.node_tree.links.new(render_layer_node.outputs['Image'], lens_distortion_node.inputs['Image'])
+    scene.node_tree.links.new(lens_distortion_node.outputs['Image'], glare_node.inputs['Image'])
+    scene.node_tree.links.new(glare_node.outputs['Image'], composite_node.inputs['Image'])
 
 
 # Args
@@ -191,12 +187,7 @@ utils.build_environmental_light(world, hdri_path)
 build_scene_composition(scene)
 
 # Render Setting
-utils.set_cycles_renderer(scene,
-                          resolution_percentage,
-                          output_file_path,
-                          camera,
-                          num_samples,
-                          use_denoising=True)
+utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_denoising=True)
 
 # Rendering
 bpy.ops.render.render(animation=False, write_still=True)

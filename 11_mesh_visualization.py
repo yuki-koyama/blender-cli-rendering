@@ -30,8 +30,7 @@ def get_color(x):
     c0 = colors[math.floor(a)]
     c1 = colors[math.ceil(a)]
 
-    return ((1.0 - t) * c0[0] + t * c1[0], (1.0 - t) * c0[1] + t * c1[1],
-            (1.0 - t) * c0[2] + t * c1[2])
+    return ((1.0 - t) * c0[0] + t * c1[0], (1.0 - t) * c0[1] + t * c1[1], (1.0 - t) * c0[2] + t * c1[2])
 
 
 def set_scene_objects():
@@ -66,16 +65,12 @@ def set_scene_objects():
     attrib_node.attribute_name = 'Col'
     rgb_node.outputs['Color'].default_value = (0.1, 0.1, 0.1, 1.0)
 
-    mat.node_tree.links.new(attrib_node.outputs['Color'],
-                            principled_node.inputs['Base Color'])
-    mat.node_tree.links.new(principled_node.outputs['BSDF'],
-                            mix_node.inputs[1])
-    mat.node_tree.links.new(rgb_node.outputs['Color'],
-                            wire_mat_node.inputs['Color'])
+    mat.node_tree.links.new(attrib_node.outputs['Color'], principled_node.inputs['Base Color'])
+    mat.node_tree.links.new(principled_node.outputs['BSDF'], mix_node.inputs[1])
+    mat.node_tree.links.new(rgb_node.outputs['Color'], wire_mat_node.inputs['Color'])
     mat.node_tree.links.new(wire_mat_node.outputs['BSDF'], mix_node.inputs[2])
     mat.node_tree.links.new(wire_node.outputs['Fac'], mix_node.inputs['Fac'])
-    mat.node_tree.links.new(mix_node.outputs['Shader'],
-                            output_node.inputs['Surface'])
+    mat.node_tree.links.new(mix_node.outputs['Shader'], output_node.inputs['Surface'])
 
     utils.arrange_nodes(mat.node_tree)
 

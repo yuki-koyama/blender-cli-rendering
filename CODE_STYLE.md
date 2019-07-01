@@ -2,8 +2,14 @@ Warning: the following requirements are not fully satisfied in the current scrip
 
 ## Formatting
 
-- Follow PEP8 as much as possible
-  - 4-space indentation
+PEP8 with an exception of using 120-column-limit.
+
+`yapf` users can easily ensure this rule by the following command:
+```
+find . -name "*.py" | xargs -I {} yapf --style='{based_on_style: pep8, column_limit: 120}' -i {}
+```
+
+Useful link: <https://wiki.blender.org/wiki/Style_Guide/Python>
 
 ## Naming Conventions
 

@@ -14,9 +14,7 @@ import assets
 
 def create_skinned_object():
     # Edit mode
-    bpy.ops.object.add(type='ARMATURE',
-                       enter_editmode=True,
-                       location=(0.0, 0.0, 0.0))
+    bpy.ops.object.add(type='ARMATURE', enter_editmode=True, location=(0.0, 0.0, 0.0))
     armature = bpy.context.object
     bone1 = armature.data.edit_bones.new('Bone1')
     bone1.head = (0.0, 0.0, 0.0)

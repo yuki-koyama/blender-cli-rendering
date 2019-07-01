@@ -135,8 +135,7 @@ def set_camera_params(camera, dof_target):
 
 
 def define_vignette_node():
-    group = bpy.data.node_groups.new(type="CompositorNodeTree",
-                                     name="Vignette")
+    group = bpy.data.node_groups.new(type="CompositorNodeTree", name="Vignette")
 
     input_node = group.nodes.new("NodeGroupInput")
     group.inputs.new("NodeSocketColor", "Image")
@@ -164,10 +163,8 @@ def define_vignette_node():
 
     group.links.new(input_node.outputs["Amount"], mix_node.inputs["Fac"])
     group.links.new(input_node.outputs["Image"], mix_node.inputs[1])
-    group.links.new(input_node.outputs["Image"],
-                    lens_distortion_node.inputs["Image"])
-    group.links.new(lens_distortion_node.outputs["Image"],
-                    separate_rgba_node.inputs["Image"])
+    group.links.new(input_node.outputs["Image"], lens_distortion_node.inputs["Image"])
+    group.links.new(lens_distortion_node.outputs["Image"], separate_rgba_node.inputs["Image"])
     group.links.new(separate_rgba_node.outputs["A"], blur_node.inputs["Image"])
     group.links.new(blur_node.outputs["Image"], mix_node.inputs[2])
     group.links.new(mix_node.outputs["Image"], output_node.inputs["Image"])
@@ -193,13 +190,11 @@ def build_scene_composition(scene):
 
     vignette_node = add_vignette_node(scene.node_tree)
 
-    lens_distortion_node = scene.node_tree.nodes.new(
-        type="CompositorNodeLensdist")
+    lens_distortion_node = scene.node_tree.nodes.new(type="CompositorNodeLensdist")
     lens_distortion_node.inputs["Distort"].default_value = -0.050
     lens_distortion_node.inputs["Dispersion"].default_value = 0.050
 
-    color_correction_node = scene.node_tree.nodes.new(
-        type="CompositorNodeColorCorrection")
+    color_correction_node = scene.node_tree.nodes.new(type="CompositorNodeColorCorrection")
     color_correction_node.master_saturation = 1.10
     color_correction_node.master_gain = 1.10
 
@@ -209,16 +204,11 @@ def build_scene_composition(scene):
 
     composite_node = scene.node_tree.nodes.new(type="CompositorNodeComposite")
 
-    scene.node_tree.links.new(render_layer_node.outputs['Image'],
-                              vignette_node.inputs['Image'])
-    scene.node_tree.links.new(vignette_node.outputs['Image'],
-                              lens_distortion_node.inputs['Image'])
-    scene.node_tree.links.new(lens_distortion_node.outputs['Image'],
-                              color_correction_node.inputs['Image'])
-    scene.node_tree.links.new(color_correction_node.outputs['Image'],
-                              glare_node.inputs['Image'])
-    scene.node_tree.links.new(glare_node.outputs['Image'],
-                              composite_node.inputs['Image'])
+    scene.node_tree.links.new(render_layer_node.outputs['Image'], vignette_node.inputs['Image'])
+    scene.node_tree.links.new(vignette_node.outputs['Image'], lens_distortion_node.inputs['Image'])
+    scene.node_tree.links.new(lens_distortion_node.outputs['Image'], color_correction_node.inputs['Image'])
+    scene.node_tree.links.new(color_correction_node.outputs['Image'], glare_node.inputs['Image'])
+    scene.node_tree.links.new(glare_node.outputs['Image'], composite_node.inputs['Image'])
 
     utils.arrange_nodes(scene.node_tree)
 
@@ -255,12 +245,7 @@ utils.build_environmental_light(world, hdri_path)
 build_scene_composition(scene)
 
 # Render Setting
-utils.set_cycles_renderer(scene,
-                          resolution_percentage,
-                          output_file_path,
-                          camera,
-                          num_samples,
-                          use_denoising=True)
+utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_denoising=True)
 
 # Render
 bpy.ops.render.render(animation=False, write_still=True)

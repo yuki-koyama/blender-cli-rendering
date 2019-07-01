@@ -35,8 +35,7 @@ def build_scene(scene, input_bvh_path):
     principled_node.inputs['Base Color'].default_value = (0.1, 0.2, 0.7, 1.0)
     principled_node.inputs['Metallic'].default_value = 0.9
     principled_node.inputs['Roughness'].default_value = 0.1
-    mat.node_tree.links.new(principled_node.outputs['BSDF'],
-                            output_node.inputs['Surface'])
+    mat.node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
     utils.arrange_nodes(mat.node_tree)
 
     armature = create_armature_from_bvh(scene, bvh_path=input_bvh_path)
@@ -46,8 +45,7 @@ def build_scene(scene, input_bvh_path):
     mat = bpy.data.materials.new("Concrete07")
     mat.use_nodes = True
     utils.clean_nodes(mat.node_tree.nodes)
-    assets.build_pbr_textured_nodes(mat.node_tree, "Concrete07",
-                                    (0.25, 0.25, 0.25))
+    assets.build_pbr_textured_nodes(mat.node_tree, "Concrete07", (0.25, 0.25, 0.25))
 
     bpy.ops.mesh.primitive_plane_add(radius=8.0, calc_uvs=True)
     current_object = bpy.context.object
@@ -74,8 +72,7 @@ def build_scene(scene, input_bvh_path):
 
 
 # Args
-input_bvh_path = str(sys.argv[sys.argv.index('--') +
-                              1])  # "./assets/motion/102_01.bvh"
+input_bvh_path = str(sys.argv[sys.argv.index('--') + 1])  # "./assets/motion/102_01.bvh"
 output_file_path = str(sys.argv[sys.argv.index('--') + 2])  # "./"
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 3])  # 100
 num_samples = int(sys.argv[sys.argv.index('--') + 4])  # 128
@@ -91,8 +88,7 @@ world = scene.world
 utils.clean_objects()
 
 # Animation Setting
-utils.set_animation(scene, fps=24, frame_start=1,
-                    frame_end=40)  # frame_end will be overriden later
+utils.set_animation(scene, fps=24, frame_start=1, frame_end=40)  # frame_end will be overriden later
 
 ## Scene
 focus_target = build_scene(scene, input_bvh_path)

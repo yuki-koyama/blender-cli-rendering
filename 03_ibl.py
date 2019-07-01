@@ -13,8 +13,7 @@ import utils
 def set_scene_objects():
     num_suzannes = 7
     for index in range(num_suzannes):
-        bpy.ops.mesh.primitive_monkey_add(
-            location=((index - (num_suzannes - 1) / 2) * 3.0, 0.0, 1.0))
+        bpy.ops.mesh.primitive_monkey_add(location=((index - (num_suzannes - 1) / 2) * 3.0, 0.0, 1.0))
         current_object = bpy.context.object
         current_object.name = "Suzanne" + str(index)
         utils.set_smooth_shading(current_object)
@@ -62,8 +61,7 @@ set_camera_params(camera, center_suzanne)
 utils.build_environmental_light(world, hdri_path)
 
 # Render Setting
-utils.set_cycles_renderer(scene, resolution_percentage, output_file_path,
-                          camera, num_samples)
+utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples)
 
 # Rendering
 bpy.ops.render.render(animation=False, write_still=True)

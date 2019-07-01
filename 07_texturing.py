@@ -13,8 +13,7 @@ import assets
 
 def set_scene_objects():
     bpy.ops.mesh.primitive_monkey_add(location=(-1.8, 0.0, 1.0),
-                                      rotation=(0.0, 0.0,
-                                                -math.pi * 60.0 / 180.0),
+                                      rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
                                       calc_uvs=True)
     current_object = bpy.context.object
     current_object.name = "Suzanne_Left"
@@ -27,8 +26,7 @@ def set_scene_objects():
     current_object.data.materials.append(mat)
 
     bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0),
-                                      rotation=(0.0, 0.0,
-                                                -math.pi * 60.0 / 180.0),
+                                      rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
                                       calc_uvs=True)
     current_object = bpy.context.object
     current_object.name = "Suzanne_Center"
@@ -41,8 +39,7 @@ def set_scene_objects():
     current_object.data.materials.append(mat)
 
     bpy.ops.mesh.primitive_monkey_add(location=(+1.8, 0.0, 1.0),
-                                      rotation=(0.0, 0.0,
-                                                -math.pi * 60.0 / 180.0),
+                                      rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
                                       calc_uvs=True)
     current_object = bpy.context.object
     current_object.name = "Suzanne_Right"
@@ -65,8 +62,7 @@ def set_scene_objects():
 
     bpy.ops.mesh.primitive_plane_add(radius=6.0,
                                      location=(0.0, 4.0, 0.0),
-                                     rotation=(math.pi * 90.0 / 180.0, 0.0,
-                                               0.0),
+                                     rotation=(math.pi * 90.0 / 180.0, 0.0, 0.0),
                                      calc_uvs=True)
     current_object = bpy.context.object
     current_object.name = "Wall"
@@ -124,12 +120,7 @@ utils.build_environmental_light(world, hdri_path)
 utils.build_scene_composition(scene)
 
 # Render Setting
-utils.set_cycles_renderer(scene,
-                          resolution_percentage,
-                          output_file_path,
-                          camera,
-                          num_samples,
-                          use_denoising=True)
+utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_denoising=True)
 
 # Render
 bpy.ops.render.render(animation=False, write_still=True)

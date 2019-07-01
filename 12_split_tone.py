@@ -13,8 +13,7 @@ import assets
 
 def set_scene_objects():
     bpy.ops.mesh.primitive_monkey_add(location=(-1.8, 0.0, 1.0),
-                                      rotation=(0.0, 0.0,
-                                                -math.pi * 60.0 / 180.0),
+                                      rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
                                       calc_uvs=True)
     current_object = bpy.context.object
     current_object.name = "Suzanne_Left"
@@ -27,8 +26,7 @@ def set_scene_objects():
     current_object.data.materials.append(mat)
 
     bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0),
-                                      rotation=(0.0, 0.0,
-                                                -math.pi * 60.0 / 180.0),
+                                      rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
                                       calc_uvs=True)
     current_object = bpy.context.object
     current_object.name = "Suzanne_Center"
@@ -41,8 +39,7 @@ def set_scene_objects():
     current_object.data.materials.append(mat)
 
     bpy.ops.mesh.primitive_monkey_add(location=(+1.8, 0.0, 1.0),
-                                      rotation=(0.0, 0.0,
-                                                -math.pi * 60.0 / 180.0),
+                                      rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
                                       calc_uvs=True)
     current_object = bpy.context.object
     current_object.name = "Suzanne_Right"

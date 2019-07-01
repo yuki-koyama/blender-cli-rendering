@@ -17,8 +17,7 @@ def build_environmental_light(world, hdri_path, rotation=0.0):
     world.use_nodes = True
     node_tree = world.node_tree
 
-    environment_texture_node = node_tree.nodes.new(
-        type="ShaderNodeTexEnvironment")
+    environment_texture_node = node_tree.nodes.new(type="ShaderNodeTexEnvironment")
     environment_texture_node.image = bpy.data.images.load(hdri_path)
 
     mapping_node = node_tree.nodes.new(type="ShaderNodeMapping")
@@ -26,12 +25,9 @@ def build_environmental_light(world, hdri_path, rotation=0.0):
 
     tex_coord_node = node_tree.nodes.new(type="ShaderNodeTexCoord")
 
-    node_tree.links.new(tex_coord_node.outputs["Generated"],
-                        mapping_node.inputs["Vector"])
-    node_tree.links.new(mapping_node.outputs["Vector"],
-                        environment_texture_node.inputs["Vector"])
-    node_tree.links.new(environment_texture_node.outputs["Color"],
-                        node_tree.nodes["Background"].inputs["Color"])
+    node_tree.links.new(tex_coord_node.outputs["Generated"], mapping_node.inputs["Vector"])
+    node_tree.links.new(mapping_node.outputs["Vector"], environment_texture_node.inputs["Vector"])
+    node_tree.links.new(environment_texture_node.outputs["Color"], node_tree.nodes["Background"].inputs["Color"])
 
     arrange_nodes(node_tree)
 
@@ -74,8 +70,7 @@ def set_camera_params(camera, focus_target):
 
 
 def add_split_tone_node_group():
-    group = bpy.data.node_groups.new(type="CompositorNodeTree",
-                                     name="SplitToneSub")
+    group = bpy.data.node_groups.new(type="CompositorNodeTree", name="SplitToneSub")
 
     input_node = group.nodes.new("NodeGroupInput")
     group.inputs.new("NodeSocketColor", "Image")
@@ -100,14 +95,11 @@ def add_split_tone_node_group():
     group.outputs.new("NodeSocketColor", "Image")
 
     group.links.new(input_node.outputs["Hue"], solid_node.inputs["H"])
-    group.links.new(input_node.outputs["Saturation"],
-                    overlay_node.inputs["Fac"])
+    group.links.new(input_node.outputs["Saturation"], overlay_node.inputs["Fac"])
     group.links.new(input_node.outputs["Image"], overlay_node.inputs[1])
     group.links.new(solid_node.outputs["Image"], overlay_node.inputs[2])
-    group.links.new(overlay_node.outputs["Image"],
-                    overlay_sep_node.inputs["Image"])
-    group.links.new(input_node.outputs["Image"],
-                    input_sep_node.inputs["Image"])
+    group.links.new(overlay_node.outputs["Image"], overlay_sep_node.inputs["Image"])
+    group.links.new(input_node.outputs["Image"], input_sep_node.inputs["Image"])
     group.links.new(overlay_sep_node.outputs["H"], comb_node.inputs["H"])
     group.links.new(overlay_sep_node.outputs["S"], comb_node.inputs["S"])
     group.links.new(input_sep_node.outputs["V"], comb_node.inputs["V"])
@@ -118,15 +110,11 @@ def add_split_tone_node_group():
 
     # --------------------------------------------------------------------------
 
-    group = bpy.data.node_groups.new(type="CompositorNodeTree",
-                                     name="SplitTone")
+    group = bpy.data.node_groups.new(type="CompositorNodeTree", name="SplitTone")
 
     input_node = group.nodes.new("NodeGroupInput")
 
-    def set_socket_value_range(socket,
-                               default_value=0.0,
-                               min_value=0.0,
-                               max_value=1.0):
+    def set_socket_value_range(socket, default_value=0.0, min_value=0.0, max_value=1.0):
         socket.default_value = default_value
         socket.min_value = min_value
         socket.max_value = max_value
@@ -169,19 +157,13 @@ def add_split_tone_node_group():
     output_node = group.nodes.new("NodeGroupOutput")
     group.outputs.new("NodeSocketColor", "Image")
 
-    group.links.new(input_node.outputs["Image"],
-                    input_sep_node.inputs["Image"])
+    group.links.new(input_node.outputs["Image"], input_sep_node.inputs["Image"])
     group.links.new(input_node.outputs["Image"], shadows_node.inputs["Image"])
-    group.links.new(input_node.outputs["ShadowsHue"],
-                    shadows_node.inputs["Hue"])
-    group.links.new(input_node.outputs["ShadowsSaturation"],
-                    shadows_node.inputs["Saturation"])
-    group.links.new(input_node.outputs["Image"],
-                    highlights_node.inputs["Image"])
-    group.links.new(input_node.outputs["HighlightsHue"],
-                    highlights_node.inputs["Hue"])
-    group.links.new(input_node.outputs["HighlightsSaturation"],
-                    highlights_node.inputs["Saturation"])
+    group.links.new(input_node.outputs["ShadowsHue"], shadows_node.inputs["Hue"])
+    group.links.new(input_node.outputs["ShadowsSaturation"], shadows_node.inputs["Saturation"])
+    group.links.new(input_node.outputs["Image"], highlights_node.inputs["Image"])
+    group.links.new(input_node.outputs["HighlightsHue"], highlights_node.inputs["Hue"])
+    group.links.new(input_node.outputs["HighlightsSaturation"], highlights_node.inputs["Saturation"])
     group.links.new(input_node.outputs["Balance"], multiply_node.inputs[0])
     group.links.new(input_sep_node.outputs["V"], power_node.inputs[0])
     group.links.new(multiply_node.outputs["Value"], power_node.inputs[1])
@@ -196,8 +178,7 @@ def add_split_tone_node_group():
 
 
 def add_vignette_node_group():
-    group = bpy.data.node_groups.new(type="CompositorNodeTree",
-                                     name="Vignette")
+    group = bpy.data.node_groups.new(type="CompositorNodeTree", name="Vignette")
 
     input_node = group.nodes.new("NodeGroupInput")
     group.inputs.new("NodeSocketColor", "Image")
@@ -225,10 +206,8 @@ def add_vignette_node_group():
 
     group.links.new(input_node.outputs["Amount"], mix_node.inputs["Fac"])
     group.links.new(input_node.outputs["Image"], mix_node.inputs[1])
-    group.links.new(input_node.outputs["Image"],
-                    lens_distortion_node.inputs["Image"])
-    group.links.new(lens_distortion_node.outputs["Image"],
-                    separate_rgba_node.inputs["Image"])
+    group.links.new(input_node.outputs["Image"], lens_distortion_node.inputs["Image"])
+    group.links.new(lens_distortion_node.outputs["Image"], separate_rgba_node.inputs["Image"])
     group.links.new(separate_rgba_node.outputs["A"], blur_node.inputs["Image"])
     group.links.new(blur_node.outputs["Image"], mix_node.inputs[2])
     group.links.new(mix_node.outputs["Image"], output_node.inputs["Image"])
@@ -266,13 +245,11 @@ def build_scene_composition(scene):
 
     vignette_node = create_vignette_node(scene.node_tree)
 
-    lens_distortion_node = scene.node_tree.nodes.new(
-        type="CompositorNodeLensdist")
+    lens_distortion_node = scene.node_tree.nodes.new(type="CompositorNodeLensdist")
     lens_distortion_node.inputs["Distort"].default_value = -0.020
     lens_distortion_node.inputs["Dispersion"].default_value = 0.050
 
-    color_correction_node = scene.node_tree.nodes.new(
-        type="CompositorNodeColorCorrection")
+    color_correction_node = scene.node_tree.nodes.new(type="CompositorNodeColorCorrection")
     color_correction_node.master_saturation = 1.10
     color_correction_node.master_gain = 1.10
 
@@ -284,18 +261,12 @@ def build_scene_composition(scene):
 
     composite_node = scene.node_tree.nodes.new(type="CompositorNodeComposite")
 
-    scene.node_tree.links.new(render_layer_node.outputs['Image'],
-                              vignette_node.inputs['Image'])
-    scene.node_tree.links.new(vignette_node.outputs['Image'],
-                              lens_distortion_node.inputs['Image'])
-    scene.node_tree.links.new(lens_distortion_node.outputs['Image'],
-                              color_correction_node.inputs['Image'])
-    scene.node_tree.links.new(color_correction_node.outputs['Image'],
-                              split_tone_node.inputs['Image'])
-    scene.node_tree.links.new(split_tone_node.outputs['Image'],
-                              glare_node.inputs['Image'])
-    scene.node_tree.links.new(glare_node.outputs['Image'],
-                              composite_node.inputs['Image'])
+    scene.node_tree.links.new(render_layer_node.outputs['Image'], vignette_node.inputs['Image'])
+    scene.node_tree.links.new(vignette_node.outputs['Image'], lens_distortion_node.inputs['Image'])
+    scene.node_tree.links.new(lens_distortion_node.outputs['Image'], color_correction_node.inputs['Image'])
+    scene.node_tree.links.new(color_correction_node.outputs['Image'], split_tone_node.inputs['Image'])
+    scene.node_tree.links.new(split_tone_node.outputs['Image'], glare_node.inputs['Image'])
+    scene.node_tree.links.new(glare_node.outputs['Image'], composite_node.inputs['Image'])
 
     arrange_nodes(scene.node_tree)
 
@@ -324,12 +295,7 @@ def add_track_to_constraint(camera, track_to_target):
     constraint.up_axis = 'UP_Y'
 
 
-def add_copy_location_constraint(copy_to_object,
-                                 copy_from_object,
-                                 use_x,
-                                 use_y,
-                                 use_z,
-                                 bone_name=''):
+def add_copy_location_constraint(copy_to_object, copy_from_object, use_x, use_y, use_z, bone_name=''):
     constraint = copy_to_object.constraints.new(type='COPY_LOCATION')
     constraint.target = copy_from_object
     constraint.use_x = use_x
@@ -379,36 +345,26 @@ def set_principled_node(principled_node,
     principled_node.inputs['Base Color'].default_value = base_color
     principled_node.inputs['Subsurface'].default_value = subsurface
     principled_node.inputs['Subsurface Color'].default_value = subsurface_color
-    principled_node.inputs[
-        'Subsurface Radius'].default_value = subsurface_radius
+    principled_node.inputs['Subsurface Radius'].default_value = subsurface_radius
     principled_node.inputs['Metallic'].default_value = metallic
     principled_node.inputs['Specular'].default_value = specular
     principled_node.inputs['Specular Tint'].default_value = specular_tint
     principled_node.inputs['Roughness'].default_value = roughness
     principled_node.inputs['Anisotropic'].default_value = anisotropic
-    principled_node.inputs[
-        'Anisotropic Rotation'].default_value = anisotropic_rotation
+    principled_node.inputs['Anisotropic Rotation'].default_value = anisotropic_rotation
     principled_node.inputs['Sheen'].default_value = sheen
     principled_node.inputs['Sheen Tint'].default_value = sheen_tint
     principled_node.inputs['Clearcoat'].default_value = clearcoat
-    principled_node.inputs[
-        'Clearcoat Roughness'].default_value = clearcoat_roughness
+    principled_node.inputs['Clearcoat Roughness'].default_value = clearcoat_roughness
     principled_node.inputs['IOR'].default_value = ior
     principled_node.inputs['Transmission'].default_value = transmission
-    principled_node.inputs[
-        'Transmission Roughness'].default_value = transmission_roughness
+    principled_node.inputs['Transmission Roughness'].default_value = transmission_roughness
 
 
-def build_pbr_nodes(node_tree,
-                    base_color=(0.6, 0.6, 0.6, 1.0),
-                    metallic=0.0,
-                    specular=0.5,
-                    roughness=0.5,
-                    sheen=0.0):
+def build_pbr_nodes(node_tree, base_color=(0.6, 0.6, 0.6, 1.0), metallic=0.0, specular=0.5, roughness=0.5, sheen=0.0):
     output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
     principled_node = node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
-    node_tree.links.new(principled_node.outputs['BSDF'],
-                        output_node.inputs['Surface'])
+    node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
 
     set_principled_node(principled_node=principled_node,
                         base_color=base_color,
@@ -430,71 +386,49 @@ def build_pbr_textured_nodes(node_tree,
                              scale=(1.0, 1.0, 1.0)):
     output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
     principled_node = node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
-    node_tree.links.new(principled_node.outputs['BSDF'],
-                        output_node.inputs['Surface'])
+    node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
 
     coord_node = node_tree.nodes.new(type='ShaderNodeTexCoord')
     mapping_node = node_tree.nodes.new(type='ShaderNodeMapping')
     mapping_node.vector_type = 'TEXTURE'
     mapping_node.scale = scale
-    node_tree.links.new(coord_node.outputs['UV'],
-                        mapping_node.inputs['Vector'])
+    node_tree.links.new(coord_node.outputs['UV'], mapping_node.inputs['Vector'])
 
     if color_texture_path != "":
         texture_node = create_texture_node(node_tree, color_texture_path, True)
-        node_tree.links.new(mapping_node.outputs['Vector'],
-                            texture_node.inputs['Vector'])
+        node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
         if ambient_occlusion_texture_path != "":
-            ao_texture_node = create_texture_node(
-                node_tree, ambient_occlusion_texture_path, False)
-            node_tree.links.new(mapping_node.outputs['Vector'],
-                                ao_texture_node.inputs['Vector'])
+            ao_texture_node = create_texture_node(node_tree, ambient_occlusion_texture_path, False)
+            node_tree.links.new(mapping_node.outputs['Vector'], ao_texture_node.inputs['Vector'])
             mix_node = node_tree.nodes.new(type='ShaderNodeMixRGB')
             mix_node.blend_type = 'MULTIPLY'
-            node_tree.links.new(texture_node.outputs['Color'],
-                                mix_node.inputs['Color1'])
-            node_tree.links.new(ao_texture_node.outputs['Color'],
-                                mix_node.inputs['Color2'])
-            node_tree.links.new(mix_node.outputs['Color'],
-                                principled_node.inputs['Base Color'])
+            node_tree.links.new(texture_node.outputs['Color'], mix_node.inputs['Color1'])
+            node_tree.links.new(ao_texture_node.outputs['Color'], mix_node.inputs['Color2'])
+            node_tree.links.new(mix_node.outputs['Color'], principled_node.inputs['Base Color'])
         else:
-            node_tree.links.new(texture_node.outputs['Color'],
-                                principled_node.inputs['Base Color'])
+            node_tree.links.new(texture_node.outputs['Color'], principled_node.inputs['Base Color'])
 
     if metallic_texture_path != "":
-        texture_node = create_texture_node(node_tree, metallic_texture_path,
-                                           False)
-        node_tree.links.new(mapping_node.outputs['Vector'],
-                            texture_node.inputs['Vector'])
-        node_tree.links.new(texture_node.outputs['Color'],
-                            principled_node.inputs['Metallic'])
+        texture_node = create_texture_node(node_tree, metallic_texture_path, False)
+        node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
+        node_tree.links.new(texture_node.outputs['Color'], principled_node.inputs['Metallic'])
 
     if roughness_texture_path != "":
-        texture_node = create_texture_node(node_tree, roughness_texture_path,
-                                           False)
-        node_tree.links.new(mapping_node.outputs['Vector'],
-                            texture_node.inputs['Vector'])
-        node_tree.links.new(texture_node.outputs['Color'],
-                            principled_node.inputs['Roughness'])
+        texture_node = create_texture_node(node_tree, roughness_texture_path, False)
+        node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
+        node_tree.links.new(texture_node.outputs['Color'], principled_node.inputs['Roughness'])
 
     if normal_texture_path != "":
-        texture_node = create_texture_node(node_tree, normal_texture_path,
-                                           False)
-        node_tree.links.new(mapping_node.outputs['Vector'],
-                            texture_node.inputs['Vector'])
+        texture_node = create_texture_node(node_tree, normal_texture_path, False)
+        node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
         normal_map_node = node_tree.nodes.new(type='ShaderNodeNormalMap')
-        node_tree.links.new(texture_node.outputs['Color'],
-                            normal_map_node.inputs['Color'])
-        node_tree.links.new(normal_map_node.outputs['Normal'],
-                            principled_node.inputs['Normal'])
+        node_tree.links.new(texture_node.outputs['Color'], normal_map_node.inputs['Color'])
+        node_tree.links.new(normal_map_node.outputs['Normal'], principled_node.inputs['Normal'])
 
     if displacement_texture_path != "":
-        texture_node = create_texture_node(node_tree,
-                                           displacement_texture_path, False)
-        node_tree.links.new(mapping_node.outputs['Vector'],
-                            texture_node.inputs['Vector'])
-        node_tree.links.new(texture_node.outputs['Color'],
-                            output_node.inputs['Displacement'])
+        texture_node = create_texture_node(node_tree, displacement_texture_path, False)
+        node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
+        node_tree.links.new(texture_node.outputs['Color'], output_node.inputs['Displacement'])
 
     arrange_nodes(node_tree)
 
@@ -565,36 +499,29 @@ def create_armature_mesh(scene, armature_object, mesh_name):
 
     for bone in armature_data.bones:
         radius = 0.10 * (0.10 + bone.length)
-        temp_vertices, temp_faces = generate_bone_mesh_pydata(
-            radius, bone.length)
+        temp_vertices, temp_faces = generate_bone_mesh_pydata(radius, bone.length)
 
         vertex_index_offset = len(vertices)
 
         temp_vertex_group = {'name': bone.name, 'vertex_indices': []}
         for local_index, vertex in enumerate(temp_vertices):
             vertices.append(bone.matrix_local * vertex)
-            temp_vertex_group['vertex_indices'].append(local_index +
-                                                       vertex_index_offset)
+            temp_vertex_group['vertex_indices'].append(local_index + vertex_index_offset)
         vertex_groups.append(temp_vertex_group)
 
         for face in temp_faces:
             if len(face) == 3:
-                faces.append((face[0] + vertex_index_offset,
-                              face[1] + vertex_index_offset,
-                              face[2] + vertex_index_offset))
+                faces.append(
+                    (face[0] + vertex_index_offset, face[1] + vertex_index_offset, face[2] + vertex_index_offset))
             else:
-                faces.append((face[0] + vertex_index_offset,
-                              face[1] + vertex_index_offset,
-                              face[2] + vertex_index_offset,
-                              face[3] + vertex_index_offset))
+                faces.append((face[0] + vertex_index_offset, face[1] + vertex_index_offset,
+                              face[2] + vertex_index_offset, face[3] + vertex_index_offset))
 
-    new_object = create_mesh_from_pydata(scene, vertices, faces, mesh_name,
-                                         mesh_name)
+    new_object = create_mesh_from_pydata(scene, vertices, faces, mesh_name, mesh_name)
     new_object.matrix_world = armature_object.matrix_world
 
     for vertex_group in vertex_groups:
-        add_rigid_vertex_group(new_object, vertex_group['name'],
-                               vertex_group['vertex_indices'])
+        add_rigid_vertex_group(new_object, vertex_group['name'], vertex_group['vertex_indices'])
 
     armature_modifier = new_object.modifiers.new('Armature', 'ARMATURE')
     armature_modifier.object = armature_object
@@ -618,12 +545,7 @@ def create_armature_mesh(scene, armature_object, mesh_name):
 ################################################################################
 
 
-def create_mesh_from_pydata(scene,
-                            vertices,
-                            faces,
-                            mesh_name,
-                            object_name,
-                            use_smooth=True):
+def create_mesh_from_pydata(scene, vertices, faces, mesh_name, object_name, use_smooth=True):
     # Add a new mesh and set vertices and faces
     # In this case, it does not require to set edges
     # After manipulating mesh data, update() needs to be called

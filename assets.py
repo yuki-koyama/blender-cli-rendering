@@ -46,13 +46,11 @@ materials = {
 
 
 def build_pbr_textured_nodes(node_tree, name, scale=(1.0, 1.0, 1.0)):
-    utils.build_pbr_textured_nodes(
-        node_tree,
-        color_texture_path=materials[name]["color"],
-        metallic_texture_path=materials[name]["metallic"],
-        roughness_texture_path=materials[name]["roughness"],
-        normal_texture_path=materials[name]["normal"],
-        displacement_texture_path=materials[name]["displacement"],
-        ambient_occlusion_texture_path=materials[name]["ambient_occlusion"],
-        scale=scale
-    )
+    utils.build_pbr_textured_nodes(node_tree,
+                                   color_texture_path=materials[name]["color"],
+                                   metallic_texture_path=materials[name]["metallic"],
+                                   roughness_texture_path=materials[name]["roughness"],
+                                   normal_texture_path=materials[name]["normal"],
+                                   displacement_texture_path=materials[name]["displacement"],
+                                   ambient_occlusion_texture_path=materials[name]["ambient_occlusion"],
+                                   scale=scale)
