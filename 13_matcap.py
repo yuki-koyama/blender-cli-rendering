@@ -10,16 +10,13 @@ sys.path.append(os.getcwd())
 import utils
 
 
-def build_matcap_nodes(node_tree, image_path):
-    pass
-
 def set_scene_objects():
     image_path = "./assets/matcaps/blue.png"
 
     mat = bpy.data.materials.new("MatCap")
     mat.use_nodes = True
     utils.clean_nodes(mat.node_tree.nodes)
-    build_matcap_nodes(mat.node_tree, image_path)
+    utils.build_matcap_nodes(mat.node_tree, image_path)
 
     bpy.ops.mesh.primitive_monkey_add(location=(1.2, 0.0, 0.0), calc_uvs=True)
     current_object = bpy.context.object
