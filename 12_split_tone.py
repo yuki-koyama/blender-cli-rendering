@@ -111,7 +111,7 @@ split_tone_node.inputs["HighlightsHue"].default_value = 0.1
 split_tone_node.inputs["HighlightsSaturation"].default_value = 0.2
 split_tone_node.inputs["ShadowsHue"].default_value = 0.6
 split_tone_node.inputs["ShadowsSaturation"].default_value = 0.4
-split_tone_node.inputs["Balance"].default_value = 0.3
+split_tone_node.inputs["Balance"].default_value = 0.7
 
 # Render Setting
 utils.set_cycles_renderer(scene,

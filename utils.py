@@ -134,6 +134,11 @@ def add_split_tone_node_group():
 
     input_sep_node = group.nodes.new(type="CompositorNodeSepHSVA")
 
+    subtract_node = group.nodes.new(type="CompositorNodeMath")
+    subtract_node.inputs[0].default_value = 1.0
+    subtract_node.operation = 'SUBTRACT'
+    subtract_node.use_clamp = True
+
     multiply_node = group.nodes.new(type="CompositorNodeMath")
     multiply_node.inputs[1].default_value = 2.0
     multiply_node.operation = 'MULTIPLY'
@@ -164,7 +169,8 @@ def add_split_tone_node_group():
     group.links.new(input_node.outputs["Image"], highlights_node.inputs["Image"])
     group.links.new(input_node.outputs["HighlightsHue"], highlights_node.inputs["Hue"])
     group.links.new(input_node.outputs["HighlightsSaturation"], highlights_node.inputs["Saturation"])
-    group.links.new(input_node.outputs["Balance"], multiply_node.inputs[0])
+    group.links.new(input_node.outputs["Balance"], subtract_node.inputs[1])
+    group.links.new(subtract_node.outputs["Value"], multiply_node.inputs[0])
     group.links.new(input_sep_node.outputs["V"], power_node.inputs[0])
     group.links.new(multiply_node.outputs["Value"], power_node.inputs[1])
     group.links.new(power_node.outputs["Value"], comb_node.inputs["Fac"])
