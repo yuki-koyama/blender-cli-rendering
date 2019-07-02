@@ -13,6 +13,17 @@ def set_animation(scene, fps=24, frame_start=1, frame_end=48, frame_current=1):
     scene.frame_current = frame_current
 
 
+def build_rgb_background(world, rgb=(0.9, 0.9, 0.9, 1.0)):
+    world.use_nodes = True
+    node_tree = world.node_tree
+
+    rgb_node = node_tree.nodes.new(type="ShaderNodeRGB")
+    rgb_node.outputs["Color"].default_value = rgb
+
+    node_tree.links.new(rgb_node.outputs["Color"], node_tree.nodes["Background"].inputs["Color"])
+
+    arrange_nodes(node_tree)
+
 def build_environmental_light(world, hdri_path, rotation=0.0):
     world.use_nodes = True
     node_tree = world.node_tree
