@@ -68,11 +68,40 @@ camera = bpy.context.object
 utils.add_track_to_constraint(camera, focus_target)
 set_camera_params(camera, focus_target)
 
-## Lights
+## Background
 utils.build_rgb_background(world, rgb=(0.89, 0.93, 1.00, 1.00))
 
 ## Composition
-utils.build_scene_composition(scene)
+def build_scene_composition(scene):
+    scene.use_nodes = True
+    utils.clean_nodes(scene.node_tree.nodes)
+
+    render_layer_node = scene.node_tree.nodes.new(type="CompositorNodeRLayers")
+
+    filter_node = scene.node_tree.nodes.new(type="CompositorNodeFilter")
+    filter_node.filter_type = "SHARPEN"
+    filter_node.inputs["Fac"].default_value = 0.1
+
+    color_correction_node = scene.node_tree.nodes.new(type="CompositorNodeColorCorrection")
+    color_correction_node.master_saturation = 1.10
+    color_correction_node.master_gain = 1.20
+    color_correction_node.midtones_gain = 1.20
+    color_correction_node.shadows_gain = 1.50
+
+    split_tone_node = utils.create_split_tone_node(scene.node_tree)
+    split_tone_node.inputs["ShadowsHue"].default_value = 0.6
+    split_tone_node.inputs["ShadowsSaturation"].default_value = 0.1
+
+    composite_node = scene.node_tree.nodes.new(type="CompositorNodeComposite")
+
+    scene.node_tree.links.new(render_layer_node.outputs['Image'], filter_node.inputs['Image'])
+    scene.node_tree.links.new(filter_node.outputs['Image'], color_correction_node.inputs['Image'])
+    scene.node_tree.links.new(color_correction_node.outputs['Image'], split_tone_node.inputs['Image'])
+    scene.node_tree.links.new(split_tone_node.outputs['Image'], composite_node.inputs['Image'])
+
+    utils.arrange_nodes(scene.node_tree)
+
+build_scene_composition(scene)
 
 # Render Setting
 utils.set_cycles_renderer(scene,
