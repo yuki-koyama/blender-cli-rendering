@@ -404,6 +404,13 @@ def build_matcap_nodes(node_tree, image_path):
     emmission_node = node_tree.nodes.new(type='ShaderNodeEmission')
     output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
 
+    frame = node_tree.nodes.new(type='NodeFrame')
+    frame.name = "MatCap UV"
+    frame.label = "MatCap UV"
+    tex_coord_node.parent = frame
+    vector_transform_node.parent = frame
+    mapping_node.parent = frame
+
     vector_transform_node.vector_type = "VECTOR"
     vector_transform_node.convert_from = "OBJECT"
     vector_transform_node.convert_to = "CAMERA"

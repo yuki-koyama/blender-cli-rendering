@@ -113,6 +113,7 @@ Python scripts for rendering images using Blender from command-line interface.
 - MatCap (a.k.a. Lit Sphere)
 - Image filtering (e.g., sharpen)
 - Simple RGB background
+- Node frame
 
 ![13_matcap](docs/compressed/13_matcap.jpg)
 
