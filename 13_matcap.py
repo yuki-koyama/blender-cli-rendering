@@ -71,6 +71,7 @@ set_camera_params(camera, focus_target)
 ## Background
 utils.build_rgb_background(world, rgb=(0.89, 0.93, 1.00, 1.00))
 
+
 ## Composition
 def build_scene_composition(scene):
     scene.use_nodes = True
@@ -100,6 +101,7 @@ def build_scene_composition(scene):
     scene.node_tree.links.new(split_tone_node.outputs['Image'], composite_node.inputs['Image'])
 
     utils.arrange_nodes(scene.node_tree)
+
 
 build_scene_composition(scene)
 
