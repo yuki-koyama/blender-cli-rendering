@@ -29,7 +29,7 @@ def build_rgb_background(world, rgb=(0.9, 0.9, 0.9, 1.0), strength=1.0):
     arrange_nodes(node_tree)
 
 
-def build_environmental_light(world, hdri_path, rotation=0.0):
+def build_environment_texture_background(world, hdri_path, rotation=0.0):
     world.use_nodes = True
     node_tree = world.node_tree
 

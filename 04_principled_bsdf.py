@@ -159,7 +159,7 @@ utils.add_track_to_constraint(camera, focus_target)
 set_camera_params(camera, focus_target)
 
 ## Lights
-utils.build_environmental_light(world, hdri_path)
+utils.build_environment_texture_background(world, hdri_path)
 
 # Render Setting
 utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_denoising=True)
