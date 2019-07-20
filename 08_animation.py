@@ -18,7 +18,7 @@ def set_scene_objects():
     current_object = bpy.context.object
     current_object.name = "Suzanne_Center"
     utils.set_smooth_shading(current_object)
-    utils.add_subdivision_surface_modifier(current_object, 3)
+    utils.add_subdivision_surface_modifier(current_object, 2)
     mat = bpy.data.materials.new("Material_Center")
     mat.use_nodes = True
     utils.clean_nodes(mat.node_tree.nodes)

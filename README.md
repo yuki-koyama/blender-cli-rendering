@@ -28,6 +28,7 @@ Python scripts for rendering images using Blender from command-line interface.
 - Subdivision surfaces
 - `TRACK_TO` constraint to achieve camera's _look-at_ behavior
 - Depth of field
+- Smooth shading
 
 ![02_suzanne](docs/compressed/02_suzanne.jpg)
 

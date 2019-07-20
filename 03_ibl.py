@@ -16,7 +16,7 @@ def set_scene_objects():
         current_object = bpy.context.object
         current_object.name = "Suzanne" + str(index)
         utils.set_smooth_shading(current_object)
-        utils.add_subdivision_surface_modifier(current_object, 3)
+        utils.add_subdivision_surface_modifier(current_object, 2)
     bpy.ops.mesh.primitive_plane_add(radius=10.0)
     return bpy.data.objects["Suzanne" + str(int((num_suzannes - 1) / 2))]
 
