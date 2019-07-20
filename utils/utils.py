@@ -184,6 +184,20 @@ def build_pbr_nodes(node_tree, base_color=(0.6, 0.6, 0.6, 1.0), metallic=0.0, sp
     arrange_nodes(node_tree)
 
 
+def build_checker_board_nodes(node_tree, size):
+    output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
+    principled_node = node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
+    checker_texture_node = node_tree.nodes.new(type='ShaderNodeTexChecker')
+
+    set_principled_node(principled_node=principled_node)
+    checker_texture_node.inputs['Scale'].default_value = size
+
+    node_tree.links.new(checker_texture_node.outputs['Color'], principled_node.inputs['Base Color'])
+    node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+
+    arrange_nodes(node_tree)
+
+
 def build_matcap_nodes(node_tree, image_path):
     tex_coord_node = node_tree.nodes.new(type='ShaderNodeTexCoord')
     vector_transform_node = node_tree.nodes.new(type='ShaderNodeVectorTransform')
