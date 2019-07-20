@@ -106,8 +106,9 @@ Python scripts for rendering images using Blender from command-line interface.
 ### 12_split_tone.py
 
 - Split Tone
+- Checker board texture
 
-![12_split_tone](docs/compressed/12_split_tone.gif)
+![12_split_tone](docs/compressed/12_split_tone.jpg)
 
 ### 13_matcap.py
 
