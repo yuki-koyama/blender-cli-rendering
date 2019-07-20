@@ -176,21 +176,22 @@ def create_vignette_node(node_tree):
     return node
 
 
-def build_scene_composition(scene):
+def build_scene_composition(scene, vignette=0.20, dispersion=0.050, gain=1.10, saturation=1.10):
     scene.use_nodes = True
     clean_nodes(scene.node_tree.nodes)
 
     render_layer_node = scene.node_tree.nodes.new(type="CompositorNodeRLayers")
 
     vignette_node = create_vignette_node(scene.node_tree)
+    vignette_node.inputs["Amount"].default_value = vignette
 
     lens_distortion_node = scene.node_tree.nodes.new(type="CompositorNodeLensdist")
-    lens_distortion_node.inputs["Distort"].default_value = -0.020
-    lens_distortion_node.inputs["Dispersion"].default_value = 0.050
+    lens_distortion_node.inputs["Distort"].default_value = -dispersion * 0.40
+    lens_distortion_node.inputs["Dispersion"].default_value = dispersion
 
     color_correction_node = scene.node_tree.nodes.new(type="CompositorNodeColorCorrection")
-    color_correction_node.master_saturation = 1.10
-    color_correction_node.master_gain = 1.10
+    color_correction_node.master_saturation = saturation
+    color_correction_node.master_gain = gain
 
     split_tone_node = create_split_tone_node(scene.node_tree)
 
