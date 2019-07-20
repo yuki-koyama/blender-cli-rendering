@@ -6,8 +6,7 @@ import math
 import os
 import random
 
-sys.path.append(os.getcwd())
-
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import utils
 
 

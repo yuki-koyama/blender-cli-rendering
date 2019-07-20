@@ -1,7 +1,7 @@
 #!/bin/bash
 
-RESOLUTION=100
-SAMPLINGS=128
+RESOLUTION=10
+SAMPLINGS=2
 
 mkdir -p out
 blender --background --python ./01_cube.py -- ./out/01_cube.png ${RESOLUTION}

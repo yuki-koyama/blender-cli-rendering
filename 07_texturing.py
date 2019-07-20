@@ -5,8 +5,7 @@ import sys
 import math
 import os
 
-sys.path.append(os.getcwd())
-
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import utils
 import assets
 
