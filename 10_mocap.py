@@ -8,7 +8,7 @@ import os
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import utils
-import assets
+import external.cc0assetsloader as loader
 
 
 def create_armature_from_bvh(scene, bvh_path):
@@ -26,6 +26,8 @@ def create_armature_from_bvh(scene, bvh_path):
 
 
 def build_scene(scene, input_bvh_path):
+    loader.build_pbr_textured_nodes_from_name("Concrete07", scale=(0.25, 0.25, 0.25))
+
     mat = bpy.data.materials.new("BlueMetal")
     mat.use_nodes = True
     utils.clean_nodes(mat.node_tree.nodes)
@@ -41,20 +43,15 @@ def build_scene(scene, input_bvh_path):
     armature_mesh = utils.create_armature_mesh(scene, armature, 'Mesh')
     armature_mesh.data.materials.append(mat)
 
-    mat = bpy.data.materials.new("Concrete07")
-    mat.use_nodes = True
-    utils.clean_nodes(mat.node_tree.nodes)
-    assets.build_pbr_textured_nodes(mat.node_tree, "Concrete07", (0.25, 0.25, 0.25))
-
     bpy.ops.mesh.primitive_plane_add(radius=8.0, calc_uvs=True)
     current_object = bpy.context.object
     current_object.name = "Floor"
-    current_object.data.materials.append(mat)
+    current_object.data.materials.append(bpy.data.materials["Concrete07"])
 
     bpy.ops.mesh.primitive_plane_add(radius=8.0, calc_uvs=True)
     current_object = bpy.context.object
     current_object.name = "Wall"
-    current_object.data.materials.append(mat)
+    current_object.data.materials.append(bpy.data.materials["Concrete07"])
     current_object.location = (0.0, 6.0, 0.0)
     current_object.rotation_euler = (0.5 * math.pi, 0.0, 0.0)
 

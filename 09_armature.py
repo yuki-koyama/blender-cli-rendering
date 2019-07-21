@@ -8,7 +8,7 @@ import os
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import utils
-import assets
+import external.cc0assetsloader as loader
 
 
 def create_skinned_object():
@@ -41,6 +41,9 @@ def create_skinned_object():
     # Object mode
     bpy.ops.object.mode_set(mode='OBJECT')
 
+    # Material
+    loader.build_pbr_textured_nodes_from_name("Metal07")
+
     # Mesh
     bpy.ops.mesh.primitive_cube_add(location=(0.0, 0.0, 1.0), calc_uvs=True)
     cube = bpy.context.object
@@ -49,11 +52,7 @@ def create_skinned_object():
     utils.add_subdivision_surface_modifier(cube, 3, is_simple=True)
     utils.add_subdivision_surface_modifier(cube, 3, is_simple=False)
     utils.set_smooth_shading(cube)
-    mat = bpy.data.materials.new("Metal07")
-    mat.use_nodes = True
-    utils.clean_nodes(mat.node_tree.nodes)
-    assets.build_pbr_textured_nodes(mat.node_tree, "Metal07")
-    cube.data.materials.append(mat)
+    cube.data.materials.append(bpy.data.materials["Metal07"])
 
     # Set the armature as the parent of the cube using the "Automatic Weight" armature option
     bpy.ops.object.select_all(action='DESELECT')
@@ -66,17 +65,15 @@ def create_skinned_object():
 
 
 def set_scene_objects():
+    loader.build_pbr_textured_nodes_from_name("Marble01")
+
     current_object = create_skinned_object()
     current_object.rotation_euler = (0.0, 0.0, math.pi * 60.0 / 180.0)
 
     bpy.ops.mesh.primitive_plane_add(radius=6.0, calc_uvs=True)
     current_object = bpy.context.object
     current_object.name = "Floor"
-    mat = bpy.data.materials.new("Marble01")
-    mat.use_nodes = True
-    utils.clean_nodes(mat.node_tree.nodes)
-    assets.build_pbr_textured_nodes(mat.node_tree, "Marble01")
-    current_object.data.materials.append(mat)
+    current_object.data.materials.append(bpy.data.materials["Marble01"])
 
     bpy.ops.object.empty_add(location=(0.0, 0.0, 1.0))
     focus_target = bpy.context.object

@@ -8,10 +8,13 @@ import os
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import utils
-import assets
+import external.cc0assetsloader as loader
 
 
 def set_scene_objects():
+    loader.build_pbr_textured_nodes_from_name("Metal07")
+    loader.build_pbr_textured_nodes_from_name("Marble01")
+
     bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0),
                                       rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
                                       calc_uvs=True)
@@ -19,11 +22,7 @@ def set_scene_objects():
     current_object.name = "Suzanne_Center"
     utils.set_smooth_shading(current_object)
     utils.add_subdivision_surface_modifier(current_object, 2)
-    mat = bpy.data.materials.new("Material_Center")
-    mat.use_nodes = True
-    utils.clean_nodes(mat.node_tree.nodes)
-    assets.build_pbr_textured_nodes(mat.node_tree, "Metal07")
-    current_object.data.materials.append(mat)
+    current_object.data.materials.append(bpy.data.materials["Metal07"])
 
     # Keyframes
     current_object.location = (0.0, 0.0, 0.2)
@@ -42,11 +41,7 @@ def set_scene_objects():
     bpy.ops.mesh.primitive_plane_add(radius=6.0, calc_uvs=True)
     current_object = bpy.context.object
     current_object.name = "Floor"
-    mat = bpy.data.materials.new("Material_Plane")
-    mat.use_nodes = True
-    utils.clean_nodes(mat.node_tree.nodes)
-    assets.build_pbr_textured_nodes(mat.node_tree, "Marble01")
-    current_object.data.materials.append(mat)
+    current_object.data.materials.append(bpy.data.materials["Marble01"])
 
     bpy.ops.object.empty_add(location=(0.0, -0.70, 1.0))
     focus_target = bpy.context.object

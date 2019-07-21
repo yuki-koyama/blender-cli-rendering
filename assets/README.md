@@ -1,43 +1,5 @@
 # Assets
 
-## PBR Textures
-
-### Concrete07
-
-- Author: StruffelProductions
-- License: CC0
-- URL: <https://cc0textures.com/view.php?tex=Concrete07>
-
-### Marble01
-
-- Author: StruffelProductions
-- License: CC0
-- URL: <https://cc0textures.com/view.php?tex=Marble01>
-
-### Leather05
-
-- Author: StruffelProductions
-- License: CC0
-- URL: <https://cc0textures.com/view.php?tex=Leather05>
-
-### Fabric02
-
-- Author: StruffelProductions
-- License: CC0
-- URL: <https://cc0textures.com/view.php?tex=Fabric02>
-
-### Metal07
-
-- Author: StruffelProductions
-- License: CC0
-- URL: <https://cc0textures.com/view.php?tex=Metal07>
-
-### Metal08
-
-- Author: StruffelProductions
-- License: CC0
-- URL: <https://cc0textures.com/view.php?tex=Metal08>
-
 ## HDRIs
 
 ### Royal Esplanade
