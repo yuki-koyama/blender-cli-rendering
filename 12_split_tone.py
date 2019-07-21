@@ -50,7 +50,6 @@ def set_scene_objects():
     floor_mat.use_nodes = True
     utils.clean_nodes(floor_mat.node_tree.nodes)
     utils.build_checker_board_nodes(floor_mat.node_tree, 2.0 * radius)
-
     current_object.data.materials.append(floor_mat)
 
     bpy.ops.object.lamp_add(type='SUN')
