@@ -22,21 +22,18 @@ def set_floor_and_lights():
     utils.build_checker_board_nodes(floor_mat.node_tree, 2.0 * radius)
     current_object.data.materials.append(floor_mat)
 
-    bpy.ops.object.lamp_add(type='AREA', location=(6.0, 0.0, 4.0), rotation=(0.0, math.pi * 60.0 / 180.0, 0.0))
-    bpy.context.object.name = "Main Light"
-    main_light = bpy.context.object.data
-    main_light.size = 5.0
-    main_light.use_nodes = True
-    main_light.node_tree.nodes["Emission"].inputs["Color"].default_value = (1.00, 0.70, 0.60, 1.00)
-    main_light.node_tree.nodes["Emission"].inputs["Strength"].default_value = 1500.0
-
-    bpy.ops.object.lamp_add(type='AREA', location=(-6.0, 0.0, 2.0), rotation=(0.0, -math.pi * 80.0 / 180.0, 0.0))
-    bpy.context.object.name = "Sub Light"
-    sub_light = bpy.context.object.data
-    sub_light.size = 5.0
-    sub_light.use_nodes = True
-    sub_light.node_tree.nodes["Emission"].inputs["Color"].default_value = (0.30, 0.42, 1.00, 1.00)
-    sub_light.node_tree.nodes["Emission"].inputs["Strength"].default_value = 1000.0
+    utils.create_area_light(location=(6.0, 0.0, 4.0),
+                            rotation=(0.0, math.pi * 60.0 / 180.0, 0.0),
+                            size=5.0,
+                            color=(1.00, 0.70, 0.60, 1.00),
+                            strength=1500.0,
+                            name="Main Light")
+    utils.create_area_light(location=(-6.0, 0.0, 2.0),
+                            rotation=(0.0, -math.pi * 80.0 / 180.0, 0.0),
+                            size=5.0,
+                            color=(0.30, 0.42, 1.00, 1.00),
+                            strength=1000.0,
+                            name="Sub Light")
 
 
 def set_scene_objects():
