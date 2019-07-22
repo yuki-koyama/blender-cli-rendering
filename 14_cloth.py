@@ -11,19 +11,7 @@ import utils
 import external.cc0assetsloader as loader
 
 
-def set_scene_objects():
-    loader.build_pbr_textured_nodes_from_name("Fabric02")
-    loader.build_pbr_textured_nodes_from_name("Fabric03")
-    bpy.data.materials["Fabric02"].node_tree.nodes["Principled BSDF"].inputs["Sheen"].default_value = 4.0
-    bpy.data.materials["Fabric03"].node_tree.nodes["Principled BSDF"].inputs["Sheen"].default_value = 4.0
-
-    bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0), calc_uvs=True)
-    current_object = bpy.context.object
-    utils.set_smooth_shading(current_object)
-    utils.add_subdivision_surface_modifier(current_object, 2)
-    current_object.data.materials.append(bpy.data.materials["Fabric03"])
-    bpy.ops.object.modifier_add(type='COLLISION')
-
+def set_floor_and_lights():
     radius = 100.0
     bpy.ops.mesh.primitive_plane_add(radius=radius, calc_uvs=True)
     current_object = bpy.context.object
@@ -49,6 +37,22 @@ def set_scene_objects():
     sub_light.use_nodes = True
     sub_light.node_tree.nodes["Emission"].inputs["Color"].default_value = (0.30, 0.42, 1.00, 1.00)
     sub_light.node_tree.nodes["Emission"].inputs["Strength"].default_value = 1000.0
+
+
+def set_scene_objects():
+    loader.build_pbr_textured_nodes_from_name("Fabric02")
+    loader.build_pbr_textured_nodes_from_name("Fabric03")
+    bpy.data.materials["Fabric02"].node_tree.nodes["Principled BSDF"].inputs["Sheen"].default_value = 4.0
+    bpy.data.materials["Fabric03"].node_tree.nodes["Principled BSDF"].inputs["Sheen"].default_value = 4.0
+
+    set_floor_and_lights()
+
+    bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0), calc_uvs=True)
+    current_object = bpy.context.object
+    utils.set_smooth_shading(current_object)
+    utils.add_subdivision_surface_modifier(current_object, 2)
+    current_object.data.materials.append(bpy.data.materials["Fabric03"])
+    bpy.ops.object.modifier_add(type='COLLISION')
 
     bpy.ops.mesh.primitive_grid_add(x_subdivisions=75,
                                     y_subdivisions=75,
@@ -89,7 +93,7 @@ utils.set_animation(scene, fps=24, frame_start=1, frame_end=48)
 focus_target = set_scene_objects()
 
 ## Camera
-bpy.ops.object.camera_add(view_align=False, location=[0.0, -11.0, 2.0])
+bpy.ops.object.camera_add(view_align=False, location=[0.0, -12.5, 2.2])
 camera = bpy.context.object
 utils.add_track_to_constraint(camera, focus_target)
 utils.set_camera_params(camera, focus_target)
