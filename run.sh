@@ -17,3 +17,4 @@ blender --background --python ./10_mocap.py -- ./assets/motion/102_01.bvh ./out/
 blender --background --python ./11_mesh_visualization.py -- ./out/11_mesh_visualization.png ${RESOLUTION} ${SAMPLINGS}
 blender --background --python ./12_split_tone.py -- ./out/12_split_tone.png ${RESOLUTION} ${SAMPLINGS}
 blender --background --python ./13_matcap.py -- ./out/13_matcap.png ${RESOLUTION} ${SAMPLINGS}
+blender --background --python ./14_cloth.py -- ./out/14/frame ${RESOLUTION} ${SAMPLINGS} && ffmpeg -r 24 -i ./out/14/frame%04d.png -pix_fmt yuv420p ./out/14_cloth.mp4
