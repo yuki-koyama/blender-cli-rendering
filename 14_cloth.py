@@ -52,7 +52,7 @@ def set_scene_objects():
                                     y_subdivisions=75,
                                     radius=1.5,
                                     calc_uvs=True,
-                                    location=(0.0, 0.0, 2.5))
+                                    location=(0.0, 0.0, 2.75))
     cloth_object = bpy.context.object
     cloth_object.name = "Cloth"
     bpy.ops.object.modifier_add(type='CLOTH')
