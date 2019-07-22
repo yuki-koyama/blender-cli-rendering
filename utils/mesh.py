@@ -1,4 +1,5 @@
 import bpy
+from utils.utils import add_subdivision_surface_modifier
 
 
 def set_smooth_shading(target_object):
@@ -28,3 +29,14 @@ def create_cached_mesh_from_alembic(file_path, name):
     bpy.context.active_object.name = name
 
     return bpy.context.active_object
+
+
+def create_smooth_monkey(location=(0.0, 0.0, 0.0), rotation=(0.0, 0.0, 0.0), subdivision_level=2, name=None):
+    bpy.ops.mesh.primitive_monkey_add(location=location, rotation=rotation, calc_uvs=True)
+    current_object = bpy.context.object
+    if name is not None:
+        current_object.name = name
+    set_smooth_shading(current_object)
+    add_subdivision_surface_modifier(current_object, subdivision_level)
+
+    return current_object

@@ -44,10 +44,7 @@ def set_scene_objects():
 
     set_floor_and_lights()
 
-    bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0), calc_uvs=True)
-    current_object = bpy.context.object
-    utils.set_smooth_shading(current_object)
-    utils.add_subdivision_surface_modifier(current_object, 2)
+    current_object = utils.create_smooth_monkey(location=(0.0, 0.0, 1.0))
     current_object.data.materials.append(bpy.data.materials["Fabric03"])
     bpy.ops.object.modifier_add(type='COLLISION')
 
