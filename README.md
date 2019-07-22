@@ -119,6 +119,14 @@ Python scripts for rendering images using Blender from command-line interface.
 
 ![13_matcap](docs/compressed/13_matcap.jpg)
 
+### 14_cloth.py
+
+- Cloth modifier
+- Collision modifier
+- Area light
+
+![14_cloth](docs/compressed/14_cloth.gif)
+
 ## For Docker Users
 
 Thanks to the fact that Blender can run on Linux without displays as a command line tool, it is straightforward to run all the above scripts using Docker.
