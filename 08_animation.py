@@ -15,13 +15,7 @@ def set_scene_objects():
     loader.build_pbr_textured_nodes_from_name("Metal07")
     loader.build_pbr_textured_nodes_from_name("Marble01")
 
-    bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0),
-                                      rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
-                                      calc_uvs=True)
-    current_object = bpy.context.object
-    current_object.name = "Suzanne_Center"
-    utils.set_smooth_shading(current_object)
-    utils.add_subdivision_surface_modifier(current_object, 2)
+    current_object = utils.create_smooth_monkey(location=(0.0, 0.0, 1.0), rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0))
     current_object.data.materials.append(bpy.data.materials["Metal07"])
 
     # Keyframes

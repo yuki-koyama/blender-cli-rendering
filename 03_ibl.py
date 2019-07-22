@@ -12,11 +12,8 @@ import utils
 def set_scene_objects():
     num_suzannes = 7
     for index in range(num_suzannes):
-        bpy.ops.mesh.primitive_monkey_add(location=((index - (num_suzannes - 1) / 2) * 3.0, 0.0, 1.0))
-        current_object = bpy.context.object
-        current_object.name = "Suzanne" + str(index)
-        utils.set_smooth_shading(current_object)
-        utils.add_subdivision_surface_modifier(current_object, 2)
+        utils.create_smooth_monkey(location=((index - (num_suzannes - 1) / 2) * 3.0, 0.0, 1.0),
+                                   name="Suzanne" + str(index))
     bpy.ops.mesh.primitive_plane_add(radius=10.0)
     return bpy.data.objects["Suzanne" + str(int((num_suzannes - 1) / 2))]
 

@@ -15,31 +15,19 @@ def set_scene_objects():
     utils.clean_nodes(mat.node_tree.nodes)
     utils.build_pbr_nodes(mat.node_tree, base_color=(0.6, 0.6, 0.6, 1.0))
 
-    bpy.ops.mesh.primitive_monkey_add(location=(-1.8, 0.0, 1.0),
-                                      rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
-                                      calc_uvs=True)
-    current_object = bpy.context.object
-    current_object.name = "Suzanne_Left"
-    utils.set_smooth_shading(current_object)
-    utils.add_subdivision_surface_modifier(current_object, 2)
+    current_object = utils.create_smooth_monkey(location=(-1.8, 0.0, 1.0),
+                                                rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
+                                                name="Suzanne_Left")
     current_object.data.materials.append(mat)
 
-    bpy.ops.mesh.primitive_monkey_add(location=(0.0, 0.0, 1.0),
-                                      rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
-                                      calc_uvs=True)
-    current_object = bpy.context.object
-    current_object.name = "Suzanne_Center"
-    utils.set_smooth_shading(current_object)
-    utils.add_subdivision_surface_modifier(current_object, 2)
+    current_object = utils.create_smooth_monkey(location=(0.0, 0.0, 1.0),
+                                                rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
+                                                name="Suzanne_Center")
     current_object.data.materials.append(mat)
 
-    bpy.ops.mesh.primitive_monkey_add(location=(+1.8, 0.0, 1.0),
-                                      rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
-                                      calc_uvs=True)
-    current_object = bpy.context.object
-    current_object.name = "Suzanne_Right"
-    utils.set_smooth_shading(current_object)
-    utils.add_subdivision_surface_modifier(current_object, 2)
+    current_object = utils.create_smooth_monkey(location=(+1.8, 0.0, 1.0),
+                                                rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
+                                                name="Suzanne_Right")
     current_object.data.materials.append(mat)
 
     radius = 100.0

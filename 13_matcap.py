@@ -17,10 +17,7 @@ def set_scene_objects():
     utils.clean_nodes(mat.node_tree.nodes)
     utils.build_matcap_nodes(mat.node_tree, image_path)
 
-    bpy.ops.mesh.primitive_monkey_add(location=(1.2, 0.0, 0.0), calc_uvs=True)
-    current_object = bpy.context.object
-    utils.set_smooth_shading(current_object)
-    utils.add_subdivision_surface_modifier(current_object, 2)
+    current_object = utils.create_smooth_monkey(location=(1.2, 0.0, 0.0))
     current_object.data.materials.append(mat)
 
     bpy.ops.mesh.primitive_uv_sphere_add(location=(-1.2, 0.0, 0.0), calc_uvs=True)
