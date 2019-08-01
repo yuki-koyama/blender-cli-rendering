@@ -1,4 +1,5 @@
 import bpy
+import math
 from utils.utils import add_subdivision_surface_modifier
 
 
@@ -33,10 +34,24 @@ def create_cached_mesh_from_alembic(file_path, name):
 
 def create_smooth_monkey(location=(0.0, 0.0, 0.0), rotation=(0.0, 0.0, 0.0), subdivision_level=2, name=None):
     bpy.ops.mesh.primitive_monkey_add(location=location, rotation=rotation, calc_uvs=True)
+
     current_object = bpy.context.object
+
     if name is not None:
         current_object.name = name
+
     set_smooth_shading(current_object)
     add_subdivision_surface_modifier(current_object, subdivision_level)
 
     return current_object
+
+
+def create_three_smooth_monkeys(names=None):
+    if names is None:
+        names = ("Suzanne Left", "Suzanne Center", "Suzanne Right")
+
+    left = create_smooth_monkey(location=(-1.8, 0.0, 1.0), rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0), name=names[0])
+    center = create_smooth_monkey(location=(0.0, 0.0, 1.0), rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0), name=names[1])
+    right = create_smooth_monkey(location=(+1.8, 0.0, 1.0), rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0), name=names[2])
+
+    return left, center, right
