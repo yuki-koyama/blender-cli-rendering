@@ -32,6 +32,34 @@ def create_cached_mesh_from_alembic(file_path, name):
     return bpy.context.active_object
 
 
+def create_plane(location=(0.0, 0.0, 0.0), rotation=(0.0, 0.0, 0.0), size=2.0, name=None):
+    if bpy.app.version >= (2, 80, 0):
+        bpy.ops.mesh.primitive_plane_add(size=size, location=location, rotation=rotation)
+    else:
+        bpy.ops.mesh.primitive_plane_add(radius=0.5 * size, calc_uvs=True, location=location, rotation=rotation)
+
+    current_object = bpy.context.object
+
+    if name is not None:
+        current_object.name = name
+
+    return current_object
+
+
+def create_smooth_sphere(location=(0.0, 0.0, 0.0), radius=1.0, subdivision_level=1, name=None):
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=radius, location=location, calc_uvs=True)
+
+    current_object = bpy.context.object
+
+    if name is not None:
+        current_object.name = name
+
+    set_smooth_shading(current_object)
+    add_subdivision_surface_modifier(current_object, subdivision_level)
+
+    return current_object
+
+
 def create_smooth_monkey(location=(0.0, 0.0, 0.0), rotation=(0.0, 0.0, 0.0), subdivision_level=2, name=None):
     bpy.ops.mesh.primitive_monkey_add(location=location, rotation=rotation, calc_uvs=True)
 
