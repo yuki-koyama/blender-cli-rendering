@@ -55,28 +55,40 @@ def set_cycles_renderer(scene,
                         use_denoising=True,
                         use_motion_blur=False,
                         use_transparent_bg=False):
+    scene.camera = camera
+
     scene.render.image_settings.file_format = 'PNG'
     scene.render.resolution_percentage = resolution_percentage
     scene.render.engine = 'CYCLES'
     scene.render.filepath = output_file_path
-    scene.render.use_freestyle = False
-    scene.cycles.samples = num_samples
-    scene.render.layers[0].cycles.use_denoising = use_denoising
-    scene.camera = camera
     scene.render.use_motion_blur = use_motion_blur
-    scene.cycles.film_transparent = use_transparent_bg
+    scene.render.film_transparent = use_transparent_bg
+
+    if bpy.app.version >= (2, 80, 0):
+        scene.view_layers[0].cycles.use_denoising = use_denoising
+    else:
+        scene.render.layers[0].cycles.use_denoising = use_denoising
+
+    scene.cycles.samples = num_samples
 
 
-def set_camera_params(camera, focus_target):
+def set_camera_params(camera, focus_target, lens=85, fstop=1.4):
     # Simulate Sony's FE 85mm F1.4 GM
     camera.data.sensor_fit = 'HORIZONTAL'
     camera.data.sensor_width = 36.0
     camera.data.sensor_height = 24.0
-    camera.data.lens = 85
-    camera.data.dof_object = focus_target
-    camera.data.cycles.aperture_type = 'FSTOP'
-    camera.data.cycles.aperture_fstop = 1.4
-    camera.data.cycles.aperture_blades = 11
+    camera.data.lens = lens
+
+    if bpy.app.version >= (2, 80, 0):
+        camera.data.dof.use_dof = True
+        camera.data.dof.focus_object = focus_target
+        camera.data.dof.aperture_fstop = fstop
+        camera.data.dof.aperture_blades = 11
+    else:
+        camera.data.dof_object = focus_target
+        camera.data.cycles.aperture_type = 'FSTOP'
+        camera.data.cycles.aperture_fstop = fstop
+        camera.data.cycles.aperture_blades = 11
 
 
 ################################################################################
