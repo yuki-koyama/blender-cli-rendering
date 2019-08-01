@@ -4,9 +4,8 @@ Python scripts for rendering images using Blender from command-line interface.
 
 ## Principles
 
-- Able to run without display
-- Designed for non-Blender users
-- Based on Blender 2.79
+- Able to run without display (thus, based on Cycles instead of EEVEE)
+- Support both Blender 2.79 & 2.80
 
 ## Possible Usages
 
