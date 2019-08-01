@@ -10,7 +10,10 @@ def create_texture_node(node_tree, path, is_color_data):
     texture_node.image = bpy.data.images.load(path)
 
     # Set other parameters
-    texture_node.color_space = 'COLOR' if is_color_data else 'NONE'
+    if bpy.app.version >= (2, 80, 0):
+        texture_node.image.colorspace_settings.is_data = False if is_color_data else True
+    else:
+        texture_node.color_space = 'COLOR' if is_color_data else 'NONE'
 
     # Return the node
     return texture_node

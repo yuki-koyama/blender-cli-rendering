@@ -17,7 +17,10 @@ def create_mesh_from_pydata(scene, vertices, faces, mesh_name, object_name, use_
     new_mesh.update()
 
     new_object = bpy.data.objects.new(mesh_name, new_mesh)
-    scene.objects.link(new_object)
+    if bpy.app.version >= (2, 80, 0):
+        scene.collection.objects.link(new_object)
+    else:
+        scene.objects.link(new_object)
 
     if use_smooth:
         set_smooth_shading(new_object)

@@ -9,7 +9,7 @@ def create_armature_mesh(scene, armature_object, mesh_name):
     assert len(armature_object.data.bones) != 0, 'Error'
 
     def add_rigid_vertex_group(target_object, name, vertex_indices):
-        new_vertex_group = target_object.vertex_groups.new(name)
+        new_vertex_group = target_object.vertex_groups.new(name=name)
         for vertex_index in vertex_indices:
             new_vertex_group.add([vertex_index], 1.0, 'REPLACE')
 
@@ -71,7 +71,10 @@ def create_armature_mesh(scene, armature_object, mesh_name):
 
         temp_vertex_group = {'name': bone.name, 'vertex_indices': []}
         for local_index, vertex in enumerate(temp_vertices):
-            vertices.append(bone.matrix_local * vertex)
+            if bpy.app.version >= (2, 80, 0):
+                vertices.append(bone.matrix_local @ vertex)
+            else:
+                vertices.append(bone.matrix_local * vertex)
             temp_vertex_group['vertex_indices'].append(local_index + vertex_index_offset)
         vertex_groups.append(temp_vertex_group)
 
@@ -98,9 +101,14 @@ def create_armature_mesh(scene, armature_object, mesh_name):
 
     # Set the armature as the parent of the new object
     bpy.ops.object.select_all(action='DESELECT')
-    new_object.select = True
-    armature_object.select = True
-    bpy.context.scene.objects.active = armature_object
+    if bpy.app.version >= (2, 80, 0):
+        new_object.select_set(True)
+        armature_object.select_set(True)
+        bpy.context.view_layer.objects.active = armature_object
+    else:
+        new_object.select = True
+        armature_object.select = True
+        bpy.context.scene.objects.active = armature_object
     bpy.ops.object.parent_set(type='OBJECT')
 
     return new_object
