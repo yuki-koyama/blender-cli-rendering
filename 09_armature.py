@@ -56,9 +56,14 @@ def create_skinned_object():
 
     # Set the armature as the parent of the cube using the "Automatic Weight" armature option
     bpy.ops.object.select_all(action='DESELECT')
-    cube.select = True
-    armature.select = True
-    bpy.context.scene.objects.active = armature
+    if bpy.app.version >= (2, 80, 0):
+        cube.select_set(True)
+        armature.select_set(True)
+        bpy.context.view_layer.objects.active = armature
+    else:
+        cube.select = True
+        armature.select = True
+        bpy.context.scene.objects.active = armature
     bpy.ops.object.parent_set(type='ARMATURE_AUTO')
 
     return armature
@@ -70,25 +75,12 @@ def set_scene_objects():
     current_object = create_skinned_object()
     current_object.rotation_euler = (0.0, 0.0, math.pi * 60.0 / 180.0)
 
-    bpy.ops.mesh.primitive_plane_add(radius=6.0, calc_uvs=True)
-    current_object = bpy.context.object
-    current_object.name = "Floor"
+    current_object = utils.create_plane(size=12.0, name="Floor")
     current_object.data.materials.append(bpy.data.materials["Marble01"])
 
     bpy.ops.object.empty_add(location=(0.0, 0.0, 1.0))
     focus_target = bpy.context.object
     return focus_target
-
-
-def set_camera_params(camera, dof_target):
-    camera.data.sensor_fit = 'HORIZONTAL'
-    camera.data.sensor_width = 36.0
-    camera.data.sensor_height = 24.0
-    camera.data.lens = 72
-    camera.data.dof_object = dof_target
-    camera.data.cycles.aperture_type = 'RADIUS'
-    camera.data.cycles.aperture_size = 0.100
-    camera.data.cycles.aperture_blades = 6
 
 
 # Args
@@ -110,11 +102,11 @@ utils.clean_objects()
 focus_target = set_scene_objects()
 
 ## Camera
-bpy.ops.object.camera_add(view_align=False, location=[0.0, -12.0, 2.0])
+bpy.ops.object.camera_add(location=(0.0, -16.0, 2.0))
 camera = bpy.context.object
 
 utils.add_track_to_constraint(camera, focus_target)
-set_camera_params(camera, focus_target)
+utils.set_camera_params(camera, focus_target, lens=85, fstop=0.5)
 
 ## Lights
 utils.build_environment_texture_background(world, hdri_path)

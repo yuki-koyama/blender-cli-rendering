@@ -34,7 +34,7 @@ def get_color(x):
 
 def set_scene_objects():
     # Instantiate a floor plane
-    bpy.ops.mesh.primitive_plane_add(location=(0.0, 0.0, -1.0), radius=100)
+    utils.create_plane(size=200.0, location=(0.0, 0.0, -1.0))
 
     # Instantiate a triangle mesh
     bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3)
@@ -45,7 +45,7 @@ def set_scene_objects():
     mesh.vertex_colors.new(name='Col')
     random_numbers = get_random_numbers(len(mesh.vertex_colors['Col'].data))
     for index, vertex_color in enumerate(mesh.vertex_colors['Col'].data):
-        vertex_color.color = get_color(random_numbers[index // 3])
+        vertex_color.color = get_color(random_numbers[index // 3]) + tuple([1.0])
 
     # Setup a material with wireframe visualization and per-face colors
     mat = bpy.data.materials.new("Material_Visualization")
@@ -79,17 +79,6 @@ def set_scene_objects():
     return focus_target
 
 
-def set_camera_params(camera, dof_target):
-    camera.data.sensor_fit = 'HORIZONTAL'
-    camera.data.sensor_width = 36.0
-    camera.data.sensor_height = 24.0
-    camera.data.lens = 72
-    camera.data.dof_object = dof_target
-    camera.data.cycles.aperture_type = 'RADIUS'
-    camera.data.cycles.aperture_size = 0.100
-    camera.data.cycles.aperture_blades = 6
-
-
 # Args
 output_file_path = str(sys.argv[sys.argv.index('--') + 1])
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
@@ -109,11 +98,11 @@ utils.clean_objects()
 focus_target = set_scene_objects()
 
 ## Camera
-bpy.ops.object.camera_add(view_align=False, location=[0.0, -10.0, 0.0])
+bpy.ops.object.camera_add(location=(0.0, -10.0, 0.0))
 camera = bpy.context.object
 
 utils.add_track_to_constraint(camera, focus_target)
-set_camera_params(camera, focus_target)
+utils.set_camera_params(camera, focus_target, lens=72, fstop=0.5)
 
 ## Lights
 utils.build_environment_texture_background(world, hdri_path)

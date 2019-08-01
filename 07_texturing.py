@@ -16,32 +16,19 @@ def set_scene_objects():
     loader.build_pbr_textured_nodes_from_name("Fabric02")
     loader.build_pbr_textured_nodes_from_name("Marble01")
 
-    current_object = utils.create_smooth_monkey(location=(-1.8, 0.0, 1.0),
-                                                rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
-                                                name="Suzanne_Left")
-    current_object.data.materials.append(bpy.data.materials["Leather05"])
+    left_object, center_object, right_object = utils.create_three_smooth_monkeys()
 
-    current_object = utils.create_smooth_monkey(location=(0.0, 0.0, 1.0),
-                                                rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
-                                                name="Suzanne_Center")
-    current_object.data.materials.append(bpy.data.materials["Metal07"])
+    left_object.data.materials.append(bpy.data.materials["Leather05"])
+    center_object.data.materials.append(bpy.data.materials["Metal07"])
+    right_object.data.materials.append(bpy.data.materials["Fabric02"])
 
-    current_object = utils.create_smooth_monkey(location=(+1.8, 0.0, 1.0),
-                                                rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
-                                                name="Suzanne_Right")
-    current_object.data.materials.append(bpy.data.materials["Fabric02"])
-
-    bpy.ops.mesh.primitive_plane_add(radius=6.0, calc_uvs=True)
-    current_object = bpy.context.object
-    current_object.name = "Floor"
+    current_object = utils.create_plane(size=12.0, name="Floor")
     current_object.data.materials.append(bpy.data.materials["Marble01"])
 
-    bpy.ops.mesh.primitive_plane_add(radius=6.0,
-                                     location=(0.0, 4.0, 0.0),
-                                     rotation=(math.pi * 90.0 / 180.0, 0.0, 0.0),
-                                     calc_uvs=True)
-    current_object = bpy.context.object
-    current_object.name = "Wall"
+    current_object = utils.create_plane(size=12.0,
+                                        location=(0.0, 4.0, 0.0),
+                                        rotation=(math.pi * 90.0 / 180.0, 0.0, 0.0),
+                                        name="Wall")
     current_object.data.materials.append(bpy.data.materials["Marble01"])
 
     bpy.ops.object.empty_add(location=(0.0, -0.70, 1.0))
@@ -79,11 +66,11 @@ utils.clean_objects()
 focus_target = set_scene_objects()
 
 ## Camera
-bpy.ops.object.camera_add(view_align=False, location=[0.0, -14.0, 2.0])
+bpy.ops.object.camera_add(location=(0.0, -16.0, 2.0))
 camera = bpy.context.object
 
 utils.add_track_to_constraint(camera, focus_target)
-set_camera_params(camera, focus_target)
+utils.set_camera_params(camera, focus_target, lens=85, fstop=0.5)
 
 ## Lights
 utils.build_environment_texture_background(world, hdri_path)

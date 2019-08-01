@@ -55,7 +55,8 @@ def set_principled_node_as_glass(principled_node):
 
 
 def set_scene_objects():
-    current_object = utils.create_smooth_monkey(location=(-3.0, 0.0, 1.0), name="Suzanne_Left")
+    left_object, center_object, right_object = utils.create_three_smooth_monkeys()
+
     mat = bpy.data.materials.new("Material_Left")
     mat.use_nodes = True
     nodes = mat.node_tree.nodes
@@ -65,9 +66,8 @@ def set_scene_objects():
     principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
     set_principled_node_as_glass(principled_node)
     links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
-    current_object.data.materials.append(mat)
+    left_object.data.materials.append(mat)
 
-    current_object = utils.create_smooth_monkey(location=(0.0, 0.0, 1.0), name="Suzanne_Center")
     mat = bpy.data.materials.new("Material_Center")
     mat.use_nodes = True
     nodes = mat.node_tree.nodes
@@ -77,9 +77,8 @@ def set_scene_objects():
     principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
     set_principled_node_as_gold(principled_node)
     links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
-    current_object.data.materials.append(mat)
+    center_object.data.materials.append(mat)
 
-    current_object = utils.create_smooth_monkey(location=(+3.0, 0.0, 1.0), name="Suzanne_Right")
     mat = bpy.data.materials.new("Material_Right")
     mat.use_nodes = True
     nodes = mat.node_tree.nodes
@@ -89,11 +88,9 @@ def set_scene_objects():
     principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
     set_principled_node_as_rough_blue(principled_node)
     links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
-    current_object.data.materials.append(mat)
+    right_object.data.materials.append(mat)
 
-    bpy.ops.mesh.primitive_plane_add(radius=10.0)
-    current_object = bpy.context.object
-    current_object.name = "Floor"
+    current_object = utils.create_plane(size=20.0, name="Floor")
     mat = bpy.data.materials.new("Material_Plane")
     mat.use_nodes = True
     nodes = mat.node_tree.nodes
@@ -108,17 +105,6 @@ def set_scene_objects():
     bpy.ops.object.empty_add(location=(0.0, -0.75, 1.0))
     focus_target = bpy.context.object
     return focus_target
-
-
-def set_camera_params(camera, dof_target):
-    camera.data.sensor_fit = 'HORIZONTAL'
-    camera.data.sensor_width = 36.0
-    camera.data.sensor_height = 24.0
-    camera.data.lens = 50
-    camera.data.dof_object = dof_target
-    camera.data.cycles.aperture_type = 'RADIUS'
-    camera.data.cycles.aperture_size = 0.180
-    camera.data.cycles.aperture_blades = 6
 
 
 def define_vignette_node():
@@ -219,11 +205,11 @@ utils.clean_objects()
 focus_target = set_scene_objects()
 
 ## Camera
-bpy.ops.object.camera_add(view_align=False, location=[0.0, -15.0, 2.0])
+bpy.ops.object.camera_add(location=(0.0, -16.0, 2.0))
 camera = bpy.context.object
 
 utils.add_track_to_constraint(camera, focus_target)
-set_camera_params(camera, focus_target)
+utils.set_camera_params(camera, focus_target, lens=85, fstop=0.5)
 
 ## Lights
 utils.build_environment_texture_background(world, hdri_path)
