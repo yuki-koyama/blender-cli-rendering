@@ -2,7 +2,7 @@ FROM_DIR=./original
 TO_DIR=./compressed
 
 WIDTH=960
-TARGET_FPS=12
+TARGET_FPS=24
 
 echo commands:
 echo - `which convert`
@@ -32,9 +32,12 @@ do
   out_file=${TO_DIR}${temp}.gif  # ./compressed/10_mocap.gif
   echo output: ${out_file}
 
-  temp_pallete=./temp.png
   filters="fps=${TARGET_FPS},scale=${WIDTH}:-1:flags=lanczos"
-  ffmpeg -ss 0.2 -t 1.8 -i ${in_file} -vf "${filters},palettegen" ${temp_pallete} -y
-  ffmpeg -ss 0.2 -t 1.8 -i ${in_file} -i ${temp_pallete} -lavfi "${filters} [x]; [x][1:v] paletteuse" -loop 100 ${out_file} -y
-  rm ${temp_pallete}
+
+  # temp_pallete=./temp.png
+  # ffmpeg -v warning -ss 0.2 -t 1.8 -i ${in_file} -vf "${filters},palettegen" ${temp_pallete} -y
+  # ffmpeg -v warning -ss 0.2 -t 1.8 -i ${in_file} -i ${temp_pallete} -lavfi "${filters} [x]; [x][1:v] paletteuse=dither=sierra2_4a" -loop 0 ${out_file} -y
+  # rm ${temp_pallete}
+
+  ffmpeg -v warning -ss 0.2 -t 1.8 -i ${in_file} -vf "${filters}" -loop 0 ${out_file} -y
 done
