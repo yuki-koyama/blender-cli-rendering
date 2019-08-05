@@ -35,23 +35,23 @@ def set_principled_node_as_ceramic(principled_node):
 def set_principled_node_as_gold(principled_node):
     utils.set_principled_node(
         principled_node=principled_node,
-        base_color=(1.00, 0.75, 0.35, 1.0),
+        base_color=(1.00, 0.71, 0.22, 1.0),
         metallic=1.0,
         specular=0.5,
-        roughness=0.0,
+        roughness=0.1,
     )
 
 
 def set_principled_node_as_glass(principled_node):
     utils.set_principled_node(principled_node=principled_node,
-                              base_color=(0.92, 0.92, 0.95, 1.0),
+                              base_color=(0.95, 0.95, 0.95, 1.0),
                               metallic=0.0,
                               specular=0.5,
                               roughness=0.0,
                               clearcoat=0.5,
                               clearcoat_roughness=0.030,
                               ior=1.45,
-                              transmission=1.0)
+                              transmission=0.98)
 
 
 def set_scene_objects():

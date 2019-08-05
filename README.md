@@ -48,26 +48,21 @@ Python scripts for rendering images using Blender from command-line interface.
 
 ### 05_composition.py
 
-- Composition
-- Glare
-- Lens distortion
-- Chromatic aberration
+- Composition nodes
+- Node group
 
 ![05_composition](docs/compressed/05_composition.jpg)
 
-### 06_vignette.py
+### 06_split_tone.py
 
-- Vignette
-- Color correction
-- Node group
-- Automatic arrangement of nodes in the node editor
+- Split tone effect
+- Checker board texture
 
-![06_vignette](docs/compressed/06_vignette.jpg)
+![06_split_tone](docs/compressed/06_split_tone.jpg)
 
 ### 07_texturing.py
 
 - Image texture
-- UV calculation
 
 ![07_texturing](docs/compressed/07_texturing.jpg)
 
@@ -102,12 +97,13 @@ Python scripts for rendering images using Blender from command-line interface.
 
 ![11_mesh_visualization](docs/compressed/11_mesh_visualization.jpg)
 
-### 12_split_tone.py
+### 12_cloth.py
 
-- Split Tone
-- Checker board texture
+- Cloth modifier
+- Collision modifier
+- Area light
 
-![12_split_tone](docs/compressed/12_split_tone.jpg)
+![12_cloth](docs/compressed/12_cloth.gif)
 
 ### 13_matcap.py
 
@@ -117,14 +113,6 @@ Python scripts for rendering images using Blender from command-line interface.
 - Node frame
 
 ![13_matcap](docs/compressed/13_matcap.jpg)
-
-### 14_cloth.py
-
-- Cloth modifier
-- Collision modifier
-- Area light
-
-![14_cloth](docs/compressed/14_cloth.gif)
 
 ## For Docker Users
 

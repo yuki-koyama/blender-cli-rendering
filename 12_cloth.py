@@ -1,4 +1,4 @@
-# blender --background --python 14_cloth.py -- </path/to/output/directory>/<name> <resolution_percentage> <num_samples>
+# blender --background --python 12_cloth.py -- </path/to/output/directory>/<name> <resolution_percentage> <num_samples>
 # ffmpeg -r 24 -i </path/to/output/directory>/<name>%04d.png -pix_fmt yuv420p out.mp4
 
 import bpy

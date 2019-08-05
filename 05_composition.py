@@ -35,23 +35,23 @@ def set_principled_node_as_ceramic(principled_node):
 def set_principled_node_as_gold(principled_node):
     utils.set_principled_node(
         principled_node=principled_node,
-        base_color=(1.00, 0.75, 0.35, 1.0),
+        base_color=(1.00, 0.71, 0.22, 1.0),
         metallic=1.0,
         specular=0.5,
-        roughness=0.0,
+        roughness=0.1,
     )
 
 
 def set_principled_node_as_glass(principled_node):
     utils.set_principled_node(principled_node=principled_node,
-                              base_color=(0.92, 0.92, 0.95, 1.0),
+                              base_color=(0.95, 0.95, 0.95, 1.0),
                               metallic=0.0,
                               specular=0.5,
                               roughness=0.0,
                               clearcoat=0.5,
                               clearcoat_roughness=0.030,
                               ior=1.45,
-                              transmission=1.0)
+                              transmission=0.98)
 
 
 def set_scene_objects():
@@ -113,19 +113,31 @@ def build_scene_composition(scene):
 
     render_layer_node = scene.node_tree.nodes.new(type="CompositorNodeRLayers")
 
+    vignette_node = utils.create_vignette_node(scene.node_tree)
+    vignette_node.inputs["Amount"].default_value = 0.70
+
     lens_distortion_node = scene.node_tree.nodes.new(type="CompositorNodeLensdist")
     lens_distortion_node.inputs["Distort"].default_value = -0.050
-    lens_distortion_node.inputs["Dispersion"].default_value = 0.050
+    lens_distortion_node.inputs["Dispersion"].default_value = 0.080
+
+    color_correction_node = scene.node_tree.nodes.new(type="CompositorNodeColorCorrection")
+    color_correction_node.master_saturation = 1.10
+    color_correction_node.master_gain = 1.40
 
     glare_node = scene.node_tree.nodes.new(type="CompositorNodeGlare")
-    glare_node.glare_type = 'FOG_GLOW'
+    glare_node.glare_type = 'GHOSTS'
+    glare_node.iterations = 2
     glare_node.quality = 'HIGH'
 
     composite_node = scene.node_tree.nodes.new(type="CompositorNodeComposite")
 
-    scene.node_tree.links.new(render_layer_node.outputs['Image'], lens_distortion_node.inputs['Image'])
-    scene.node_tree.links.new(lens_distortion_node.outputs['Image'], glare_node.inputs['Image'])
+    scene.node_tree.links.new(render_layer_node.outputs['Image'], vignette_node.inputs['Image'])
+    scene.node_tree.links.new(vignette_node.outputs['Image'], lens_distortion_node.inputs['Image'])
+    scene.node_tree.links.new(lens_distortion_node.outputs['Image'], color_correction_node.inputs['Image'])
+    scene.node_tree.links.new(color_correction_node.outputs['Image'], glare_node.inputs['Image'])
     scene.node_tree.links.new(glare_node.outputs['Image'], composite_node.inputs['Image'])
+
+    utils.arrange_nodes(scene.node_tree)
 
 
 # Args
@@ -162,5 +174,5 @@ build_scene_composition(scene)
 # Render Setting
 utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_denoising=True)
 
-# Rendering
+# Render
 bpy.ops.render.render(animation=False, write_still=True)

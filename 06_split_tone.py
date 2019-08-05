@@ -1,4 +1,4 @@
-# blender --background --python 12_split_tone.py -- </path/to/output/image> <resolution_percentage> <num_samples>
+# blender --background --python 06_split_tone.py -- </path/to/output/image> <resolution_percentage> <num_samples>
 
 import bpy
 import sys
