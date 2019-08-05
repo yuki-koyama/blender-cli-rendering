@@ -15,50 +15,26 @@ def set_scene_objects():
     utils.clean_nodes(mat.node_tree.nodes)
     utils.build_pbr_nodes(mat.node_tree, base_color=(0.6, 0.6, 0.6, 1.0))
 
-    current_object = utils.create_smooth_monkey(location=(-1.8, 0.0, 1.0),
-                                                rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
-                                                name="Suzanne_Left")
-    current_object.data.materials.append(mat)
+    left_object, center_object, right_object = utils.create_three_smooth_monkeys()
+    left_object.data.materials.append(mat)
+    center_object.data.materials.append(mat)
+    right_object.data.materials.append(mat)
 
-    current_object = utils.create_smooth_monkey(location=(0.0, 0.0, 1.0),
-                                                rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
-                                                name="Suzanne_Center")
-    current_object.data.materials.append(mat)
-
-    current_object = utils.create_smooth_monkey(location=(+1.8, 0.0, 1.0),
-                                                rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0),
-                                                name="Suzanne_Right")
-    current_object.data.materials.append(mat)
-
-    radius = 100.0
-    bpy.ops.mesh.primitive_plane_add(radius=radius, calc_uvs=True)
-    current_object = bpy.context.object
-    current_object.name = "Floor"
+    plane_size = 100.0
+    current_object = utils.create_plane(size=plane_size, name="Floor")
     floor_mat = bpy.data.materials.new("Material_Plane")
     floor_mat.use_nodes = True
     utils.clean_nodes(floor_mat.node_tree.nodes)
-    utils.build_checker_board_nodes(floor_mat.node_tree, 2.0 * radius)
+    utils.build_checker_board_nodes(floor_mat.node_tree, plane_size)
     current_object.data.materials.append(floor_mat)
 
-    bpy.ops.object.lamp_add(type='SUN')
-    sun = bpy.context.object.data
-    sun.use_nodes = True
-    sun.node_tree.nodes["Emission"].inputs["Strength"].default_value = 4.0
+    sun_object = utils.create_sun_light()
+    sun_object.data.use_nodes = True
+    sun_object.data.node_tree.nodes["Emission"].inputs["Strength"].default_value = 3.0
 
     bpy.ops.object.empty_add(location=(0.0, -0.70, 1.0))
     focus_target = bpy.context.object
     return focus_target
-
-
-def set_camera_params(camera, dof_target):
-    camera.data.sensor_fit = 'HORIZONTAL'
-    camera.data.sensor_width = 36.0
-    camera.data.sensor_height = 24.0
-    camera.data.lens = 72
-    camera.data.dof_object = dof_target
-    camera.data.cycles.aperture_type = 'RADIUS'
-    camera.data.cycles.aperture_size = 0.100
-    camera.data.cycles.aperture_blades = 6
 
 
 def set_composition(scene):
@@ -88,11 +64,11 @@ utils.clean_objects()
 focus_target = set_scene_objects()
 
 ## Camera
-bpy.ops.object.camera_add(view_align=False, location=[0.0, -14.0, 5.0])
+bpy.ops.object.camera_add(location=(0.0, -14.0, 5.0))
 camera = bpy.context.object
 
 utils.add_track_to_constraint(camera, focus_target)
-set_camera_params(camera, focus_target)
+utils.set_camera_params(camera, focus_target, lens=72, fstop=0.2)
 
 ## Lights
 utils.build_rgb_background(world, rgb=(0.0, 0.0, 0.0, 1.0))

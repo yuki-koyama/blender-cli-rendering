@@ -12,20 +12,12 @@ import utils
 def set_scene_objects():
     num_suzannes = 7
     for index in range(num_suzannes):
-        utils.create_smooth_monkey(location=((index - (num_suzannes - 1) / 2) * 3.0, 0.0, 1.0),
+        utils.create_smooth_monkey(location=((index - (num_suzannes - 1) / 2) * 2.8, 0.0, 1.0),
                                    name="Suzanne" + str(index))
-    bpy.ops.mesh.primitive_plane_add(radius=10.0)
+
+    utils.create_plane(size=20.0)
+
     return bpy.data.objects["Suzanne" + str(int((num_suzannes - 1) / 2))]
-
-
-def set_camera_params(camera, dof_target):
-    camera.data.sensor_fit = 'HORIZONTAL'
-    camera.data.sensor_width = 36.0
-    camera.data.sensor_height = 24.0
-    camera.data.lens = 50
-    camera.data.dof_object = dof_target
-    camera.data.cycles.aperture_type = 'RADIUS'
-    camera.data.cycles.aperture_size = 0.2
 
 
 # Args
@@ -47,11 +39,11 @@ utils.clean_objects()
 center_suzanne = set_scene_objects()
 
 ## Camera
-bpy.ops.object.camera_add(view_align=False, location=[6.0, -12.0, 2.0])
+bpy.ops.object.camera_add(location=(5.0, -10.0, 2.0))
 camera = bpy.context.object
 
 utils.add_track_to_constraint(camera, center_suzanne)
-set_camera_params(camera, center_suzanne)
+utils.set_camera_params(camera, center_suzanne, lens=50, fstop=0.2)
 
 ## Lights
 utils.build_environment_texture_background(world, hdri_path)

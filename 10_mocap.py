@@ -43,14 +43,10 @@ def build_scene(scene, input_bvh_path):
     armature_mesh = utils.create_armature_mesh(scene, armature, 'Mesh')
     armature_mesh.data.materials.append(mat)
 
-    bpy.ops.mesh.primitive_plane_add(radius=8.0, calc_uvs=True)
-    current_object = bpy.context.object
-    current_object.name = "Floor"
+    current_object = utils.create_plane(size=16.0, name="Floor")
     current_object.data.materials.append(bpy.data.materials["Concrete07"])
 
-    bpy.ops.mesh.primitive_plane_add(radius=8.0, calc_uvs=True)
-    current_object = bpy.context.object
-    current_object.name = "Wall"
+    current_object = utils.create_plane(size=16.0, name="Wall")
     current_object.data.materials.append(bpy.data.materials["Concrete07"])
     current_object.location = (0.0, 6.0, 0.0)
     current_object.rotation_euler = (0.5 * math.pi, 0.0, 0.0)
@@ -90,7 +86,7 @@ utils.set_animation(scene, fps=24, frame_start=1, frame_end=40)  # frame_end wil
 focus_target = build_scene(scene, input_bvh_path)
 
 ## Camera
-bpy.ops.object.camera_add(view_align=False, location=[0.0, -10.0, 1.0])
+bpy.ops.object.camera_add(location=(0.0, -10.0, 1.0))
 camera = bpy.context.object
 
 utils.add_copy_location_constraint(copy_to_object=camera,

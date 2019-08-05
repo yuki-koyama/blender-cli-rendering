@@ -12,14 +12,12 @@ import external.cc0assetsloader as loader
 
 
 def set_floor_and_lights():
-    radius = 100.0
-    bpy.ops.mesh.primitive_plane_add(radius=radius, calc_uvs=True)
-    current_object = bpy.context.object
-    current_object.name = "Floor"
+    size = 200.0
+    current_object = utils.create_plane(size=size, name="Floor")
     floor_mat = bpy.data.materials.new("Material_Plane")
     floor_mat.use_nodes = True
     utils.clean_nodes(floor_mat.node_tree.nodes)
-    utils.build_checker_board_nodes(floor_mat.node_tree, 2.0 * radius)
+    utils.build_checker_board_nodes(floor_mat.node_tree, size)
     current_object.data.materials.append(floor_mat)
 
     utils.create_area_light(location=(6.0, 0.0, 4.0),
@@ -48,11 +46,17 @@ def set_scene_objects():
     current_object.data.materials.append(bpy.data.materials["Fabric03"])
     bpy.ops.object.modifier_add(type='COLLISION')
 
-    bpy.ops.mesh.primitive_grid_add(x_subdivisions=75,
-                                    y_subdivisions=75,
-                                    radius=1.5,
-                                    calc_uvs=True,
-                                    location=(0.0, 0.0, 2.75))
+    if bpy.app.version >= (2, 80, 0):
+        bpy.ops.mesh.primitive_grid_add(x_subdivisions=75,
+                                        y_subdivisions=75,
+                                        size=3.0,
+                                        location=(0.0, 0.0, 2.75))
+    else:
+        bpy.ops.mesh.primitive_grid_add(x_subdivisions=75,
+                                        y_subdivisions=75,
+                                        radius=1.5,
+                                        calc_uvs=True,
+                                        location=(0.0, 0.0, 2.75))
     cloth_object = bpy.context.object
     cloth_object.name = "Cloth"
     bpy.ops.object.modifier_add(type='CLOTH')
@@ -87,7 +91,7 @@ utils.set_animation(scene, fps=24, frame_start=1, frame_end=48)
 focus_target = set_scene_objects()
 
 ## Camera
-bpy.ops.object.camera_add(view_align=False, location=[0.0, -12.5, 2.2])
+bpy.ops.object.camera_add(location=(0.0, -12.5, 2.2))
 camera = bpy.context.object
 utils.add_track_to_constraint(camera, focus_target)
 utils.set_camera_params(camera, focus_target)
