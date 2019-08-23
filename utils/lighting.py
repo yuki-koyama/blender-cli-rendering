@@ -10,7 +10,7 @@ def create_area_light(location=(0.0, 0.0, 5.0),
     if bpy.app.version >= (2, 80, 0):
         bpy.ops.object.light_add(type='AREA', location=location, rotation=rotation)
     else:
-        bpy.ops.object.ramp_add(type='AREA', location=location, rotation=rotation)
+        bpy.ops.object.lamp_add(type='AREA', location=location, rotation=rotation)
 
     if name is not None:
         bpy.context.object.name = name
@@ -31,7 +31,7 @@ def create_sun_light(location=(0.0, 0.0, 5.0), rotation=(0.0, 0.0, 0.0), name=No
     if bpy.app.version >= (2, 80, 0):
         bpy.ops.object.light_add(type='SUN', location=location, rotation=rotation)
     else:
-        bpy.ops.object.ramp_add(type='SUN', location=location, rotation=rotation)
+        bpy.ops.object.lamp_add(type='SUN', location=location, rotation=rotation)
 
     if name is not None:
         bpy.context.object.name = name
