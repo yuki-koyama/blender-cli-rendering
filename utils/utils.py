@@ -62,11 +62,12 @@ def set_cycles_renderer(scene,
     scene.render.engine = 'CYCLES'
     scene.render.filepath = output_file_path
     scene.render.use_motion_blur = use_motion_blur
-    scene.render.film_transparent = use_transparent_bg
 
     if bpy.app.version >= (2, 80, 0):
+        scene.cycles.film_transparent = use_transparent_bg
         scene.view_layers[0].cycles.use_denoising = use_denoising
     else:
+        scene.render.film_transparent = use_transparent_bg
         scene.render.layers[0].cycles.use_denoising = use_denoising
 
     scene.cycles.samples = num_samples
