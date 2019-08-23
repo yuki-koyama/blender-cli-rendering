@@ -50,7 +50,10 @@ def create_plane(location=(0.0, 0.0, 0.0), rotation=(0.0, 0.0, 0.0), size=2.0, n
 
 
 def create_smooth_sphere(location=(0.0, 0.0, 0.0), radius=1.0, subdivision_level=1, name=None):
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=radius, location=location, calc_uvs=True)
+    if bpy.app.version >= (2, 80, 0):
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=radius, location=location, calc_uvs=True)
+    else:
+        bpy.ops.mesh.primitive_uv_sphere_add(size=radius, location=location, calc_uvs=True)
 
     current_object = bpy.context.object
 
