@@ -13,9 +13,16 @@ Useful link: <https://wiki.blender.org/wiki/Style_Guide/Python>
 
 ## Naming Conventions
 
-- A function named `create_XXX` instantiates an `object`/`node` to the specified `scene`/`node_tree`. This function returns the newly created `object`/`node`.
-- A function named `create_XXXs` instantiates a set of `object`/`node` to the specified `scene`/`node_tree`. This function returns a tuple of the newly created `object`/`node`.
+### Functions
+
+- A function named `create_XXX` instantiates an `bpy.types.Object`/`bpy.types.Node` to the specified `scene`/`node_tree`. This function returns the newly created `bpy.types.Object`/`bpy.types.Node`.
+- A function named `create_XXXs` instantiates a set of `bpy.types.Object`/`bpy.types.Node` to the specified `scene`/`node_tree`. This function returns a tuple of the newly created `bpy.types.Object`/`bpy.types.Node`.
 - A function named `build_XXX` manipulates the specified `scene`/`node_tree` by various operations; for example, by instantiating a set of objects. This function does not return anything.
 - A function named `set_XXX` changes parameters of specified objects etc. This function does not instantiate new objects. This function does not return anything.
 - A function named `add_XXX_constraint`/`modifier` adds either a constraint or modifier to an object. This function does not instantiate new objects. This function does not return anything.
-- A function named `add_XXX_YYY` adds a data-block to data-blocks in `bpy.data.YYYs`. This function does not instantiate any `object`/`node` to `scene`/`node_tree`. This function returns the newly added `YYY`.
+- A function named `add_XXX_YYY` adds a data-block to data-blocks in `bpy.data.YYYs`. This function does not instantiate any `bpy.types.Object`/`bpy.types.Node` to `scene`/`node_tree`. This function returns the newly added `YYY`.
+
+### Variables
+
+- A variable named `XXX_object` (or `object`) has the type `bpy.types.Object`.
+- A variable named `XXX_node` (or `node`) has the type `bpy.types.Node`.
