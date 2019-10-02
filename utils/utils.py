@@ -57,12 +57,12 @@ def build_environment_texture_background(world: bpy.types.World, hdri_path: str,
 def set_cycles_renderer(scene: bpy.types.Scene,
                         resolution_percentage: int,
                         output_file_path: str,
-                        camera: bpy.types.Object,
+                        camera_object: bpy.types.Object,
                         num_samples: int,
                         use_denoising: bool = True,
                         use_motion_blur: bool = False,
                         use_transparent_bg: bool = False) -> None:
-    scene.camera = camera
+    scene.camera = camera_object
 
     scene.render.image_settings.file_format = 'PNG'
     scene.render.resolution_percentage = resolution_percentage
@@ -80,24 +80,24 @@ def set_cycles_renderer(scene: bpy.types.Scene,
     scene.cycles.samples = num_samples
 
 
-def set_camera_params(camera: bpy.types.Object, focus_target: bpy.types.Object, lens: float = 85.0,
+def set_camera_params(camera: bpy.types.Camera, focus_target: bpy.types.Object, lens: float = 85.0,
                       fstop: float = 1.4) -> None:
     # Simulate Sony's FE 85mm F1.4 GM
-    camera.data.sensor_fit = 'HORIZONTAL'
-    camera.data.sensor_width = 36.0
-    camera.data.sensor_height = 24.0
-    camera.data.lens = lens
+    camera.sensor_fit = 'HORIZONTAL'
+    camera.sensor_width = 36.0
+    camera.sensor_height = 24.0
+    camera.lens = lens
 
     if bpy.app.version >= (2, 80, 0):
-        camera.data.dof.use_dof = True
-        camera.data.dof.focus_object = focus_target
-        camera.data.dof.aperture_fstop = fstop
-        camera.data.dof.aperture_blades = 11
+        camera.dof.use_dof = True
+        camera.dof.focus_object = focus_target
+        camera.dof.aperture_fstop = fstop
+        camera.dof.aperture_blades = 11
     else:
-        camera.data.dof_object = focus_target
-        camera.data.cycles.aperture_type = 'FSTOP'
-        camera.data.cycles.aperture_fstop = fstop
-        camera.data.cycles.aperture_blades = 11
+        camera.dof_object = focus_target
+        camera.cycles.aperture_type = 'FSTOP'
+        camera.cycles.aperture_fstop = fstop
+        camera.cycles.aperture_blades = 11
 
 
 ################################################################################

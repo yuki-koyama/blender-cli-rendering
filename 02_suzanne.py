@@ -32,17 +32,17 @@ center_suzanne = set_scene_objects()
 
 ## Camera
 bpy.ops.object.camera_add(location=(10.0, -7.0, 0.0))
-camera = bpy.context.object
+camera_object = bpy.context.object
 
-utils.add_track_to_constraint(camera, center_suzanne)
-utils.set_camera_params(camera, center_suzanne, lens=50)
+utils.add_track_to_constraint(camera_object, center_suzanne)
+utils.set_camera_params(camera_object.data, center_suzanne, lens=50.0)
 
 ## Lights
 utils.create_sun_light(rotation=(0.0, math.pi * 0.5, -math.pi * 0.1))
 
 # Render Setting
 scene = bpy.data.scenes["Scene"]
-utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples)
+utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera_object, num_samples)
 
 # Rendering
 bpy.ops.render.render(animation=False, write_still=True)

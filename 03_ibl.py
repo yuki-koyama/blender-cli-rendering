@@ -40,16 +40,16 @@ center_suzanne = set_scene_objects()
 
 ## Camera
 bpy.ops.object.camera_add(location=(5.0, -10.0, 2.0))
-camera = bpy.context.object
+camera_object = bpy.context.object
 
-utils.add_track_to_constraint(camera, center_suzanne)
-utils.set_camera_params(camera, center_suzanne, lens=50, fstop=0.2)
+utils.add_track_to_constraint(camera_object, center_suzanne)
+utils.set_camera_params(camera_object.data, center_suzanne, lens=50, fstop=0.2)
 
 ## Lights
 utils.build_environment_texture_background(world, hdri_path)
 
 # Render Setting
-utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples)
+utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera_object, num_samples)
 
 # Rendering
 bpy.ops.render.render(animation=False, write_still=True)

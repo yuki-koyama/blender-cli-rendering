@@ -89,9 +89,10 @@ focus_target = set_scene_objects()
 
 ## Camera
 bpy.ops.object.camera_add(location=(0.0, -12.5, 2.2))
-camera = bpy.context.object
-utils.add_track_to_constraint(camera, focus_target)
-utils.set_camera_params(camera, focus_target)
+camera_object = bpy.context.object
+
+utils.add_track_to_constraint(camera_object, focus_target)
+utils.set_camera_params(camera_object.data, focus_target)
 
 ## Background
 utils.build_rgb_background(world, rgb=(0.0, 0.0, 0.0, 1.0))
@@ -103,7 +104,7 @@ utils.build_scene_composition(scene, dispersion=0.0)
 utils.set_cycles_renderer(scene,
                           resolution_percentage,
                           output_file_path,
-                          camera,
+                          camera_object,
                           num_samples,
                           use_denoising=True,
                           use_motion_blur=True,

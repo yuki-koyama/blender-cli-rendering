@@ -67,10 +67,10 @@ focus_target = set_scene_objects()
 
 ## Camera
 bpy.ops.object.camera_add(location=(0.0, -16.0, 2.0))
-camera = bpy.context.object
+camera_object = bpy.context.object
 
-utils.add_track_to_constraint(camera, focus_target)
-utils.set_camera_params(camera, focus_target, lens=85, fstop=0.5)
+utils.add_track_to_constraint(camera_object, focus_target)
+utils.set_camera_params(camera_object.data, focus_target, lens=85, fstop=0.5)
 
 ## Lights
 utils.build_environment_texture_background(world, hdri_path)
@@ -79,7 +79,12 @@ utils.build_environment_texture_background(world, hdri_path)
 utils.build_scene_composition(scene)
 
 # Render Setting
-utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera, num_samples, use_denoising=True)
+utils.set_cycles_renderer(scene,
+                          resolution_percentage,
+                          output_file_path,
+                          camera_object,
+                          num_samples,
+                          use_denoising=True)
 
 # Render
 bpy.ops.render.render(animation=False, write_still=True)
