@@ -47,10 +47,7 @@ def set_scene_objects():
     bpy.ops.object.modifier_add(type='COLLISION')
 
     if bpy.app.version >= (2, 80, 0):
-        bpy.ops.mesh.primitive_grid_add(x_subdivisions=75,
-                                        y_subdivisions=75,
-                                        size=3.0,
-                                        location=(0.0, 0.0, 2.75))
+        bpy.ops.mesh.primitive_grid_add(x_subdivisions=75, y_subdivisions=75, size=3.0, location=(0.0, 0.0, 2.75))
     else:
         bpy.ops.mesh.primitive_grid_add(x_subdivisions=75,
                                         y_subdivisions=75,

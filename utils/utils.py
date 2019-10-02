@@ -1,20 +1,27 @@
 import bpy
 import math
 import sys
+from typing import Tuple
 
 ################################################################################
 # Scene
 ################################################################################
 
 
-def set_animation(scene, fps=24, frame_start=1, frame_end=48, frame_current=1):
+def set_animation(scene: bpy.types.Scene,
+                  fps: int = 24,
+                  frame_start: int = 1,
+                  frame_end: int = 48,
+                  frame_current: int = 1) -> None:
     scene.render.fps = fps
     scene.frame_start = frame_start
     scene.frame_end = frame_end
     scene.frame_current = frame_current
 
 
-def build_rgb_background(world, rgb=(0.9, 0.9, 0.9, 1.0), strength=1.0):
+def build_rgb_background(world: bpy.types.World,
+                         rgb: Tuple[float, float, float, float] = (0.9, 0.9, 0.9, 1.0),
+                         strength: float = 1.0) -> None:
     world.use_nodes = True
     node_tree = world.node_tree
 
@@ -28,7 +35,7 @@ def build_rgb_background(world, rgb=(0.9, 0.9, 0.9, 1.0), strength=1.0):
     arrange_nodes(node_tree)
 
 
-def build_environment_texture_background(world, hdri_path, rotation=0.0):
+def build_environment_texture_background(world: bpy.types.World, hdri_path: str, rotation: float = 0.0) -> None:
     world.use_nodes = True
     node_tree = world.node_tree
 
@@ -47,14 +54,14 @@ def build_environment_texture_background(world, hdri_path, rotation=0.0):
     arrange_nodes(node_tree)
 
 
-def set_cycles_renderer(scene,
-                        resolution_percentage,
-                        output_file_path,
-                        camera,
-                        num_samples,
-                        use_denoising=True,
-                        use_motion_blur=False,
-                        use_transparent_bg=False):
+def set_cycles_renderer(scene: bpy.types.Scene,
+                        resolution_percentage: int,
+                        output_file_path: str,
+                        camera: bpy.types.Object,
+                        num_samples: int,
+                        use_denoising: bool = True,
+                        use_motion_blur: bool = False,
+                        use_transparent_bg: bool = False) -> None:
     scene.camera = camera
 
     scene.render.image_settings.file_format = 'PNG'
@@ -73,7 +80,8 @@ def set_cycles_renderer(scene,
     scene.cycles.samples = num_samples
 
 
-def set_camera_params(camera, focus_target, lens=85, fstop=1.4):
+def set_camera_params(camera: bpy.types.Object, focus_target: bpy.types.Object, lens: float = 85.0,
+                      fstop: float = 1.4) -> None:
     # Simulate Sony's FE 85mm F1.4 GM
     camera.data.sensor_fit = 'HORIZONTAL'
     camera.data.sensor_width = 36.0
