@@ -3,8 +3,8 @@ import math
 from utils.modifier import add_subdivision_surface_modifier
 
 
-def set_smooth_shading(target_object):
-    for polygon in target_object.data.polygons:
+def set_smooth_shading(mesh: bpy.types.Mesh) -> None:
+    for polygon in mesh.polygons:
         polygon.use_smooth = True
 
 
@@ -12,18 +12,17 @@ def create_mesh_from_pydata(scene, vertices, faces, mesh_name, object_name, use_
     # Add a new mesh and set vertices and faces
     # In this case, it does not require to set edges
     # After manipulating mesh data, update() needs to be called
-    new_mesh = bpy.data.meshes.new(mesh_name)
+    new_mesh: bpy.types.Mesh = bpy.data.meshes.new(mesh_name)
     new_mesh.from_pydata(vertices, [], faces)
     new_mesh.update()
+    if use_smooth:
+        set_smooth_shading(new_mesh)
 
-    new_object = bpy.data.objects.new(mesh_name, new_mesh)
+    new_object: bpy.types.Object = bpy.data.objects.new(mesh_name, new_mesh)
     if bpy.app.version >= (2, 80, 0):
         scene.collection.objects.link(new_object)
     else:
         scene.objects.link(new_object)
-
-    if use_smooth:
-        set_smooth_shading(new_object)
 
     return new_object
 
@@ -60,7 +59,7 @@ def create_smooth_sphere(location=(0.0, 0.0, 0.0), radius=1.0, subdivision_level
     if name is not None:
         current_object.name = name
 
-    set_smooth_shading(current_object)
+    set_smooth_shading(current_object.data)
     add_subdivision_surface_modifier(current_object, subdivision_level)
 
     return current_object
@@ -74,7 +73,7 @@ def create_smooth_monkey(location=(0.0, 0.0, 0.0), rotation=(0.0, 0.0, 0.0), sub
     if name is not None:
         current_object.name = name
 
-    set_smooth_shading(current_object)
+    set_smooth_shading(current_object.data)
     add_subdivision_surface_modifier(current_object, subdivision_level)
 
     return current_object

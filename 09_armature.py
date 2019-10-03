@@ -51,7 +51,7 @@ def create_skinned_object():
     cube.scale = (0.5, 0.5, 1.0)
     utils.add_subdivision_surface_modifier(cube, 3, is_simple=True)
     utils.add_subdivision_surface_modifier(cube, 3, is_simple=False)
-    utils.set_smooth_shading(cube)
+    utils.set_smooth_shading(cube.data)
     cube.data.materials.append(bpy.data.materials["Metal07"])
 
     # Set the armature as the parent of the cube using the "Automatic Weight" armature option

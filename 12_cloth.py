@@ -60,7 +60,7 @@ def set_scene_objects():
     cloth_object.modifiers["Cloth"].collision_settings.use_collision = True
     cloth_object.modifiers["Cloth"].collision_settings.use_self_collision = True
     cloth_object.modifiers["Cloth"].settings.quality = 10
-    utils.set_smooth_shading(cloth_object)
+    utils.set_smooth_shading(cloth_object.data)
     utils.add_subdivision_surface_modifier(cloth_object, 2)
     cloth_object.data.materials.append(bpy.data.materials["Fabric02"])
 
