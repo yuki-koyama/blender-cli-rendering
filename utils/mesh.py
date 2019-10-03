@@ -1,6 +1,6 @@
 import bpy
 import math
-from utils.utils import add_subdivision_surface_modifier
+from utils.modifier import add_subdivision_surface_modifier
 
 
 def set_smooth_shading(target_object):

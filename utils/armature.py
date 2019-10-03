@@ -1,7 +1,7 @@
 import bpy
 import mathutils
 from utils.mesh import create_mesh_from_pydata
-from utils.utils import add_subdivision_surface_modifier
+from utils.modifier import add_subdivision_surface_modifier
 
 
 def create_armature_mesh(scene, armature_object, mesh_name):
