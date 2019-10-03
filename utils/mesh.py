@@ -1,5 +1,6 @@
 import bpy
 import math
+from typing import Tuple, List, Iterable, Optional
 from utils.modifier import add_subdivision_surface_modifier
 
 
@@ -8,7 +9,12 @@ def set_smooth_shading(mesh: bpy.types.Mesh) -> None:
         polygon.use_smooth = True
 
 
-def create_mesh_from_pydata(scene, vertices, faces, mesh_name, object_name, use_smooth=True):
+def create_mesh_from_pydata(scene: bpy.types.Scene,
+                            vertices: List[Iterable[float]],
+                            faces: List[Iterable[int]],
+                            mesh_name: str,
+                            object_name: str,
+                            use_smooth: bool = True) -> bpy.types.Object:
     # Add a new mesh and set vertices and faces
     # In this case, it does not require to set edges
     # After manipulating mesh data, update() needs to be called
@@ -27,14 +33,17 @@ def create_mesh_from_pydata(scene, vertices, faces, mesh_name, object_name, use_
     return new_object
 
 
-def create_cached_mesh_from_alembic(file_path, name):
+def create_cached_mesh_from_alembic(file_path: str, name: str) -> bpy.types.Object:
     bpy.ops.wm.alembic_import(filepath=file_path, as_background_job=False)
     bpy.context.active_object.name = name
 
     return bpy.context.active_object
 
 
-def create_plane(location=(0.0, 0.0, 0.0), rotation=(0.0, 0.0, 0.0), size=2.0, name=None):
+def create_plane(location: Tuple[float, float, float] = (0.0, 0.0, 0.0),
+                 rotation: Tuple[float, float, float] = (0.0, 0.0, 0.0),
+                 size: float = 2.0,
+                 name: Optional[str] = None) -> bpy.types.Object:
     if bpy.app.version >= (2, 80, 0):
         bpy.ops.mesh.primitive_plane_add(size=size, location=location, rotation=rotation)
     else:
@@ -48,7 +57,10 @@ def create_plane(location=(0.0, 0.0, 0.0), rotation=(0.0, 0.0, 0.0), size=2.0, n
     return current_object
 
 
-def create_smooth_sphere(location=(0.0, 0.0, 0.0), radius=1.0, subdivision_level=1, name=None):
+def create_smooth_sphere(location: Tuple[float, float, float] = (0.0, 0.0, 0.0),
+                         radius: float = 1.0,
+                         subdivision_level: int = 1,
+                         name: Optional[str] = None) -> bpy.types.Object:
     if bpy.app.version >= (2, 80, 0):
         bpy.ops.mesh.primitive_uv_sphere_add(radius=radius, location=location, calc_uvs=True)
     else:
@@ -65,7 +77,10 @@ def create_smooth_sphere(location=(0.0, 0.0, 0.0), radius=1.0, subdivision_level
     return current_object
 
 
-def create_smooth_monkey(location=(0.0, 0.0, 0.0), rotation=(0.0, 0.0, 0.0), subdivision_level=2, name=None):
+def create_smooth_monkey(location: Tuple[float, float, float] = (0.0, 0.0, 0.0),
+                         rotation: Tuple[float, float, float] = (0.0, 0.0, 0.0),
+                         subdivision_level: int = 2,
+                         name: Optional[str] = None) -> bpy.types.Object:
     bpy.ops.mesh.primitive_monkey_add(location=location, rotation=rotation, calc_uvs=True)
 
     current_object = bpy.context.object
@@ -79,7 +94,8 @@ def create_smooth_monkey(location=(0.0, 0.0, 0.0), rotation=(0.0, 0.0, 0.0), sub
     return current_object
 
 
-def create_three_smooth_monkeys(names=None):
+def create_three_smooth_monkeys(names: Optional[Tuple[str, str, str]] = None
+                                ) -> Tuple[bpy.types.Object, bpy.types.Object, bpy.types.Object]:
     if names is None:
         names = ("Suzanne Left", "Suzanne Center", "Suzanne Right")
 
