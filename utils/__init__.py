@@ -4,3 +4,4 @@ from utils.composition import *
 from utils.lighting import *
 from utils.material import *
 from utils.mesh import *
+from utils.modifier import *
