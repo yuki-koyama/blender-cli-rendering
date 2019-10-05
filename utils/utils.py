@@ -107,14 +107,19 @@ def set_camera_params(camera: bpy.types.Camera,
 ################################################################################
 
 
-def add_track_to_constraint(camera_object, track_to_target_object):
+def add_track_to_constraint(camera_object: bpy.types.Object, track_to_target_object: bpy.types.Object) -> None:
     constraint = camera_object.constraints.new(type='TRACK_TO')
     constraint.target = track_to_target_object
     constraint.track_axis = 'TRACK_NEGATIVE_Z'
     constraint.up_axis = 'UP_Y'
 
 
-def add_copy_location_constraint(copy_to_object, copy_from_object, use_x, use_y, use_z, bone_name=''):
+def add_copy_location_constraint(copy_to_object: bpy.types.Object,
+                                 copy_from_object: bpy.types.Object,
+                                 use_x: bool,
+                                 use_y: bool,
+                                 use_z: bool,
+                                 bone_name: str = '') -> None:
     constraint = copy_to_object.constraints.new(type='COPY_LOCATION')
     constraint.target = copy_from_object
     constraint.use_x = use_x
