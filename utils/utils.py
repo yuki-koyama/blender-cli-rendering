@@ -107,9 +107,9 @@ def set_camera_params(camera: bpy.types.Camera,
 ################################################################################
 
 
-def add_track_to_constraint(camera, track_to_target):
-    constraint = camera.constraints.new(type='TRACK_TO')
-    constraint.target = track_to_target
+def add_track_to_constraint(camera_object, track_to_target_object):
+    constraint = camera_object.constraints.new(type='TRACK_TO')
+    constraint.target = track_to_target_object
     constraint.track_axis = 'TRACK_NEGATIVE_Z'
     constraint.up_axis = 'UP_Y'
 
