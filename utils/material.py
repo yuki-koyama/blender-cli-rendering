@@ -1,8 +1,9 @@
 import bpy
 import utils
+from typing import Tuple
 
 
-def create_texture_node(node_tree, path, is_color_data):
+def create_texture_node(node_tree: bpy.types.NodeTree, path: str, is_color_data: bool) -> bpy.types.Node:
     # Instantiate a new texture image node
     texture_node = node_tree.nodes.new(type='ShaderNodeTexImage')
 
@@ -56,7 +57,12 @@ def set_principled_node(principled_node,
     principled_node.inputs['Transmission Roughness'].default_value = transmission_roughness
 
 
-def build_pbr_nodes(node_tree, base_color=(0.6, 0.6, 0.6, 1.0), metallic=0.0, specular=0.5, roughness=0.5, sheen=0.0):
+def build_pbr_nodes(node_tree: bpy.types.NodeTree,
+                    base_color: Tuple[float, float, float, float] = (0.6, 0.6, 0.6, 1.0),
+                    metallic: float = 0.0,
+                    specular: float = 0.5,
+                    roughness: float = 0.5,
+                    sheen: float = 0.0) -> None:
     output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
     principled_node = node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
     node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
@@ -71,7 +77,7 @@ def build_pbr_nodes(node_tree, base_color=(0.6, 0.6, 0.6, 1.0), metallic=0.0, sp
     utils.arrange_nodes(node_tree)
 
 
-def build_checker_board_nodes(node_tree, size):
+def build_checker_board_nodes(node_tree: bpy.types.NodeTree, size: float) -> None:
     output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
     principled_node = node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
     checker_texture_node = node_tree.nodes.new(type='ShaderNodeTexChecker')
