@@ -2,6 +2,7 @@ import bpy
 import mathutils
 from utils.mesh import create_mesh_from_pydata
 from utils.modifier import add_subdivision_surface_modifier
+from typing import Dict, List, Iterable
 
 
 def create_armature_mesh(scene: bpy.types.Scene, armature_object: bpy.types.Object, mesh_name: str) -> bpy.types.Object:
@@ -59,9 +60,9 @@ def create_armature_mesh(scene: bpy.types.Scene, armature_object: bpy.types.Obje
 
     armature_data = armature_object.data
 
-    vertices = []
-    faces = []
-    vertex_groups = []
+    vertices: List[mathutils.Vector] = []
+    faces: List[Iterable[int]] = []
+    vertex_groups: List[Dict] = []
 
     for bone in armature_data.bones:
         radius = 0.10 * (0.10 + bone.length)
