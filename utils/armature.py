@@ -4,7 +4,7 @@ from utils.mesh import create_mesh_from_pydata
 from utils.modifier import add_subdivision_surface_modifier
 
 
-def create_armature_mesh(scene, armature_object, mesh_name):
+def create_armature_mesh(scene: bpy.types.Scene, armature_object: bpy.types.Object, mesh_name: str) -> bpy.types.Object:
     assert armature_object.type == 'ARMATURE', 'Error'
     assert len(armature_object.data.bones) != 0, 'Error'
 
