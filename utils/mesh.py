@@ -24,7 +24,7 @@ def create_mesh_from_pydata(scene: bpy.types.Scene,
     if use_smooth:
         set_smooth_shading(new_mesh)
 
-    new_object: bpy.types.Object = bpy.data.objects.new(mesh_name, new_mesh)
+    new_object: bpy.types.Object = bpy.data.objects.new(object_name, new_mesh)
     if bpy.app.version >= (2, 80, 0):
         scene.collection.objects.link(new_object)
     else:
