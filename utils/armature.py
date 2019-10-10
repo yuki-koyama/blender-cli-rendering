@@ -2,19 +2,19 @@ import bpy
 import mathutils
 from utils.mesh import create_mesh_from_pydata
 from utils.modifier import add_subdivision_surface_modifier
-from typing import Dict, List, Iterable
+from typing import Any, Dict, List, Tuple
 
 
 def create_armature_mesh(scene: bpy.types.Scene, armature_object: bpy.types.Object, mesh_name: str) -> bpy.types.Object:
     assert armature_object.type == 'ARMATURE', 'Error'
     assert len(armature_object.data.bones) != 0, 'Error'
 
-    def add_rigid_vertex_group(target_object, name, vertex_indices):
+    def add_rigid_vertex_group(target_object: bpy.types.Object, name: str, vertex_indices: List[int]) -> None:
         new_vertex_group = target_object.vertex_groups.new(name=name)
         for vertex_index in vertex_indices:
             new_vertex_group.add([vertex_index], 1.0, 'REPLACE')
 
-    def generate_bone_mesh_pydata(radius, length):
+    def generate_bone_mesh_pydata(radius: float, length: float) -> Tuple[List[mathutils.Vector], List[List[int]]]:
         base_radius = radius
         top_radius = 0.5 * radius
 
@@ -38,31 +38,31 @@ def create_armature_mesh(scene: bpy.types.Scene, armature_object: bpy.types.Obje
 
         faces = [
             # End point for the base part
-            (8, 1, 0),
-            (8, 2, 1),
-            (8, 3, 2),
-            (8, 0, 3),
+            [8, 1, 0],
+            [8, 2, 1],
+            [8, 3, 2],
+            [8, 0, 3],
 
             # End point for the top part
-            (9, 4, 5),
-            (9, 5, 6),
-            (9, 6, 7),
-            (9, 7, 4),
+            [9, 4, 5],
+            [9, 5, 6],
+            [9, 6, 7],
+            [9, 7, 4],
 
             # Side faces
-            (0, 1, 5, 4),
-            (1, 2, 6, 5),
-            (2, 3, 7, 6),
-            (3, 0, 4, 7)
+            [0, 1, 5, 4],
+            [1, 2, 6, 5],
+            [2, 3, 7, 6],
+            [3, 0, 4, 7],
         ]
 
         return vertices, faces
 
-    armature_data = armature_object.data
+    armature_data: bpy.types.Armature = armature_object.data
 
     vertices: List[mathutils.Vector] = []
-    faces: List[Iterable[int]] = []
-    vertex_groups: List[Dict] = []
+    faces: List[List[int]] = []
+    vertex_groups: List[Dict[str, Any]] = []
 
     for bone in armature_data.bones:
         radius = 0.10 * (0.10 + bone.length)
@@ -81,11 +81,18 @@ def create_armature_mesh(scene: bpy.types.Scene, armature_object: bpy.types.Obje
 
         for face in temp_faces:
             if len(face) == 3:
-                faces.append(
-                    (face[0] + vertex_index_offset, face[1] + vertex_index_offset, face[2] + vertex_index_offset))
+                faces.append([
+                    face[0] + vertex_index_offset,
+                    face[1] + vertex_index_offset,
+                    face[2] + vertex_index_offset,
+                ])
             else:
-                faces.append((face[0] + vertex_index_offset, face[1] + vertex_index_offset,
-                              face[2] + vertex_index_offset, face[3] + vertex_index_offset))
+                faces.append([
+                    face[0] + vertex_index_offset,
+                    face[1] + vertex_index_offset,
+                    face[2] + vertex_index_offset,
+                    face[3] + vertex_index_offset,
+                ])
 
     new_object = create_mesh_from_pydata(scene, vertices, faces, mesh_name, mesh_name)
     new_object.matrix_world = armature_object.matrix_world
