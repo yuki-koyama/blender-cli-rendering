@@ -2,14 +2,14 @@ import bpy
 import mathutils
 from utils.mesh import create_mesh_from_pydata
 from utils.modifier import add_subdivision_surface_modifier
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, Iterable, List, Tuple
 
 
 def create_armature_mesh(scene: bpy.types.Scene, armature_object: bpy.types.Object, mesh_name: str) -> bpy.types.Object:
     assert armature_object.type == 'ARMATURE', 'Error'
     assert len(armature_object.data.bones) != 0, 'Error'
 
-    def add_rigid_vertex_group(target_object: bpy.types.Object, name: str, vertex_indices: List[int]) -> None:
+    def add_rigid_vertex_group(target_object: bpy.types.Object, name: str, vertex_indices: Iterable[int]) -> None:
         new_vertex_group = target_object.vertex_groups.new(name=name)
         for vertex_index in vertex_indices:
             new_vertex_group.add([vertex_index], 1.0, 'REPLACE')

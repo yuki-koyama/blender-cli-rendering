@@ -1,6 +1,6 @@
 import bpy
 import math
-from typing import Tuple, List, Iterable, Optional
+from typing import Tuple, Iterable, Optional, Sequence
 from utils.modifier import add_subdivision_surface_modifier
 
 
@@ -10,8 +10,8 @@ def set_smooth_shading(mesh: bpy.types.Mesh) -> None:
 
 
 def create_mesh_from_pydata(scene: bpy.types.Scene,
-                            vertices: List[Iterable[float]],
-                            faces: List[Iterable[int]],
+                            vertices: Iterable[Iterable[float]],
+                            faces: Iterable[Iterable[int]],
                             mesh_name: str,
                             object_name: str,
                             use_smooth: bool = True) -> bpy.types.Object:
