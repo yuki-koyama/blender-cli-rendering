@@ -134,17 +134,17 @@ def add_copy_location_constraint(copy_to_object: bpy.types.Object,
 ################################################################################
 
 
-def clean_objects():
+def clean_objects() -> None:
     for item in bpy.data.objects:
         bpy.data.objects.remove(item)
 
 
-def clean_nodes(nodes):
+def clean_nodes(nodes: bpy.types.Nodes) -> None:
     for node in nodes:
         nodes.remove(node)
 
 
-def arrange_nodes(node_tree, verbose=False):
+def arrange_nodes(node_tree: bpy.types.NodeTree, verbose: bool = False) -> None:
     max_num_iters = 2000
     epsilon = 1e-05
     target_space = 50.0
