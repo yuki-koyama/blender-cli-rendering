@@ -199,13 +199,13 @@ def arrange_nodes(node_tree: bpy.types.NodeTree, verbose: bool = False) -> None:
             k = 0.5 if not second_stage else 0.05
             socket_offset = 20.0
 
-            def get_from_socket_index(node, node_socket):
+            def get_from_socket_index(node: bpy.types.Node, node_socket: bpy.types.NodeSocket) -> int:
                 for i in range(len(node.outputs)):
                     if node.outputs[i] == node_socket:
                         return i
                 assert False
 
-            def get_to_socket_index(node, node_socket):
+            def get_to_socket_index(node: bpy.types.Node, node_socket: bpy.types.NodeSocket) -> int:
                 for i in range(len(node.inputs)):
                     if node.inputs[i] == node_socket:
                         return i
@@ -248,7 +248,7 @@ def arrange_nodes(node_tree: bpy.types.NodeTree, verbose: bool = False) -> None:
                     rx_2 = 0.5 * w_2 + margin
 
                     # Note: "dimensions" and "height" may not be correct depending on the situation
-                    def get_height(node):
+                    def get_height(node: bpy.types.Node) -> float:
                         if node.dimensions.y > epsilon:
                             return node.dimensions.y
                         elif math.fabs(node.height - 100.0) > epsilon:
