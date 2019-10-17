@@ -91,7 +91,7 @@ def build_checker_board_nodes(node_tree: bpy.types.NodeTree, size: float) -> Non
     utils.arrange_nodes(node_tree)
 
 
-def build_matcap_nodes(node_tree, image_path):
+def build_matcap_nodes(node_tree: bpy.types.NodeTree, image_path: str) -> None:
     tex_coord_node = node_tree.nodes.new(type='ShaderNodeTexCoord')
     vector_transform_node = node_tree.nodes.new(type='ShaderNodeVectorTransform')
     mapping_node = node_tree.nodes.new(type='ShaderNodeMapping')
@@ -123,14 +123,14 @@ def build_matcap_nodes(node_tree, image_path):
     utils.arrange_nodes(node_tree)
 
 
-def build_pbr_textured_nodes(node_tree,
-                             color_texture_path="",
-                             metallic_texture_path="",
-                             roughness_texture_path="",
-                             normal_texture_path="",
-                             displacement_texture_path="",
-                             ambient_occlusion_texture_path="",
-                             scale=(1.0, 1.0, 1.0)):
+def build_pbr_textured_nodes(node_tree: bpy.types.NodeTree,
+                             color_texture_path: str = "",
+                             metallic_texture_path: str = "",
+                             roughness_texture_path: str = "",
+                             normal_texture_path: str = "",
+                             displacement_texture_path: str = "",
+                             ambient_occlusion_texture_path: str = "",
+                             scale: Tuple[float, float, float] = (1.0, 1.0, 1.0)) -> None:
     output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
     principled_node = node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
     node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
