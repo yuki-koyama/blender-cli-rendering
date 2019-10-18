@@ -1,21 +1,32 @@
 # blender --background --python 01_cube.py -- </path/to/output/image> <resolution_percentage>
 
 import bpy
+import os
 import sys
 
-# Args
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+import utils
 
-output_file_path = str(sys.argv[sys.argv.index('--') + 1])
-resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
 
-# Setting
+def get_output_file_path() -> str:
+    return str(sys.argv[sys.argv.index('--') + 1])
 
-bpy.context.scene.render.image_settings.file_format = 'PNG'
-bpy.context.scene.render.resolution_percentage = resolution_percentage
-bpy.data.scenes["Scene"].render.engine = 'CYCLES'
-bpy.data.scenes["Scene"].render.filepath = output_file_path
-bpy.context.scene.render.use_freestyle = False
 
-# Rendering
+def get_resolution_percentage() -> int:
+    return int(sys.argv[sys.argv.index('--') + 2])
 
-bpy.ops.render.render(animation=False, write_still=True)
+
+if __name__ == "__main__":
+    # Args
+    output_file_path = get_output_file_path()
+    resolution_percentage = get_resolution_percentage()
+
+    # Setting
+    default_scene = bpy.context.scene
+    default_camera_object = bpy.data.objects["Camera"]
+    num_samples = 32
+    utils.set_cycles_renderer(default_scene, resolution_percentage, output_file_path, default_camera_object,
+                              num_samples)
+
+    # Rendering
+    bpy.ops.render.render(animation=False, write_still=True)
