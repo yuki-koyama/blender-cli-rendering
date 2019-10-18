@@ -86,8 +86,7 @@ utils.set_animation(scene, fps=24, frame_start=1, frame_end=40)  # frame_end wil
 focus_target_object = build_scene(scene, input_bvh_path)
 
 ## Camera
-bpy.ops.object.camera_add(location=(0.0, -10.0, 1.0))
-camera_object = bpy.context.object
+camera_object = utils.create_camera(location=(0.0, -10.0, 1.0))
 
 utils.add_copy_location_constraint(copy_to_object=camera_object,
                                    copy_from_object=focus_target_object,
