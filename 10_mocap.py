@@ -83,19 +83,19 @@ utils.clean_objects()
 utils.set_animation(scene, fps=24, frame_start=1, frame_end=40)  # frame_end will be overriden later
 
 ## Scene
-focus_target = build_scene(scene, input_bvh_path)
+focus_target_object = build_scene(scene, input_bvh_path)
 
 ## Camera
 bpy.ops.object.camera_add(location=(0.0, -10.0, 1.0))
 camera_object = bpy.context.object
 
 utils.add_copy_location_constraint(copy_to_object=camera_object,
-                                   copy_from_object=focus_target,
+                                   copy_from_object=focus_target_object,
                                    use_x=True,
                                    use_y=False,
                                    use_z=False)
-utils.add_track_to_constraint(camera_object, focus_target)
-utils.set_camera_params(camera_object.data, focus_target)
+utils.add_track_to_constraint(camera_object, focus_target_object)
+utils.set_camera_params(camera_object.data, focus_target_object)
 
 ## Lights
 utils.build_environment_texture_background(world, hdri_path)
