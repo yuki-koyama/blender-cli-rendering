@@ -5,19 +5,20 @@ import sys
 import math
 import os
 import random
+from typing import List, Tuple
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import utils
 
 
-def get_random_numbers(length):
+def get_random_numbers(length: int) -> List[float]:
     numbers = []
     for i in range(length):
         numbers.append(random.random())
     return numbers
 
 
-def get_color(x):
+def get_color(x: float) -> Tuple[float, float, float]:
     colors = [
         (0.776470, 0.894117, 0.545098),
         (0.482352, 0.788235, 0.435294),
@@ -32,7 +33,7 @@ def get_color(x):
     return ((1.0 - t) * c0[0] + t * c1[0], (1.0 - t) * c0[1] + t * c1[1], (1.0 - t) * c0[2] + t * c1[2])
 
 
-def set_scene_objects():
+def set_scene_objects() -> bpy.types.Object:
     # Instantiate a floor plane
     utils.create_plane(size=200.0, location=(0.0, 0.0, -1.0))
 
@@ -95,14 +96,13 @@ world = scene.world
 utils.clean_objects()
 
 ## Object
-focus_target = set_scene_objects()
+focus_target_object = set_scene_objects()
 
 ## Camera
-bpy.ops.object.camera_add(location=(0.0, -10.0, 0.0))
-camera_object = bpy.context.object
+camera_object = utils.create_camera(location=(0.0, -10.0, 0.0))
 
-utils.add_track_to_constraint(camera_object, focus_target)
-utils.set_camera_params(camera_object.data, focus_target, lens=72, fstop=0.5)
+utils.add_track_to_constraint(camera_object, focus_target_object)
+utils.set_camera_params(camera_object.data, focus_target_object, lens=72, fstop=0.5)
 
 ## Lights
 utils.build_environment_texture_background(world, hdri_path)

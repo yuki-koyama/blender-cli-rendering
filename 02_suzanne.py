@@ -31,8 +31,7 @@ utils.clean_objects()
 center_suzanne = set_scene_objects()
 
 ## Camera
-bpy.ops.object.camera_add(location=(10.0, -7.0, 0.0))
-camera_object = bpy.context.object
+camera_object = utils.create_camera(location=(10.0, -7.0, 0.0))
 
 utils.add_track_to_constraint(camera_object, center_suzanne)
 utils.set_camera_params(camera_object.data, center_suzanne, lens=50.0)
