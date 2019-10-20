@@ -11,7 +11,7 @@ import utils
 import external.cc0assetsloader as loader
 
 
-def create_armature_from_bvh(scene, bvh_path):
+def create_armature_from_bvh(bvh_path: str) -> bpy.types.Object:
     bpy.ops.import_anim.bvh(filepath=bvh_path,
                             axis_forward='-Z',
                             axis_up='Y',
@@ -25,7 +25,7 @@ def create_armature_from_bvh(scene, bvh_path):
     return armature
 
 
-def build_scene(scene, input_bvh_path):
+def build_scene(scene: bpy.types.Scene, input_bvh_path: str) -> bpy.types.Object:
     loader.build_pbr_textured_nodes_from_name("Concrete07", scale=(0.25, 0.25, 0.25))
 
     mat = bpy.data.materials.new("BlueMetal")
@@ -39,7 +39,7 @@ def build_scene(scene, input_bvh_path):
     mat.node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
     utils.arrange_nodes(mat.node_tree)
 
-    armature = create_armature_from_bvh(scene, bvh_path=input_bvh_path)
+    armature = create_armature_from_bvh(bvh_path=input_bvh_path)
     armature_mesh = utils.create_armature_mesh(scene, armature, 'Mesh')
     armature_mesh.data.materials.append(mat)
 

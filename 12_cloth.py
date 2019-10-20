@@ -11,7 +11,7 @@ import utils
 import external.cc0assetsloader as loader
 
 
-def set_floor_and_lights():
+def set_floor_and_lights() -> None:
     size = 200.0
     current_object = utils.create_plane(size=size, name="Floor")
     floor_mat = bpy.data.materials.new("Material_Plane")
@@ -34,7 +34,7 @@ def set_floor_and_lights():
                             name="Sub Light")
 
 
-def set_scene_objects():
+def set_scene_objects() -> bpy.types.Object:
     loader.build_pbr_textured_nodes_from_name("Fabric02")
     loader.build_pbr_textured_nodes_from_name("Fabric03")
     bpy.data.materials["Fabric02"].node_tree.nodes["Principled BSDF"].inputs["Sheen"].default_value = 4.0
@@ -85,14 +85,13 @@ utils.clean_objects()
 utils.set_animation(scene, fps=24, frame_start=1, frame_end=48)
 
 ## Object
-focus_target = set_scene_objects()
+focus_target_object = set_scene_objects()
 
 ## Camera
-bpy.ops.object.camera_add(location=(0.0, -12.5, 2.2))
-camera_object = bpy.context.object
+camera_object = utils.create_camera(location=(0.0, -12.5, 2.2))
 
-utils.add_track_to_constraint(camera_object, focus_target)
-utils.set_camera_params(camera_object.data, focus_target)
+utils.add_track_to_constraint(camera_object, focus_target_object)
+utils.set_camera_params(camera_object.data, focus_target_object)
 
 ## Background
 utils.build_rgb_background(world, rgb=(0.0, 0.0, 0.0, 1.0))
