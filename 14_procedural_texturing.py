@@ -39,7 +39,7 @@ def set_scene_objects() -> bpy.types.Object:
     mat.use_nodes = True
     utils.clean_nodes(mat.node_tree.nodes)
 
-    # TODO: Define the node tree
+    utils.build_peeling_paint_metal_nodes(mat.node_tree)
 
     current_object = utils.create_smooth_monkey(location=(0.0, 0.0, 1.0))
     current_object.data.materials.append(mat)
@@ -47,6 +47,7 @@ def set_scene_objects() -> bpy.types.Object:
     bpy.ops.object.empty_add(location=(0.0, -0.75, 1.05))
     focus_target = bpy.context.object
     return focus_target
+
 
 # Args
 output_file_path = str(sys.argv[sys.argv.index('--') + 1])

@@ -178,3 +178,33 @@ def build_pbr_textured_nodes(node_tree: bpy.types.NodeTree,
         node_tree.links.new(texture_node.outputs['Color'], output_node.inputs['Displacement'])
 
     utils.arrange_nodes(node_tree)
+
+
+def add_peeling_paint_metal_node_group() -> bpy.types.NodeGroup:
+    group = bpy.data.node_groups.new(type="ShaderNodeTree", name="Peeling Paint Metal")
+
+    # TODO
+
+    return group
+
+
+def create_peeling_paint_metal_node_group(node_tree: bpy.types.NodeTree) -> bpy.types.Node:
+    peeling_paint_metal_node_group = add_peeling_paint_metal_node_group()
+
+    node = node_tree.nodes.new(type='ShaderNodeGroup')
+    node.name = "Peeling Paint Metal"
+    node.node_tree = peeling_paint_metal_node_group
+
+    return node
+
+
+def build_peeling_paint_metal_nodes(node_tree: bpy.types.NodeTree) -> None:
+    output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
+    principled_node = node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
+    node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
+
+    node = create_peeling_paint_metal_node_group(node_tree)
+
+    # TODO
+
+    utils.arrange_nodes(node_tree)
