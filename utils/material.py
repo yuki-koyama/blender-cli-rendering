@@ -1,6 +1,7 @@
 import bpy
 import utils
 from typing import Tuple
+from utils.node import set_socket_value_range
 
 
 def create_texture_node(node_tree: bpy.types.NodeTree, path: str, is_color_data: bool) -> bpy.types.Node:
@@ -191,6 +192,12 @@ def add_peeling_paint_metal_node_group() -> bpy.types.NodeGroup:
     group.inputs.new("NodeSocketFloat", "Distortion")
     group.inputs.new("NodeSocketFloatFactor", "Fac")
     group.inputs.new("NodeSocketFloatFactor", "Threshold")
+
+    set_socket_value_range(group.inputs["Scale"], default_value=4.0, min_value=0.0, max_value=1000.0)
+    set_socket_value_range(group.inputs["Detail"], default_value=5.0, min_value=0.0, max_value=16.0)
+    set_socket_value_range(group.inputs["Distortion"], default_value=0.2, min_value=0.0, max_value=1000.0)
+    set_socket_value_range(group.inputs["Fac"], default_value=1.0)
+    set_socket_value_range(group.inputs["Threshold"], default_value=0.4)
 
     # TODO
 
