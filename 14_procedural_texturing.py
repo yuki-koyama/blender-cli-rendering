@@ -44,7 +44,7 @@ def set_scene_objects() -> bpy.types.Object:
     current_object = utils.create_smooth_monkey(location=(0.0, 0.0, 1.0))
     current_object.data.materials.append(mat)
 
-    bpy.ops.object.empty_add(location=(0.0, -0.75, 1.05))
+    bpy.ops.object.empty_add(location=(0.0, -0.75, 1.20))
     focus_target = bpy.context.object
     return focus_target
 
@@ -68,13 +68,13 @@ focus_target_object = set_scene_objects()
 camera_object = utils.create_camera(location=(0.0, -10.0, 2.2))
 
 utils.add_track_to_constraint(camera_object, focus_target_object)
-utils.set_camera_params(camera_object.data, focus_target_object)
+utils.set_camera_params(camera_object.data, focus_target_object, lens=180.0)
 
 ## Background
 utils.build_rgb_background(world, rgb=(0.0, 0.0, 0.0, 1.0))
 
 ## Composition
-utils.build_scene_composition(scene)
+utils.build_scene_composition(scene, dispersion=0.0)
 
 # Render Setting
 utils.set_cycles_renderer(scene,
