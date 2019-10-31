@@ -183,6 +183,15 @@ def build_pbr_textured_nodes(node_tree: bpy.types.NodeTree,
 def add_peeling_paint_metal_node_group() -> bpy.types.NodeGroup:
     group = bpy.data.node_groups.new(type="ShaderNodeTree", name="Peeling Paint Metal")
 
+    input_node = group.nodes.new("NodeGroupInput")
+    group.inputs.new("NodeSocketColor", "Paint Color")
+    group.inputs.new("NodeSocketColor", "Metal Color")
+    group.inputs.new("NodeSocketFloat", "Scale")
+    group.inputs.new("NodeSocketFloat", "Detail")
+    group.inputs.new("NodeSocketFloat", "Distortion")
+    group.inputs.new("NodeSocketFloatFactor", "Fac")
+    group.inputs.new("NodeSocketFloatFactor", "Threshold")
+
     # TODO
 
     return group
