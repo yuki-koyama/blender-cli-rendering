@@ -18,3 +18,4 @@ blender --background --python ./10_mocap.py -- ./assets/motion/102_01.bvh ${OUT_
 blender --background --python ./11_mesh_visualization.py -- ${OUT_DIR}/11_mesh_visualization.png ${RESOLUTION} ${SAMPLINGS}
 blender --background --python ./12_cloth.py -- ${OUT_DIR}/12/frame ${RESOLUTION} ${SAMPLINGS} && ffmpeg -r 24 -i ${OUT_DIR}/12/frame%04d.png -pix_fmt yuv420p ${OUT_DIR}/12_cloth.mp4
 blender --background --python ./13_matcap.py -- ${OUT_DIR}/13_matcap.png ${RESOLUTION} ${SAMPLINGS}
+blender --background --python ./14_procedural_texturing.py -- ${OUT_DIR}/14_procedural_texturing.png ${RESOLUTION} ${SAMPLINGS}

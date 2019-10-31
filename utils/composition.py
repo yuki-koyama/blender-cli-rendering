@@ -1,5 +1,5 @@
 import bpy
-from utils.utils import clean_nodes, arrange_nodes
+from utils.node import set_socket_value_range, clean_nodes, arrange_nodes
 
 
 def add_split_tone_node_group():
@@ -46,11 +46,6 @@ def add_split_tone_node_group():
     group = bpy.data.node_groups.new(type="CompositorNodeTree", name="SplitTone")
 
     input_node = group.nodes.new("NodeGroupInput")
-
-    def set_socket_value_range(socket, default_value=0.0, min_value=0.0, max_value=1.0):
-        socket.default_value = default_value
-        socket.min_value = min_value
-        socket.max_value = max_value
 
     group.inputs.new("NodeSocketColor", "Image")
     group.inputs.new("NodeSocketFloat", "HighlightsHue")
