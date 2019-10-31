@@ -1,6 +1,5 @@
 import bpy
-from utils.utils import clean_nodes, arrange_nodes
-from utils.node import set_socket_value_range
+from utils.node import set_socket_value_range, clean_nodes, arrange_nodes
 
 
 def add_split_tone_node_group():

@@ -1,7 +1,6 @@
 import bpy
-import utils
 from typing import Tuple
-from utils.node import set_socket_value_range
+from utils.node import set_socket_value_range, arrange_nodes
 
 
 def create_texture_node(node_tree: bpy.types.NodeTree, path: str, is_color_data: bool) -> bpy.types.Node:
@@ -75,7 +74,7 @@ def build_pbr_nodes(node_tree: bpy.types.NodeTree,
                         roughness=roughness,
                         sheen=sheen)
 
-    utils.arrange_nodes(node_tree)
+    arrange_nodes(node_tree)
 
 
 def build_checker_board_nodes(node_tree: bpy.types.NodeTree, size: float) -> None:
@@ -89,7 +88,7 @@ def build_checker_board_nodes(node_tree: bpy.types.NodeTree, size: float) -> Non
     node_tree.links.new(checker_texture_node.outputs['Color'], principled_node.inputs['Base Color'])
     node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
 
-    utils.arrange_nodes(node_tree)
+    arrange_nodes(node_tree)
 
 
 def build_matcap_nodes(node_tree: bpy.types.NodeTree, image_path: str) -> None:
@@ -121,7 +120,7 @@ def build_matcap_nodes(node_tree: bpy.types.NodeTree, image_path: str) -> None:
     node_tree.links.new(texture_image_node.outputs['Color'], emmission_node.inputs['Color'])
     node_tree.links.new(emmission_node.outputs['Emission'], output_node.inputs['Surface'])
 
-    utils.arrange_nodes(node_tree)
+    arrange_nodes(node_tree)
 
 
 def build_pbr_textured_nodes(node_tree: bpy.types.NodeTree,
@@ -178,7 +177,7 @@ def build_pbr_textured_nodes(node_tree: bpy.types.NodeTree,
         node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
         node_tree.links.new(texture_node.outputs['Color'], output_node.inputs['Displacement'])
 
-    utils.arrange_nodes(node_tree)
+    arrange_nodes(node_tree)
 
 
 def add_peeling_paint_metal_node_group() -> bpy.types.NodeGroup:
@@ -223,4 +222,4 @@ def build_peeling_paint_metal_nodes(node_tree: bpy.types.NodeTree) -> None:
 
     # TODO
 
-    utils.arrange_nodes(node_tree)
+    arrange_nodes(node_tree)
