@@ -117,6 +117,12 @@ Python scripts for rendering images using Blender from command-line interface.
 
 ![13_matcap](docs/compressed/13_matcap.jpg)
 
+### 14_procedural_texturing.py
+
+- Noise texture
+
+![14_procedural_texturing](docs/compressed/14_procedural_texturing.jpg)
+
 ## For Docker Users
 
 Thanks to the fact that Blender can run on Linux without displays as a command line tool, it is straightforward to run all the above scripts using Docker.
