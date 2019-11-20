@@ -68,7 +68,7 @@ focus_target_object = set_scene_objects()
 camera_object = utils.create_camera(location=(0.0, -10.0, 2.2))
 
 utils.add_track_to_constraint(camera_object, focus_target_object)
-utils.set_camera_params(camera_object.data, focus_target_object, lens=180.0)
+utils.set_camera_params(camera_object.data, focus_target_object, lens=180.0, fstop=2.4)
 
 ## Background
 utils.build_rgb_background(world, rgb=(0.0, 0.0, 0.0, 1.0))
