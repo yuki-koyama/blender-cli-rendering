@@ -111,8 +111,12 @@ def build_matcap_nodes(node_tree: bpy.types.NodeTree, image_path: str) -> None:
     vector_transform_node.convert_to = "CAMERA"
 
     mapping_node.vector_type = "TEXTURE"
-    mapping_node.translation = (1.0, 1.0, 0.0)
-    mapping_node.scale = (2.0, 2.0, 1.0)
+    if bpy.app.version >= (2, 81, 0):
+        mapping_node.inputs["Location"].default_value = (1.0, 1.0, 0.0)
+        mapping_node.inputs["Scale"].default_value = (2.0, 2.0, 1.0)
+    else:
+        mapping_node.translation = (1.0, 1.0, 0.0)
+        mapping_node.scale = (2.0, 2.0, 1.0)
 
     node_tree.links.new(tex_coord_node.outputs['Normal'], vector_transform_node.inputs['Vector'])
     node_tree.links.new(vector_transform_node.outputs['Vector'], mapping_node.inputs['Vector'])
