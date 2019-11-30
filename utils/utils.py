@@ -42,7 +42,10 @@ def build_environment_texture_background(world: bpy.types.World, hdri_path: str,
     environment_texture_node.image = bpy.data.images.load(hdri_path)
 
     mapping_node = node_tree.nodes.new(type="ShaderNodeMapping")
-    mapping_node.rotation[2] = rotation
+    if bpy.app.version >= (2, 81, 0):
+        mapping_node.inputs["Rotation"].default_value = (0.0, 0.0, rotation)
+    else:
+        mapping_node.rotation[2] = rotation
 
     tex_coord_node = node_tree.nodes.new(type="ShaderNodeTexCoord")
 
