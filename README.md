@@ -2,13 +2,14 @@
 
 ![GitHub](https://img.shields.io/github/license/yuki-koyama/blender-cli-rendering)
 ![Blender](https://img.shields.io/badge/blender-2.80-brightgreen)
+![Blender](https://img.shields.io/badge/blender-2.81-brightgreen)
 
 Python scripts for rendering images using Blender from command-line interface.
 
 ## Principles
 
 - Able to run without display (thus, based on Cycles instead of EEVEE)
-- Support both Blender 2.79 & 2.80
+- Support both Blender 2.79 & 2.80+
 
 ## Possible Usages
 
