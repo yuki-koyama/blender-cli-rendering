@@ -1,4 +1,4 @@
-# blender --background --python 07_texturing.py -- </path/to/output/image> <resolution_percentage> <num_samples>
+# blender --background --python 07_texturing.py --render-frame 1 -- </path/to/output/image> <resolution_percentage> <num_samples>
 
 import bpy
 import sys
@@ -81,6 +81,3 @@ utils.build_scene_composition(scene)
 # Render Setting
 utils.set_output_properties(scene, resolution_percentage, output_file_path)
 utils.set_cycles_renderer(scene, camera_object, num_samples)
-
-# Render
-bpy.ops.render.render(animation=False, write_still=True)

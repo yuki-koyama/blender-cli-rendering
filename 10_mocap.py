@@ -1,4 +1,4 @@
-# blender --background --python 10_mocap.py -- </path/to/input/bvh> </path/to/output/directory>/<name> <resolution_percentage> <num_samples>
+# blender --background --python 10_mocap.py --render-frame 1 -- </path/to/input/bvh> </path/to/output/directory>/<name> <resolution_percentage> <num_samples>
 # ffmpeg -r 24 -i </path/to/output/directory>/<name>%04d.png -pix_fmt yuv420p out.mp4
 
 import bpy
@@ -105,6 +105,3 @@ utils.build_scene_composition(scene)
 # Render Setting
 utils.set_output_properties(scene, resolution_percentage, output_file_path)
 utils.set_cycles_renderer(scene, camera_object, num_samples, use_motion_blur=True)
-
-# Render
-bpy.ops.render.render(animation=True)

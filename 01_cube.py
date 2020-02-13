@@ -1,4 +1,4 @@
-# blender --background --python 01_cube.py -- </path/to/output/image> <resolution_percentage>
+# blender --background --python 01_cube.py --render-frame 1 -- </path/to/output/image> <resolution_percentage>
 
 import bpy
 import os
@@ -16,17 +16,17 @@ def get_resolution_percentage() -> int:
     return int(sys.argv[sys.argv.index('--') + 2])
 
 
+def get_num_samples() -> int:
+    return int(sys.argv[sys.argv.index('--') + 3])
+
 if __name__ == "__main__":
     # Args
     output_file_path = get_output_file_path()
     resolution_percentage = get_resolution_percentage()
+    num_samples = get_num_samples()
 
     # Setting
     scene = bpy.context.scene
     camera_object = bpy.data.objects["Camera"]
-    num_samples = 32
     utils.set_output_properties(scene, resolution_percentage, output_file_path)
     utils.set_cycles_renderer(scene, camera_object, num_samples)
-
-    # Rendering
-    bpy.ops.render.render(animation=False, write_still=True)

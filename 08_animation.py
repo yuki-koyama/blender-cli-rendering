@@ -1,4 +1,4 @@
-# blender --background --python 08_animation.py -- </path/to/output/directory>/<name> <resolution_percentage> <num_samples>
+# blender --background --python 08_animation.py --render-anim -- </path/to/output/directory>/<name> <resolution_percentage> <num_samples>
 # ffmpeg -r 24 -i </path/to/output/directory>/<name>%04d.png -pix_fmt yuv420p out.mp4
 
 import bpy
@@ -77,6 +77,3 @@ utils.set_animation(scene, fps=24, frame_start=1, frame_end=48)
 # Render Setting
 utils.set_output_properties(scene, resolution_percentage, output_file_path)
 utils.set_cycles_renderer(scene, camera_object, num_samples, use_motion_blur=True)
-
-# Render
-bpy.ops.render.render(animation=True)
