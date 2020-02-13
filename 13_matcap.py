@@ -88,13 +88,8 @@ def build_scene_composition(scene):
 build_scene_composition(scene)
 
 # Render Setting
-utils.set_cycles_renderer(scene,
-                          resolution_percentage,
-                          output_file_path,
-                          camera_object,
-                          num_samples,
-                          use_denoising=False,
-                          use_transparent_bg=False)
+utils.set_output_properties(scene, resolution_percentage, output_file_path)
+utils.set_cycles_renderer(scene, camera_object, num_samples, use_denoising=False)
 
 # Render
 bpy.ops.render.render(animation=False, write_still=True)

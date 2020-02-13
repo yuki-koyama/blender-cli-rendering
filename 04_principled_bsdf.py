@@ -136,12 +136,8 @@ utils.set_camera_params(camera_object.data, focus_target, lens=85, fstop=0.5)
 utils.build_environment_texture_background(world, hdri_path)
 
 # Render Setting
-utils.set_cycles_renderer(scene,
-                          resolution_percentage,
-                          output_file_path,
-                          camera_object,
-                          num_samples,
-                          use_denoising=True)
+utils.set_output_properties(scene, resolution_percentage, output_file_path)
+utils.set_cycles_renderer(scene, camera_object, num_samples)
 
 # Rendering
 bpy.ops.render.render(animation=False, write_still=True)

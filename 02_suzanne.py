@@ -41,7 +41,8 @@ utils.create_sun_light(rotation=(0.0, math.pi * 0.5, -math.pi * 0.1))
 
 # Render Setting
 scene = bpy.data.scenes["Scene"]
-utils.set_cycles_renderer(scene, resolution_percentage, output_file_path, camera_object, num_samples)
+utils.set_output_properties(scene, resolution_percentage, output_file_path)
+utils.set_cycles_renderer(scene, camera_object, num_samples)
 
 # Rendering
 bpy.ops.render.render(animation=False, write_still=True)

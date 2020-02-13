@@ -22,11 +22,11 @@ if __name__ == "__main__":
     resolution_percentage = get_resolution_percentage()
 
     # Setting
-    default_scene = bpy.context.scene
-    default_camera_object = bpy.data.objects["Camera"]
+    scene = bpy.context.scene
+    camera_object = bpy.data.objects["Camera"]
     num_samples = 32
-    utils.set_cycles_renderer(default_scene, resolution_percentage, output_file_path, default_camera_object,
-                              num_samples)
+    utils.set_output_properties(scene, resolution_percentage, output_file_path)
+    utils.set_cycles_renderer(scene, camera_object, num_samples)
 
     # Rendering
     bpy.ops.render.render(animation=False, write_still=True)

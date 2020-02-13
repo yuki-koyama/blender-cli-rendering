@@ -56,9 +56,14 @@ def build_environment_texture_background(world: bpy.types.World, hdri_path: str,
     arrange_nodes(node_tree)
 
 
+def set_output_properties(scene: bpy.types.Scene, resolution_percentage: int = 100, output_file_path: str = "") -> None:
+    scene.render.resolution_percentage = resolution_percentage
+
+    if output_file_path:
+        scene.render.filepath = output_file_path
+
+
 def set_cycles_renderer(scene: bpy.types.Scene,
-                        resolution_percentage: int,
-                        output_file_path: str,
                         camera_object: bpy.types.Object,
                         num_samples: int,
                         use_denoising: bool = True,
@@ -67,9 +72,7 @@ def set_cycles_renderer(scene: bpy.types.Scene,
     scene.camera = camera_object
 
     scene.render.image_settings.file_format = 'PNG'
-    scene.render.resolution_percentage = resolution_percentage
     scene.render.engine = 'CYCLES'
-    scene.render.filepath = output_file_path
     scene.render.use_motion_blur = use_motion_blur
 
     if bpy.app.version >= (2, 80, 0):
