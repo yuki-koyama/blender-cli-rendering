@@ -19,6 +19,7 @@ def get_resolution_percentage() -> int:
 def get_num_samples() -> int:
     return int(sys.argv[sys.argv.index('--') + 3])
 
+
 if __name__ == "__main__":
     # Args
     output_file_path = get_output_file_path()

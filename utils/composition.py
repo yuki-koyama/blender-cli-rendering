@@ -2,7 +2,7 @@ import bpy
 from utils.node import set_socket_value_range, clean_nodes, arrange_nodes
 
 
-def add_split_tone_node_group():
+def add_split_tone_node_group() -> bpy.types.NodeGroup:
     group = bpy.data.node_groups.new(type="CompositorNodeTree", name="SplitToneSub")
 
     input_node = group.nodes.new("NodeGroupInput")
@@ -111,7 +111,7 @@ def add_split_tone_node_group():
     return group
 
 
-def add_vignette_node_group():
+def add_vignette_node_group() -> bpy.types.NodeGroup:
     group = bpy.data.node_groups.new(type="CompositorNodeTree", name="Vignette")
 
     input_node = group.nodes.new("NodeGroupInput")
@@ -151,7 +151,7 @@ def add_vignette_node_group():
     return group
 
 
-def create_split_tone_node(node_tree):
+def create_split_tone_node(node_tree: bpy.types.NodeTree) -> bpy.types.Node:
     split_tone_node_group = add_split_tone_node_group()
 
     node = node_tree.nodes.new(type='CompositorNodeGroup')
@@ -161,7 +161,7 @@ def create_split_tone_node(node_tree):
     return node
 
 
-def create_vignette_node(node_tree):
+def create_vignette_node(node_tree: bpy.types.NodeTree) -> bpy.types.Node:
     vignette_node_group = add_vignette_node_group()
 
     node = node_tree.nodes.new(type='CompositorNodeGroup')
@@ -171,7 +171,11 @@ def create_vignette_node(node_tree):
     return node
 
 
-def build_scene_composition(scene, vignette=0.20, dispersion=0.050, gain=1.10, saturation=1.10):
+def build_scene_composition(scene: bpy.types.Scene,
+                            vignette: float = 0.20,
+                            dispersion: float = 0.050,
+                            gain: float = 1.10,
+                            saturation: float = 1.10) -> None:
     scene.use_nodes = True
     clean_nodes(scene.node_tree.nodes)
 
