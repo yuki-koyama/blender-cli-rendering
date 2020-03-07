@@ -15,6 +15,8 @@ def create_text(scene: bpy.types.Scene,
                 align_y: str = 'CENTER',
                 size: float = 1.0,
                 font_name: str = "Bfont",
+                extrude: float = 0.0,
+                space_line: float = 1.0,
                 location: Tuple[float, float, float] = (0.0, 0.0, 0.0),
                 rotation: Tuple[float, float, float] = (0.0, 0.0, 0.0)) -> bpy.types.Object:
 
@@ -25,6 +27,8 @@ def create_text(scene: bpy.types.Scene,
     new_text_data.align_y = align_y
     new_text_data.size = size
     new_text_data.font = bpy.data.fonts[font_name]
+    new_text_data.space_line = space_line
+    new_text_data.extrude = extrude
 
     new_object: bpy.types.Object = bpy.data.objects.new(name, new_text_data)
     if bpy.app.version >= (2, 80, 0):
