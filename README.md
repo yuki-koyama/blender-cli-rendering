@@ -4,12 +4,12 @@
 ![Blender](https://img.shields.io/badge/blender-2.80-brightgreen)
 ![Blender](https://img.shields.io/badge/blender-2.81-brightgreen)
 
-Python scripts for rendering images using Blender from command-line interface.
+Python scripts for generating scenes and rendering images using Blender from command-line interface.
 
 ## Principles
 
-- Able to run without display (thus, based on Cycles instead of EEVEE)
-- Support both Blender 2.79 & 2.80+
+- Able to run without display (thus, the renderer should be Cycles instead of EEVEE)
+- Support the latest Blender release (currently 2.82)
 
 ## Possible Usages
 
