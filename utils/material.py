@@ -351,19 +351,26 @@ def add_peeling_paint_metal_node_group() -> bpy.types.NodeGroup:
 
     input_node = group.nodes.new(type="NodeGroupInput")
     group.inputs.new("NodeSocketColor", "Paint Color")
+    group.inputs.new("NodeSocketFloatFactor", "Paint Roughness")
     group.inputs.new("NodeSocketColor", "Metal Color")
+    group.inputs.new("NodeSocketFloatFactor", "Metal Roughness")
     group.inputs.new("NodeSocketFloat", "Scale")
     group.inputs.new("NodeSocketFloat", "Detail")
     group.inputs.new("NodeSocketFloat", "Distortion")
     group.inputs.new("NodeSocketFloatFactor", "Threshold")
+    group.inputs.new("NodeSocketFloat", "Peel Intense")
+
+    group.inputs["Paint Color"].default_value = (0.152, 0.524, 0.067, 1.000)
+    group.inputs["Metal Color"].default_value = (0.062, 0.015, 0.011, 1.000)
+
+    set_socket_value_range(group.inputs["Paint Roughness"], default_value=0.05)
+    set_socket_value_range(group.inputs["Metal Roughness"], default_value=0.50)
 
     set_socket_value_range(group.inputs["Scale"], default_value=4.5, min_value=0.0, max_value=1000.0)
     set_socket_value_range(group.inputs["Detail"], default_value=8.0, min_value=0.0, max_value=16.0)
     set_socket_value_range(group.inputs["Distortion"], default_value=0.5, min_value=0.0, max_value=1000.0)
     set_socket_value_range(group.inputs["Threshold"], default_value=0.42)
-
-    group.inputs["Paint Color"].default_value = (0.152, 0.524, 0.067, 1.000)
-    group.inputs["Metal Color"].default_value = (0.062, 0.015, 0.011, 1.000)
+    set_socket_value_range(group.inputs["Peel Intense"], default_value=0.2, min_value=0.0, max_value=1.0)
 
     tex_coord_node = group.nodes.new(type="ShaderNodeTexCoord")
     mapping_node = group.nodes.new(type="ShaderNodeMapping")
@@ -431,6 +438,8 @@ def add_peeling_paint_metal_node_group() -> bpy.types.NodeGroup:
     group.links.new(color_mix_node.outputs["Color"], ao_mix_node.inputs[1])
     group.links.new(ao_node.outputs["Color"], ao_mix_node.inputs[2])
 
+    create_frame_node(group, nodes=(epsilon_add_node, fallout_subtract_node, ao_node), name="AO", label="AO")
+
     # Metallic
 
     metallic_node = group.nodes.new(type="ShaderNodeMixRGB")
@@ -442,9 +451,9 @@ def add_peeling_paint_metal_node_group() -> bpy.types.NodeGroup:
     # Roughness
 
     roughness_node = group.nodes.new(type="ShaderNodeMixRGB")
-    roughness_node.inputs["Color1"].default_value = (0.50, 0.50, 0.50, 1.0)
-    roughness_node.inputs["Color2"].default_value = (0.05, 0.05, 0.05, 1.0)
 
+    group.links.new(input_node.outputs["Metal Roughness"], roughness_node.inputs["Color1"])
+    group.links.new(input_node.outputs["Paint Roughness"], roughness_node.inputs["Color2"])
     group.links.new(peeling_threshold_node.outputs["Color"], roughness_node.inputs["Fac"])
 
     # Bump
@@ -455,15 +464,19 @@ def add_peeling_paint_metal_node_group() -> bpy.types.NodeGroup:
     height_node.inputs["Color3"].default_value = (0.5, 0.5, 0.5, 1.0)
 
     height_peak_add_node = group.nodes.new(type="ShaderNodeMath")
-    height_peak_add_node.operation = "ADD"
-    height_peak_add_node.inputs[1].default_value = 0.005
+    height_peak_add_node.operation = "MULTIPLY_ADD"
+    height_peak_add_node.inputs[1].default_value = 0.025
+    height_peak_add_node.label = "Height Peak Add"
 
     height_tail_add_node = group.nodes.new(type="ShaderNodeMath")
-    height_tail_add_node.operation = "ADD"
-    height_tail_add_node.inputs[1].default_value = 0.025
+    height_tail_add_node.operation = "MULTIPLY_ADD"
+    height_tail_add_node.inputs[1].default_value = 0.100
+    height_tail_add_node.label = "Height Tail Add"
 
-    group.links.new(input_node.outputs["Threshold"], height_peak_add_node.inputs[0])
-    group.links.new(input_node.outputs["Threshold"], height_tail_add_node.inputs[0])
+    group.links.new(input_node.outputs["Threshold"], height_peak_add_node.inputs[2])
+    group.links.new(input_node.outputs["Peel Intense"], height_peak_add_node.inputs[0])
+    group.links.new(height_peak_add_node.outputs["Value"], height_tail_add_node.inputs[2])
+    group.links.new(input_node.outputs["Peel Intense"], height_tail_add_node.inputs[0])
     group.links.new(peeling_noise_node.outputs["Fac"], height_node.inputs["Fac"])
     group.links.new(input_node.outputs["Threshold"], height_node.inputs["Pos1"])
     group.links.new(height_peak_add_node.outputs["Value"], height_node.inputs["Pos2"])
@@ -472,12 +485,17 @@ def add_peeling_paint_metal_node_group() -> bpy.types.NodeGroup:
     bump_node = group.nodes.new(type="ShaderNodeBump")
     group.links.new(height_node.outputs["Color"], bump_node.inputs["Height"])
 
+    create_frame_node(group,
+                      nodes=(height_node, height_peak_add_node, height_tail_add_node, bump_node),
+                      name="Bump",
+                      label="Bump")
+
     # Output
 
     output_node = group.nodes.new("NodeGroupOutput")
     group.outputs.new("NodeSocketColor", "Color")
-    group.outputs.new("NodeSocketColor", "Metallic")
-    group.outputs.new("NodeSocketColor", "Roughness")
+    group.outputs.new("NodeSocketFloatFactor", "Metallic")
+    group.outputs.new("NodeSocketFloatFactor", "Roughness")
     group.outputs.new("NodeSocketVectorDirection", "Bump")
 
     group.links.new(ao_mix_node.outputs["Color"], output_node.inputs["Color"])
