@@ -1,6 +1,21 @@
 import bpy
 import sys
 import math
+from typing import Iterable
+
+
+def create_frame_node(node_tree: bpy.types.NodeTree,
+                      nodes: Iterable[bpy.types.Node] = [],
+                      name: str = "Frame",
+                      label: str = "Frame") -> bpy.types.Node:
+    frame_node = node_tree.nodes.new(type='NodeFrame')
+    frame_node.name = name
+    frame_node.label = label
+
+    for node in nodes:
+        node.parent = frame_node
+
+    return frame_node
 
 
 def set_socket_value_range(socket: bpy.types.NodeSocket,

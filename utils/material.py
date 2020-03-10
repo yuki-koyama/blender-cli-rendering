@@ -1,6 +1,6 @@
 import bpy
 from typing import Tuple
-from utils.node import set_socket_value_range, arrange_nodes
+from utils.node import set_socket_value_range, arrange_nodes, create_frame_node
 
 
 def create_texture_node(node_tree: bpy.types.NodeTree, path: str, is_color_data: bool) -> bpy.types.Node:
@@ -99,12 +99,9 @@ def build_matcap_nodes(node_tree: bpy.types.NodeTree, image_path: str) -> None:
     emmission_node = node_tree.nodes.new(type='ShaderNodeEmission')
     output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
 
-    frame = node_tree.nodes.new(type='NodeFrame')
-    frame.name = "MatCap UV"
-    frame.label = "MatCap UV"
-    tex_coord_node.parent = frame
-    vector_transform_node.parent = frame
-    mapping_node.parent = frame
+    create_frame_node(node_tree, (tex_coord_node, vector_transform_node, mapping_node),
+                      name="MatCap UV",
+                      label="MatCap UV")
 
     vector_transform_node.vector_type = "VECTOR"
     vector_transform_node.convert_from = "OBJECT"
