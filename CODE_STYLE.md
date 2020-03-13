@@ -11,6 +11,14 @@ find . -name "*.py" | xargs -I {} yapf --style='{based_on_style: pep8, column_li
 
 Useful link: <https://wiki.blender.org/wiki/Style_Guide/Python>
 
+## Typing
+
+```
+mypy *.py --ignore-missing-import --strict
+```
+
+Note that the current codes do not satisfy this above condition. This needs to be fixed.
+
 ## Naming Conventions
 
 ### Functions
