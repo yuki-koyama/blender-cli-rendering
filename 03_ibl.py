@@ -9,7 +9,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import utils
 
 
-def set_scene_objects():
+def set_scene_objects() -> bpy.types.Object:
     num_suzannes = 7
     for index in range(num_suzannes):
         utils.create_smooth_monkey(location=((index - (num_suzannes - 1) / 2) * 2.8, 0.0, 1.0),
