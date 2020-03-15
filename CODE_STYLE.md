@@ -14,7 +14,7 @@ Useful link: <https://wiki.blender.org/wiki/Style_Guide/Python>
 ## Typing
 
 ```
-mypy *.py --ignore-missing-import --strict
+mypy *.py --ignore-missing-import --strict --implicit-reexport
 ```
 
 Note that the current codes do not satisfy this above condition. This needs to be fixed.
