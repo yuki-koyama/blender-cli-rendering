@@ -9,7 +9,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import utils
 
 
-def set_principled_node_as_rough_blue(principled_node):
+def set_principled_node_as_rough_blue(principled_node: bpy.types.Node) -> None:
     utils.set_principled_node(
         principled_node=principled_node,
         base_color=(0.1, 0.2, 0.6, 1.0),
@@ -19,7 +19,7 @@ def set_principled_node_as_rough_blue(principled_node):
     )
 
 
-def set_principled_node_as_ceramic(principled_node):
+def set_principled_node_as_ceramic(principled_node: bpy.types.Node) -> None:
     utils.set_principled_node(
         principled_node=principled_node,
         base_color=(0.8, 0.8, 0.8, 1.0),
@@ -32,7 +32,7 @@ def set_principled_node_as_ceramic(principled_node):
     )
 
 
-def set_principled_node_as_gold(principled_node):
+def set_principled_node_as_gold(principled_node: bpy.types.Node) -> None:
     utils.set_principled_node(
         principled_node=principled_node,
         base_color=(1.00, 0.71, 0.22, 1.0),
@@ -42,7 +42,7 @@ def set_principled_node_as_gold(principled_node):
     )
 
 
-def set_principled_node_as_glass(principled_node):
+def set_principled_node_as_glass(principled_node: bpy.types.Node) -> None:
     utils.set_principled_node(principled_node=principled_node,
                               base_color=(0.95, 0.95, 0.95, 1.0),
                               metallic=0.0,
@@ -54,7 +54,7 @@ def set_principled_node_as_glass(principled_node):
                               transmission=0.98)
 
 
-def set_scene_objects():
+def set_scene_objects() -> bpy.types.Object:
     left_object, center_object, right_object = utils.create_three_smooth_monkeys()
 
     mat = bpy.data.materials.new("Material_Left")
@@ -107,7 +107,7 @@ def set_scene_objects():
     return focus_target
 
 
-def build_scene_composition(scene):
+def build_scene_composition(scene: bpy.types.Scene) -> None:
     scene.use_nodes = True
     utils.clean_nodes(scene.node_tree.nodes)
 

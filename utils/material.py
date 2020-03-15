@@ -20,24 +20,24 @@ def create_texture_node(node_tree: bpy.types.NodeTree, path: str, is_color_data:
     return texture_node
 
 
-def set_principled_node(principled_node,
-                        base_color=(0.6, 0.6, 0.6, 1.0),
-                        subsurface=0.0,
-                        subsurface_color=(0.8, 0.8, 0.8, 1.0),
-                        subsurface_radius=(1.0, 0.2, 0.1),
-                        metallic=0.0,
-                        specular=0.5,
-                        specular_tint=0.0,
-                        roughness=0.5,
-                        anisotropic=0.0,
-                        anisotropic_rotation=0.0,
-                        sheen=0.0,
-                        sheen_tint=0.5,
-                        clearcoat=0.0,
-                        clearcoat_roughness=0.03,
-                        ior=1.45,
-                        transmission=0.0,
-                        transmission_roughness=0.0):
+def set_principled_node(principled_node: bpy.types.Node,
+                        base_color: Tuple[float, float, float, float] = (0.6, 0.6, 0.6, 1.0),
+                        subsurface: float = 0.0,
+                        subsurface_color: Tuple[float, float, float, float] = (0.8, 0.8, 0.8, 1.0),
+                        subsurface_radius: Tuple[float, float, float] = (1.0, 0.2, 0.1),
+                        metallic: float = 0.0,
+                        specular: float = 0.5,
+                        specular_tint: float = 0.0,
+                        roughness: float = 0.5,
+                        anisotropic: float = 0.0,
+                        anisotropic_rotation: float = 0.0,
+                        sheen: float = 0.0,
+                        sheen_tint: float = 0.5,
+                        clearcoat: float = 0.0,
+                        clearcoat_roughness: float = 0.03,
+                        ior: float = 1.45,
+                        transmission: float = 0.0,
+                        transmission_roughness: float = 0.0):
     principled_node.inputs['Base Color'].default_value = base_color
     principled_node.inputs['Subsurface'].default_value = subsurface
     principled_node.inputs['Subsurface Color'].default_value = subsurface_color
