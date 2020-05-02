@@ -72,10 +72,7 @@ def create_armature_mesh(scene: bpy.types.Scene, armature_object: bpy.types.Obje
 
         temp_vertex_group = {'name': bone.name, 'vertex_indices': []}
         for local_index, vertex in enumerate(temp_vertices):
-            if bpy.app.version >= (2, 80, 0):
-                vertices.append(bone.matrix_local @ vertex)
-            else:
-                vertices.append(bone.matrix_local * vertex)
+            vertices.append(bone.matrix_local @ vertex)
             temp_vertex_group['vertex_indices'].append(local_index + vertex_index_offset)
         vertex_groups.append(temp_vertex_group)
 
@@ -109,14 +106,9 @@ def create_armature_mesh(scene: bpy.types.Scene, armature_object: bpy.types.Obje
 
     # Set the armature as the parent of the new object
     bpy.ops.object.select_all(action='DESELECT')
-    if bpy.app.version >= (2, 80, 0):
-        new_object.select_set(True)
-        armature_object.select_set(True)
-        bpy.context.view_layer.objects.active = armature_object
-    else:
-        new_object.select = True
-        armature_object.select = True
-        bpy.context.scene.objects.active = armature_object
+    new_object.select_set(True)
+    armature_object.select_set(True)
+    bpy.context.view_layer.objects.active = armature_object
     bpy.ops.object.parent_set(type='OBJECT')
 
     return new_object

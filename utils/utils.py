@@ -31,10 +31,7 @@ def create_text(scene: bpy.types.Scene,
     new_text_data.extrude = extrude
 
     new_object: bpy.types.Object = bpy.data.objects.new(name, new_text_data)
-    if bpy.app.version >= (2, 80, 0):
-        scene.collection.objects.link(new_object)
-    else:
-        scene.objects.link(new_object)
+    scene.collection.objects.link(new_object)
 
     new_object.location = location
     new_object.rotation_euler = (math.pi * rotation[0] / 180.0, math.pi * rotation[1] / 180.0, math.pi * rotation[2])
@@ -115,12 +112,8 @@ def set_cycles_renderer(scene: bpy.types.Scene,
     scene.render.engine = 'CYCLES'
     scene.render.use_motion_blur = use_motion_blur
 
-    if bpy.app.version >= (2, 80, 0):
-        scene.render.film_transparent = use_transparent_bg
-        scene.view_layers[0].cycles.use_denoising = use_denoising
-    else:
-        scene.cycles.film_transparent = use_transparent_bg
-        scene.render.layers[0].cycles.use_denoising = use_denoising
+    scene.render.film_transparent = use_transparent_bg
+    scene.view_layers[0].cycles.use_denoising = use_denoising
 
     scene.cycles.samples = num_samples
 

@@ -25,10 +25,7 @@ def create_mesh_from_pydata(scene: bpy.types.Scene,
         set_smooth_shading(new_mesh)
 
     new_object: bpy.types.Object = bpy.data.objects.new(object_name, new_mesh)
-    if bpy.app.version >= (2, 80, 0):
-        scene.collection.objects.link(new_object)
-    else:
-        scene.objects.link(new_object)
+    scene.collection.objects.link(new_object)
 
     return new_object
 
@@ -44,10 +41,7 @@ def create_plane(location: Tuple[float, float, float] = (0.0, 0.0, 0.0),
                  rotation: Tuple[float, float, float] = (0.0, 0.0, 0.0),
                  size: float = 2.0,
                  name: Optional[str] = None) -> bpy.types.Object:
-    if bpy.app.version >= (2, 80, 0):
-        bpy.ops.mesh.primitive_plane_add(size=size, location=location, rotation=rotation)
-    else:
-        bpy.ops.mesh.primitive_plane_add(radius=0.5 * size, calc_uvs=True, location=location, rotation=rotation)
+    bpy.ops.mesh.primitive_plane_add(size=size, location=location, rotation=rotation)
 
     current_object = bpy.context.object
 
@@ -61,10 +55,7 @@ def create_smooth_sphere(location: Tuple[float, float, float] = (0.0, 0.0, 0.0),
                          radius: float = 1.0,
                          subdivision_level: int = 1,
                          name: Optional[str] = None) -> bpy.types.Object:
-    if bpy.app.version >= (2, 80, 0):
-        bpy.ops.mesh.primitive_uv_sphere_add(radius=radius, location=location, calc_uvs=True)
-    else:
-        bpy.ops.mesh.primitive_uv_sphere_add(size=radius, location=location, calc_uvs=True)
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=radius, location=location, calc_uvs=True)
 
     current_object = bpy.context.object
 
