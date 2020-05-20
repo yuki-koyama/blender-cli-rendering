@@ -1,8 +1,7 @@
 # blender-cli-rendering
 
 ![GitHub](https://img.shields.io/github/license/yuki-koyama/blender-cli-rendering)
-![Blender](https://img.shields.io/badge/blender-2.80-brightgreen)
-![Blender](https://img.shields.io/badge/blender-2.81-brightgreen)
+![Blender](https://img.shields.io/badge/blender-2.82-brightgreen)
 
 Python scripts for generating scenes and rendering images using Blender from command-line interface.
 
