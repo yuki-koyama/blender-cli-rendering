@@ -12,6 +12,7 @@ Python scripts for generating scenes and rendering images using Blender from com
 
 ## Possible Usages
 
+- Material to learn how to use Blender Python APIs.
 - Visualization of 3D data with fancy rendering quality.
 - Generation of synthetic training datasets for machine learning-based computer vision.
 
