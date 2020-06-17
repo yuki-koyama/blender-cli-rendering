@@ -85,8 +85,8 @@ def create_smooth_monkey(location: Tuple[float, float, float] = (0.0, 0.0, 0.0),
     return current_object
 
 
-def create_three_smooth_monkeys(names: Optional[Tuple[str, str, str]] = None
-                                ) -> Tuple[bpy.types.Object, bpy.types.Object, bpy.types.Object]:
+def create_three_smooth_monkeys(
+        names: Optional[Tuple[str, str, str]] = None) -> Tuple[bpy.types.Object, bpy.types.Object, bpy.types.Object]:
     if names is None:
         names = ("Suzanne Left", "Suzanne Center", "Suzanne Right")
 

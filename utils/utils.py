@@ -8,17 +8,19 @@ from utils.node import arrange_nodes
 ################################################################################
 
 
-def create_text(scene: bpy.types.Scene,
-                body: str,
-                name: str,
-                align_x: str = 'CENTER',
-                align_y: str = 'CENTER',
-                size: float = 1.0,
-                font_name: str = "Bfont",
-                extrude: float = 0.0,
-                space_line: float = 1.0,
-                location: Tuple[float, float, float] = (0.0, 0.0, 0.0),
-                rotation: Tuple[float, float, float] = (0.0, 0.0, 0.0)) -> bpy.types.Object:
+def create_text(
+    scene: bpy.types.Scene,
+    body: str,
+    name: str,
+    align_x: str = 'CENTER',
+    align_y: str = 'CENTER',
+    size: float = 1.0,
+    font_name: str = "Bfont",
+    extrude: float = 0.0,
+    space_line: float = 1.0,
+    location: Tuple[float, float, float] = (0.0, 0.0, 0.0),
+    rotation: Tuple[float, float, float] = (0.0, 0.0, 0.0)
+) -> bpy.types.Object:
 
     new_text_data: bpy.types.Curve = bpy.data.curves.new(name=name, type='FONT')
 
