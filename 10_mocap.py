@@ -28,9 +28,7 @@ def create_armature_from_bvh(bvh_path: str) -> bpy.types.Object:
 def build_scene(scene: bpy.types.Scene, input_bvh_path: str) -> bpy.types.Object:
     loader.build_pbr_textured_nodes_from_name("Concrete07", scale=(0.25, 0.25, 0.25))
 
-    mat = bpy.data.materials.new("BlueMetal")
-    mat.use_nodes = True
-    utils.clean_nodes(mat.node_tree.nodes)
+    mat = utils.add_material("BlueMetal", use_nodes=True, make_node_tree_empty=True)
     output_node = mat.node_tree.nodes.new(type='ShaderNodeOutputMaterial')
     principled_node = mat.node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
     principled_node.inputs['Base Color'].default_value = (0.1, 0.2, 0.7, 1.0)

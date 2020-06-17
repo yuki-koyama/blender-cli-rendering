@@ -57,33 +57,27 @@ def set_principled_node_as_glass(principled_node: bpy.types.Node) -> None:
 def set_scene_objects() -> bpy.types.Object:
     left_object, center_object, right_object = utils.create_three_smooth_monkeys()
 
-    mat = bpy.data.materials.new("Material_Left")
-    mat.use_nodes = True
+    mat = utils.add_material("Material_Left", use_nodes=True, make_node_tree_empty=True)
     nodes = mat.node_tree.nodes
     links = mat.node_tree.links
-    utils.clean_nodes(nodes)
     output_node = nodes.new(type='ShaderNodeOutputMaterial')
     principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
     set_principled_node_as_glass(principled_node)
     links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
     left_object.data.materials.append(mat)
 
-    mat = bpy.data.materials.new("Material_Center")
-    mat.use_nodes = True
+    mat = utils.add_material("Material_Center", use_nodes=True, make_node_tree_empty=True)
     nodes = mat.node_tree.nodes
     links = mat.node_tree.links
-    utils.clean_nodes(nodes)
     output_node = nodes.new(type='ShaderNodeOutputMaterial')
     principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
     set_principled_node_as_gold(principled_node)
     links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
     center_object.data.materials.append(mat)
 
-    mat = bpy.data.materials.new("Material_Right")
-    mat.use_nodes = True
+    mat = utils.add_material("Material_Right", use_nodes=True, make_node_tree_empty=True)
     nodes = mat.node_tree.nodes
     links = mat.node_tree.links
-    utils.clean_nodes(nodes)
     output_node = nodes.new(type='ShaderNodeOutputMaterial')
     principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
     set_principled_node_as_rough_blue(principled_node)
@@ -91,11 +85,9 @@ def set_scene_objects() -> bpy.types.Object:
     right_object.data.materials.append(mat)
 
     current_object = utils.create_plane(size=20.0, name="Floor")
-    mat = bpy.data.materials.new("Material_Plane")
-    mat.use_nodes = True
+    mat = utils.add_material("Material_Plane", use_nodes=True, make_node_tree_empty=True)
     nodes = mat.node_tree.nodes
     links = mat.node_tree.links
-    utils.clean_nodes(nodes)
     output_node = nodes.new(type='ShaderNodeOutputMaterial')
     principled_node = nodes.new(type='ShaderNodeBsdfPrincipled')
     set_principled_node_as_ceramic(principled_node)

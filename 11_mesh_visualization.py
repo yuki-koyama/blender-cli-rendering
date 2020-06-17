@@ -49,9 +49,7 @@ def set_scene_objects() -> bpy.types.Object:
         vertex_color.color = get_color(random_numbers[index // 3]) + tuple([1.0])
 
     # Setup a material with wireframe visualization and per-face colors
-    mat = bpy.data.materials.new("Material_Visualization")
-    mat.use_nodes = True
-    utils.clean_nodes(mat.node_tree.nodes)
+    mat = utils.add_material("Material_Visualization", use_nodes=True, make_node_tree_empty=True)
     current_object.data.materials.append(mat)
 
     output_node = mat.node_tree.nodes.new(type='ShaderNodeOutputMaterial')

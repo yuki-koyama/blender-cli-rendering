@@ -12,9 +12,7 @@ import utils
 def set_scene_objects():
     image_path = "./assets/matcaps/blue.png"
 
-    mat = bpy.data.materials.new("MatCap")
-    mat.use_nodes = True
-    utils.clean_nodes(mat.node_tree.nodes)
+    mat = utils.add_material("MatCap", use_nodes=True, make_node_tree_empty=True)
     utils.build_matcap_nodes(mat.node_tree, image_path)
 
     current_object = utils.create_smooth_monkey(location=(1.2, 0.0, 0.0))

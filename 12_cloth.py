@@ -14,9 +14,7 @@ import external.cc0assetsloader as loader
 def set_floor_and_lights() -> None:
     size = 200.0
     current_object = utils.create_plane(size=size, name="Floor")
-    floor_mat = bpy.data.materials.new("Material_Plane")
-    floor_mat.use_nodes = True
-    utils.clean_nodes(floor_mat.node_tree.nodes)
+    floor_mat = utils.add_material("Material_Plane", use_nodes=True, make_node_tree_empty=True)
     utils.build_checker_board_nodes(floor_mat.node_tree, size)
     current_object.data.materials.append(floor_mat)
 

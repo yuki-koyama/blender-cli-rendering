@@ -12,9 +12,7 @@ import utils
 def set_floor_and_lights() -> None:
     size = 200.0
     current_object = utils.create_plane(size=size, name="Floor")
-    floor_mat = bpy.data.materials.new("Material_Plane")
-    floor_mat.use_nodes = True
-    utils.clean_nodes(floor_mat.node_tree.nodes)
+    floor_mat = utils.add_material("Material_Plane", use_nodes=True, make_node_tree_empty=True)
     utils.build_checker_board_nodes(floor_mat.node_tree, size)
     current_object.data.materials.append(floor_mat)
 
@@ -35,10 +33,7 @@ def set_floor_and_lights() -> None:
 def set_scene_objects() -> bpy.types.Object:
     set_floor_and_lights()
 
-    mat = bpy.data.materials.new("Peeling Paint Metal")
-    mat.use_nodes = True
-    utils.clean_nodes(mat.node_tree.nodes)
-
+    mat = utils.add_material("Peeling Paint Metal", use_nodes=True, make_node_tree_empty=True)
     utils.build_peeling_paint_metal_nodes(mat.node_tree)
 
     current_object = utils.create_smooth_monkey(location=(0.0, 0.0, 1.0))

@@ -10,9 +10,7 @@ import utils
 
 
 def set_scene_objects():
-    mat = bpy.data.materials.new("Material")
-    mat.use_nodes = True
-    utils.clean_nodes(mat.node_tree.nodes)
+    mat = utils.add_material("Material", use_nodes=True, make_node_tree_empty=True)
     utils.build_pbr_nodes(mat.node_tree, base_color=(0.6, 0.6, 0.6, 1.0))
 
     left_object, center_object, right_object = utils.create_three_smooth_monkeys()
@@ -22,9 +20,7 @@ def set_scene_objects():
 
     plane_size = 100.0
     current_object = utils.create_plane(size=plane_size, name="Floor")
-    floor_mat = bpy.data.materials.new("Material_Plane")
-    floor_mat.use_nodes = True
-    utils.clean_nodes(floor_mat.node_tree.nodes)
+    floor_mat = utils.add_material("Material_Plane", use_nodes=True, make_node_tree_empty=True)
     utils.build_checker_board_nodes(floor_mat.node_tree, plane_size)
     current_object.data.materials.append(floor_mat)
 
