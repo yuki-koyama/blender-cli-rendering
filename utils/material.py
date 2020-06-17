@@ -1,6 +1,6 @@
 import bpy
 from typing import Tuple
-from utils.node import set_socket_value_range, arrange_nodes, create_frame_node
+from utils.node import set_socket_value_range, arrange_nodes, create_frame_node, clean_nodes
 
 
 def create_texture_node(node_tree: bpy.types.NodeTree, path: str, is_color_data: bool) -> bpy.types.Node:
@@ -533,3 +533,20 @@ def build_peeling_paint_metal_nodes(node_tree: bpy.types.NodeTree) -> None:
     node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
 
     arrange_nodes(node_tree)
+
+
+def add_material(name: str = "Material", use_nodes: bool = False, make_node_tree_empty: bool = False) -> bpy.types.Material:
+    '''
+    https://docs.blender.org/api/current/bpy.types.BlendDataMaterials.html
+    https://docs.blender.org/api/current/bpy.types.Material.html
+    '''
+
+    # TODO: Check whether the name is already used or not
+
+    material = bpy.data.materials.new(name)
+    material.use_nodes = use_nodes
+
+    if use_nodes and make_node_tree_empty:
+        clean_nodes(material.node_tree.nodes)
+
+    return material
