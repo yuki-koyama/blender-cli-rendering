@@ -95,3 +95,15 @@ def create_three_smooth_monkeys(
     right = create_smooth_monkey(location=(+1.8, 0.0, 1.0), rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0), name=names[2])
 
     return left, center, right
+
+
+# https://docs.blender.org/api/current/bpy.types.VertexGroups.html
+# https://docs.blender.org/api/current/bpy.types.VertexGroup.html
+def add_vertex_group(mesh_object: bpy.types.Object, name: str = "Group") -> bpy.types.VertexGroup:
+
+    # TODO: Check whether the object has a mesh data
+    # TODO: Check whether the object already has a vertex group with the specified name
+
+    vertex_group = mesh_object.vertex_groups.new(name=name)
+
+    return vertex_group
