@@ -1,6 +1,7 @@
 import bpy
 
 
+# https://docs.blender.org/api/current/bpy.types.SubsurfModifier.html
 def add_subdivision_surface_modifier(mesh_object: bpy.types.Object, level: int, is_simple: bool = False) -> None:
 
     modifier: bpy.types.SubsurfModifier = mesh_object.modifiers.new(name="Subsurf", type='SUBSURF')
@@ -10,6 +11,7 @@ def add_subdivision_surface_modifier(mesh_object: bpy.types.Object, level: int, 
     modifier.subdivision_type = 'SIMPLE' if is_simple else 'CATMULL_CLARK'
 
 
+# https://docs.blender.org/api/current/bpy.types.SolidifyModifier.html
 def add_solidify_modifier(mesh_object: bpy.types.Object,
                           thickness: float = 0.01,
                           flip_normal: bool = False,
