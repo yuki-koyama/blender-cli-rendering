@@ -535,7 +535,26 @@ def build_peeling_paint_metal_nodes(node_tree: bpy.types.NodeTree) -> None:
     arrange_nodes(node_tree)
 
 
-def add_material(name: str = "Material", use_nodes: bool = False, make_node_tree_empty: bool = False) -> bpy.types.Material:
+def build_emission_nodes(node_tree: bpy.types.NodeTree,
+                         color: Tuple[float, float, float] = (0.0, 0.0, 0.0),
+                         strength: float = 1.0) -> None:
+    '''
+    https://docs.blender.org/api/current/bpy.types.ShaderNodeEmission.html
+    '''
+    output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
+    emission_node = node_tree.nodes.new(type='ShaderNodeEmission')
+
+    emission_node.inputs["Color"].default_value = color + (1.0, )
+    emission_node.inputs["Strength"].default_value = strength
+
+    node_tree.links.new(emission_node.outputs['Emission'], output_node.inputs['Surface'])
+
+    arrange_nodes(node_tree)
+
+
+def add_material(name: str = "Material",
+                 use_nodes: bool = False,
+                 make_node_tree_empty: bool = False) -> bpy.types.Material:
     '''
     https://docs.blender.org/api/current/bpy.types.BlendDataMaterials.html
     https://docs.blender.org/api/current/bpy.types.Material.html
