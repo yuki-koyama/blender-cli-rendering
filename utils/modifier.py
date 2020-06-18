@@ -36,3 +36,24 @@ def add_solidify_modifier(mesh_object: bpy.types.Object,
 
     modifier.shell_vertex_group = shell_vertex_group
     modifier.rim_vertex_group = rim_vertex_group
+
+
+def add_displace_modifier(mesh_object: bpy.types.Object,
+                          texture_name: str,
+                          vertex_group: str = "",
+                          mid_level: float = 0.5,
+                          strength: float = 1.0) -> None:
+    '''
+    https://docs.blender.org/api/current/bpy.types.DisplaceModifier.html
+    '''
+
+    modifier = mesh_object.modifiers.new(name="Displace", type='DISPLACE')
+
+    modifier.mid_level = mid_level
+    modifier.strength = strength
+
+    # TODO: Check whether texture_name is properly defined
+    modifier.texture = bpy.data.textures[texture_name]
+
+    # TODO: Check whether vertex_group is either empty or defined
+    modifier.vertex_group = vertex_group
