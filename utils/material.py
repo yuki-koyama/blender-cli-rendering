@@ -34,7 +34,7 @@ def set_principled_node(principled_node: bpy.types.Node,
                         clearcoat_roughness: float = 0.03,
                         ior: float = 1.45,
                         transmission: float = 0.0,
-                        transmission_roughness: float = 0.0):
+                        transmission_roughness: float = 0.0) -> None:
     principled_node.inputs['Base Color'].default_value = base_color
     principled_node.inputs['Subsurface'].default_value = subsurface
     principled_node.inputs['Subsurface Color'].default_value = subsurface_color
