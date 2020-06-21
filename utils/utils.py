@@ -148,6 +148,31 @@ def add_copy_location_constraint(copy_to_object: bpy.types.Object,
 
 
 ################################################################################
+# Library
+################################################################################
+
+
+def append_material(blend_file_path: str, material_name: str) -> bool:
+    '''
+    https://docs.blender.org/api/current/bpy.types.BlendDataLibraries.html
+    https://docs.blender.org/api/current/bpy.ops.wm.html
+    '''
+
+    # Check whether the specified material exists in the blend file
+    with bpy.data.libraries.load(blend_file_path, link=False) as (data_from, data_to):
+        if not material_name in data_from.materials:
+            return False
+
+    # Append the material
+    bpy.ops.wm.append(directory=blend_file_path + '\\Material\\', files=[{'name': material_name}])
+
+    # TODO: Remove the linked library from byp.data.libraries
+
+    # Return success flag
+    return True
+
+
+################################################################################
 # Misc.
 ################################################################################
 
