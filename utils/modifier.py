@@ -1,6 +1,19 @@
 import bpy
 
 
+def add_boolean_modifier(mesh_object: bpy.types.Object,
+                         another_mesh_object: bpy.types.Object,
+                         operation: str = "DIFFERENCE") -> None:
+    '''
+    https://docs.blender.org/api/current/bpy.types.BooleanModifier.html
+    '''
+
+    modifier: bpy.types.SubsurfModifier = mesh_object.modifiers.new(name="Boolean", type='BOOLEAN')
+
+    modifier.object = another_mesh_object
+    modifier.operation = operation
+
+
 def add_subdivision_surface_modifier(mesh_object: bpy.types.Object, level: int, is_simple: bool = False) -> None:
     '''
     https://docs.blender.org/api/current/bpy.types.SubsurfModifier.html
