@@ -107,7 +107,8 @@ def set_cycles_renderer(scene: bpy.types.Scene,
                         num_samples: int,
                         use_denoising: bool = True,
                         use_motion_blur: bool = False,
-                        use_transparent_bg: bool = False) -> None:
+                        use_transparent_bg: bool = False,
+                        prefer_cuda_use: bool = True) -> None:
     scene.camera = camera_object
 
     scene.render.image_settings.file_format = 'PNG'
@@ -118,18 +119,28 @@ def set_cycles_renderer(scene: bpy.types.Scene,
     scene.view_layers[0].cycles.use_denoising = use_denoising
 
     scene.cycles.samples = num_samples
-    
-    # Enable GPU Acceleration 
-    # Source - https://blender.stackexchange.com/a/196702
-    bpy.context.scene.cycles.device = "GPU"
-    bpy.context.preferences.addons["cycles"].preferences.compute_device_type = "CUDA"
 
-    # get_devices() to let Blender detects GPU device
+    # Enable GPU acceleration
+    # Source - https://blender.stackexchange.com/a/196702
+    if prefer_cuda_use:
+        bpy.context.scene.cycles.device = "GPU"
+
+        # Change the preference setting
+        bpy.context.preferences.addons["cycles"].preferences.compute_device_type = "CUDA"
+
+    # Call get_devices() to let Blender detects GPU device (if any)
     bpy.context.preferences.addons["cycles"].preferences.get_devices()
-    print(bpy.context.preferences.addons["cycles"].preferences.compute_device_type)
+
+    # Let Blender use all available devices, include GPU and CPU
     for d in bpy.context.preferences.addons["cycles"].preferences.devices:
-        d["use"] = 1 # Using all devices, include GPU and CPU
-        print(d["name"], d["use"])
+        d["use"] = 1
+
+    # Display the devices to be used for rendering
+    print("----")
+    print("The following devices will be used for path tracing:")
+    for d in bpy.context.preferences.addons["cycles"].preferences.devices:
+        print("- {}".format(d["name"]))
+    print("----")
 
 ################################################################################
 # Constraints
