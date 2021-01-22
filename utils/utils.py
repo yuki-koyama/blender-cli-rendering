@@ -108,7 +108,8 @@ def set_cycles_renderer(scene: bpy.types.Scene,
                         use_denoising: bool = True,
                         use_motion_blur: bool = False,
                         use_transparent_bg: bool = False,
-                        prefer_cuda_use: bool = True) -> None:
+                        prefer_cuda_use: bool = True,
+                        use_adaptive_sampling: bool = False) -> None:
     scene.camera = camera_object
 
     scene.render.image_settings.file_format = 'PNG'
@@ -118,6 +119,7 @@ def set_cycles_renderer(scene: bpy.types.Scene,
     scene.render.film_transparent = use_transparent_bg
     scene.view_layers[0].cycles.use_denoising = use_denoising
 
+    scene.cycles.use_adaptive_sampling = use_adaptive_sampling
     scene.cycles.samples = num_samples
 
     # Enable GPU acceleration
@@ -141,6 +143,7 @@ def set_cycles_renderer(scene: bpy.types.Scene,
     for d in bpy.context.preferences.addons["cycles"].preferences.devices:
         print("- {}".format(d["name"]))
     print("----")
+
 
 ################################################################################
 # Constraints
