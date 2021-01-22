@@ -12,11 +12,13 @@ import external.cc0assetsloader as loader
 
 
 def create_armature_from_bvh(bvh_path: str) -> bpy.types.Object:
+    global_scale = 0.056444  # This value needs to be changed depending on the motion data
+
     bpy.ops.import_anim.bvh(filepath=bvh_path,
                             axis_forward='-Z',
                             axis_up='Y',
                             target='ARMATURE',
-                            global_scale=0.056444,
+                            global_scale=global_scale,
                             frame_start=1,
                             use_fps_scale=True,
                             update_scene_fps=False,
@@ -28,6 +30,7 @@ def create_armature_from_bvh(bvh_path: str) -> bpy.types.Object:
 def build_scene(scene: bpy.types.Scene, input_bvh_path: str) -> bpy.types.Object:
     loader.build_pbr_textured_nodes_from_name("Concrete07", scale=(0.25, 0.25, 0.25))
 
+    # Build a metal material for the humanoid body
     mat = utils.add_material("BlueMetal", use_nodes=True, make_node_tree_empty=True)
     output_node = mat.node_tree.nodes.new(type='ShaderNodeOutputMaterial')
     principled_node = mat.node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
@@ -37,18 +40,22 @@ def build_scene(scene: bpy.types.Scene, input_bvh_path: str) -> bpy.types.Object
     mat.node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
     utils.arrange_nodes(mat.node_tree)
 
+    # Import the motion file and create a humanoid object
     armature = create_armature_from_bvh(bvh_path=input_bvh_path)
     armature_mesh = utils.create_armature_mesh(scene, armature, 'Mesh')
     armature_mesh.data.materials.append(mat)
 
+    # Create a floor object
     current_object = utils.create_plane(size=16.0, name="Floor")
     current_object.data.materials.append(bpy.data.materials["Concrete07"])
 
+    # Create a wall object
     current_object = utils.create_plane(size=16.0, name="Wall")
     current_object.data.materials.append(bpy.data.materials["Concrete07"])
     current_object.location = (0.0, 6.0, 0.0)
     current_object.rotation_euler = (0.5 * math.pi, 0.0, 0.0)
 
+    # Create a target object for camera work
     bpy.ops.object.empty_add(location=(0.0, 0.0, 0.8))
     focus_target = bpy.context.object
     utils.add_copy_location_constraint(copy_to_object=focus_target,
