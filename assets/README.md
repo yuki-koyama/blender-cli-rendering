@@ -45,3 +45,8 @@
 - Author: CMU Graphics Lab
 - License: See <http://mocap.cs.cmu.edu/>
 - URL: <https://sites.google.com/a/cgspeed.com/cgspeed/motion-capture/3dsmax-friendly-release-of-cmu-motion-database>
+
+## PBR Materials
+
+- License: CC0
+- URL: <https://cc0textures.com/>
