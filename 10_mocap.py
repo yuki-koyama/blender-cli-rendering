@@ -8,7 +8,15 @@ import os
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import utils
-import external.cc0assetsloader as loader
+
+# Define paths for the PBR textures used in this scene
+texture_paths = {
+    "ambient_occlusion": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_AO.jpg",
+    "color": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_col.jpg",
+    "displacement": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_disp.jpg",
+    "normal": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_nrm.jpg",
+    "roughness": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_rgh.jpg",
+}
 
 
 def create_armature_from_bvh(bvh_path: str) -> bpy.types.Object:
@@ -28,7 +36,16 @@ def create_armature_from_bvh(bvh_path: str) -> bpy.types.Object:
 
 
 def build_scene(scene: bpy.types.Scene, input_bvh_path: str) -> bpy.types.Object:
-    loader.build_pbr_textured_nodes_from_name("Concrete07", scale=(0.25, 0.25, 0.25))
+
+    # Build a concrete material for the floor and the wall
+    mat = utils.add_material("Concrete07", use_nodes=True, make_node_tree_empty=True)
+    utils.build_pbr_textured_nodes(mat.node_tree,
+                                   color_texture_path=texture_paths["color"],
+                                   roughness_texture_path=texture_paths["roughness"],
+                                   normal_texture_path=texture_paths["normal"],
+                                   displacement_texture_path=texture_paths["displacement"],
+                                   ambient_occlusion_texture_path=texture_paths["ambient_occlusion"],
+                                   scale=(0.25, 0.25, 0.25))
 
     # Build a metal material for the humanoid body
     mat = utils.add_material("BlueMetal", use_nodes=True, make_node_tree_empty=True)
