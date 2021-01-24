@@ -34,4 +34,4 @@ Note that the current codes do not satisfy this above condition. This needs to b
 
 - A variable named `XXX_object` (or `object`) has the type `bpy.types.Object`. In addition, an instance of `bpy.types.Object` that has its `type` of `YYY` (e.g., `Mesh`) should have a name like `XXX_YYY_object` (e.g., `cube_mesh_object`).
 - A variable named `XXX_node` (or `node`) has the type `bpy.types.Node`.
-- An instance of a subclass of `pby.types.ID`, say `bpy.type.Camera` for example, should have a name like `XXX_camera`.
+- An instance of a subclass of `bpy.types.ID`, say `bpy.type.Camera` for example, should have a name like `XXX_camera`.
