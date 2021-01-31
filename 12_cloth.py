@@ -8,7 +8,40 @@ import os
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import utils
-import external.cc0assetsloader as loader
+
+# Define paths for the PBR textures used in this scene
+texture_paths = {
+    "Fabric02": {
+        "ambient_occlusion": "",
+        "color": "./assets/cc0textures.com/[2K]Fabric02/Fabric02_col.jpg",
+        "displacement": "./assets/cc0textures.com/[2K]Fabric02/Fabric02_disp.jpg",
+        "metallic": "",
+        "normal": "./assets/cc0textures.com/[2K]Fabric02/Fabric02_nrm.jpg",
+        "roughness": "./assets/cc0textures.com/[2K]Fabric02/Fabric02_rgh.jpg",
+    },
+    "Fabric03": {
+        "ambient_occlusion": "",
+        "color": "./assets/cc0textures.com/[2K]Fabric03/Fabric03_col.jpg",
+        "displacement": "./assets/cc0textures.com/[2K]Fabric03/Fabric03_disp.jpg",
+        "metallic": "",
+        "normal": "./assets/cc0textures.com/[2K]Fabric03/Fabric03_nrm.jpg",
+        "roughness": "./assets/cc0textures.com/[2K]Fabric03/Fabric03_rgh.jpg",
+    },
+}
+
+
+def add_named_material(name: str, scale=(1.0, 1.0, 1.0), displacement_scale: float = 1.0) -> bpy.types.Material:
+    mat = utils.add_material(name, use_nodes=True, make_node_tree_empty=True)
+    utils.build_pbr_textured_nodes(mat.node_tree,
+                                   color_texture_path=texture_paths[name]["color"],
+                                   roughness_texture_path=texture_paths[name]["roughness"],
+                                   normal_texture_path=texture_paths[name]["normal"],
+                                   metallic_texture_path=texture_paths[name]["metallic"],
+                                   displacement_texture_path=texture_paths[name]["displacement"],
+                                   ambient_occlusion_texture_path=texture_paths[name]["ambient_occlusion"],
+                                   scale=scale,
+                                   displacement_scale=displacement_scale)
+    return mat
 
 
 def set_floor_and_lights() -> None:
@@ -33,8 +66,8 @@ def set_floor_and_lights() -> None:
 
 
 def set_scene_objects() -> bpy.types.Object:
-    loader.build_pbr_textured_nodes_from_name("Fabric02")
-    loader.build_pbr_textured_nodes_from_name("Fabric03")
+    add_named_material("Fabric02")
+    add_named_material("Fabric03")
     bpy.data.materials["Fabric02"].node_tree.nodes["Principled BSDF"].inputs["Sheen"].default_value = 4.0
     bpy.data.materials["Fabric03"].node_tree.nodes["Principled BSDF"].inputs["Sheen"].default_value = 4.0
 

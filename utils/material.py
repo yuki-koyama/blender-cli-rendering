@@ -121,15 +121,15 @@ def build_matcap_nodes(node_tree: bpy.types.NodeTree, image_path: str) -> None:
     arrange_nodes(node_tree)
 
 
-def build_pbr_textured_nodes(
-    node_tree: bpy.types.NodeTree,
-    color_texture_path: str = "",
-    metallic_texture_path: str = "",
-    roughness_texture_path: str = "",
-    normal_texture_path: str = "",
-    displacement_texture_path: str = "",
-    ambient_occlusion_texture_path: str = "",
-    scale: Tuple[float, float, float] = (1.0, 1.0, 1.0)) -> None:
+def build_pbr_textured_nodes(node_tree: bpy.types.NodeTree,
+                             color_texture_path: str = "",
+                             metallic_texture_path: str = "",
+                             roughness_texture_path: str = "",
+                             normal_texture_path: str = "",
+                             displacement_texture_path: str = "",
+                             ambient_occlusion_texture_path: str = "",
+                             scale: Tuple[float, float, float] = (1.0, 1.0, 1.0),
+                             displacement_scale: float = 1.0) -> None:
     output_node = node_tree.nodes.new(type='ShaderNodeOutputMaterial')
     principled_node = node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
     node_tree.links.new(principled_node.outputs['BSDF'], output_node.inputs['Surface'])
@@ -177,7 +177,10 @@ def build_pbr_textured_nodes(
     if displacement_texture_path != "":
         texture_node = create_texture_node(node_tree, displacement_texture_path, False)
         node_tree.links.new(mapping_node.outputs['Vector'], texture_node.inputs['Vector'])
-        node_tree.links.new(texture_node.outputs['Color'], output_node.inputs['Displacement'])
+        displacement_node = node_tree.nodes.new(type='ShaderNodeDisplacement')
+        displacement_node.inputs['Scale'].default_value = displacement_scale
+        node_tree.links.new(texture_node.outputs['Color'], displacement_node.inputs['Height'])
+        node_tree.links.new(displacement_node.outputs['Displacement'], output_node.inputs['Displacement'])
 
     arrange_nodes(node_tree)
 

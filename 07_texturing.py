@@ -7,14 +7,63 @@ import os
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import utils
-import external.cc0assetsloader as loader
+
+# Define paths for the PBR textures used in this scene
+texture_paths = {
+    "Leather05": {
+        "ambient_occlusion": "",
+        "color": "./assets/cc0textures.com/[2K]Leather05/Leather05_col.jpg",
+        "displacement": "./assets/cc0textures.com/[2K]Leather05/Leather05_disp.jpg",
+        "metallic": "",
+        "normal": "./assets/cc0textures.com/[2K]Leather05/Leather05_nrm.jpg",
+        "roughness": "./assets/cc0textures.com/[2K]Leather05/Leather05_rgh.jpg",
+    },
+    "Metal07": {
+        "ambient_occlusion": "",
+        "color": "./assets/cc0textures.com/[2K]Metal07/Metal07_col.jpg",
+        "displacement": "./assets/cc0textures.com/[2K]Metal07/Metal07_disp.jpg",
+        "metallic": "./assets/cc0textures.com/[2K]Metal07/Metal07_met.jpg",
+        "normal": "./assets/cc0textures.com/[2K]Metal07/Metal07_nrm.jpg",
+        "roughness": "./assets/cc0textures.com/[2K]Metal07/Metal07_rgh.jpg",
+    },
+    "Fabric02": {
+        "ambient_occlusion": "",
+        "color": "./assets/cc0textures.com/[2K]Fabric02/Fabric02_col.jpg",
+        "displacement": "./assets/cc0textures.com/[2K]Fabric02/Fabric02_disp.jpg",
+        "metallic": "",
+        "normal": "./assets/cc0textures.com/[2K]Fabric02/Fabric02_nrm.jpg",
+        "roughness": "./assets/cc0textures.com/[2K]Fabric02/Fabric02_rgh.jpg",
+    },
+    "Marble01": {
+        "ambient_occlusion": "",
+        "color": "./assets/cc0textures.com/[2K]Marble01/Marble01_col.jpg",
+        "displacement": "./assets/cc0textures.com/[2K]Marble01/Marble01_disp.jpg",
+        "metallic": "",
+        "normal": "./assets/cc0textures.com/[2K]Marble01/Marble01_nrm.jpg",
+        "roughness": "./assets/cc0textures.com/[2K]Marble01/Marble01_rgh.jpg",
+    },
+}
+
+
+def add_named_material(name: str, scale=(1.0, 1.0, 1.0), displacement_scale: float = 1.0) -> bpy.types.Material:
+    mat = utils.add_material(name, use_nodes=True, make_node_tree_empty=True)
+    utils.build_pbr_textured_nodes(mat.node_tree,
+                                   color_texture_path=texture_paths[name]["color"],
+                                   roughness_texture_path=texture_paths[name]["roughness"],
+                                   normal_texture_path=texture_paths[name]["normal"],
+                                   metallic_texture_path=texture_paths[name]["metallic"],
+                                   displacement_texture_path=texture_paths[name]["displacement"],
+                                   ambient_occlusion_texture_path=texture_paths[name]["ambient_occlusion"],
+                                   scale=scale,
+                                   displacement_scale=displacement_scale)
+    return mat
 
 
 def set_scene_objects():
-    loader.build_pbr_textured_nodes_from_name("Leather05")
-    loader.build_pbr_textured_nodes_from_name("Metal07")
-    loader.build_pbr_textured_nodes_from_name("Fabric02")
-    loader.build_pbr_textured_nodes_from_name("Marble01")
+    add_named_material("Leather05")
+    add_named_material("Metal07")
+    add_named_material("Fabric02")
+    add_named_material("Marble01", displacement_scale=0.02)
 
     left_object, center_object, right_object = utils.create_three_smooth_monkeys()
 

@@ -8,7 +8,40 @@ import os
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import utils
-import external.cc0assetsloader as loader
+
+# Define paths for the PBR textures used in this scene
+texture_paths = {
+    "Metal07": {
+        "ambient_occlusion": "",
+        "color": "./assets/cc0textures.com/[2K]Metal07/Metal07_col.jpg",
+        "displacement": "./assets/cc0textures.com/[2K]Metal07/Metal07_disp.jpg",
+        "metallic": "./assets/cc0textures.com/[2K]Metal07/Metal07_met.jpg",
+        "normal": "./assets/cc0textures.com/[2K]Metal07/Metal07_nrm.jpg",
+        "roughness": "./assets/cc0textures.com/[2K]Metal07/Metal07_rgh.jpg",
+    },
+    "Marble01": {
+        "ambient_occlusion": "",
+        "color": "./assets/cc0textures.com/[2K]Marble01/Marble01_col.jpg",
+        "displacement": "./assets/cc0textures.com/[2K]Marble01/Marble01_disp.jpg",
+        "metallic": "",
+        "normal": "./assets/cc0textures.com/[2K]Marble01/Marble01_nrm.jpg",
+        "roughness": "./assets/cc0textures.com/[2K]Marble01/Marble01_rgh.jpg",
+    },
+}
+
+
+def add_named_material(name: str, scale=(1.0, 1.0, 1.0), displacement_scale: float = 1.0) -> bpy.types.Material:
+    mat = utils.add_material(name, use_nodes=True, make_node_tree_empty=True)
+    utils.build_pbr_textured_nodes(mat.node_tree,
+                                   color_texture_path=texture_paths[name]["color"],
+                                   roughness_texture_path=texture_paths[name]["roughness"],
+                                   normal_texture_path=texture_paths[name]["normal"],
+                                   metallic_texture_path=texture_paths[name]["metallic"],
+                                   displacement_texture_path=texture_paths[name]["displacement"],
+                                   ambient_occlusion_texture_path=texture_paths[name]["ambient_occlusion"],
+                                   scale=scale,
+                                   displacement_scale=displacement_scale)
+    return mat
 
 
 def create_skinned_object():
@@ -42,7 +75,7 @@ def create_skinned_object():
     bpy.ops.object.mode_set(mode='OBJECT')
 
     # Material
-    loader.build_pbr_textured_nodes_from_name("Metal07")
+    add_named_material("Metal07")
 
     # Mesh
     bpy.ops.mesh.primitive_cube_add(location=(0.0, 0.0, 1.0), calc_uvs=True)
@@ -70,7 +103,7 @@ def create_skinned_object():
 
 
 def set_scene_objects():
-    loader.build_pbr_textured_nodes_from_name("Marble01")
+    add_named_material("Marble01", displacement_scale=0.02)
 
     current_object = create_skinned_object()
     current_object.rotation_euler = (0.0, 0.0, math.pi * 60.0 / 180.0)

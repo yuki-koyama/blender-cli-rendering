@@ -22,7 +22,7 @@ texture_paths = {
 }
 
 
-def add_named_material(name: str, scale=(1.0, 1.0, 1.0)) -> bpy.types.Material:
+def add_named_material(name: str, scale=(1.0, 1.0, 1.0), displacement_scale: float = 1.0) -> bpy.types.Material:
     mat = utils.add_material(name, use_nodes=True, make_node_tree_empty=True)
     utils.build_pbr_textured_nodes(mat.node_tree,
                                    color_texture_path=texture_paths[name]["color"],
@@ -31,7 +31,8 @@ def add_named_material(name: str, scale=(1.0, 1.0, 1.0)) -> bpy.types.Material:
                                    metallic_texture_path=texture_paths[name]["metallic"],
                                    displacement_texture_path=texture_paths[name]["displacement"],
                                    ambient_occlusion_texture_path=texture_paths[name]["ambient_occlusion"],
-                                   scale=scale)
+                                   scale=scale,
+                                   displacement_scale=displacement_scale)
     return mat
 
 
