@@ -30,7 +30,7 @@ texture_paths = {
 }
 
 
-def add_named_material(name: str, scale=(1.0, 1.0, 1.0)) -> bpy.types.Material:
+def add_named_material(name: str, scale=(1.0, 1.0, 1.0), displacement_scale: float = 1.0) -> bpy.types.Material:
     mat = utils.add_material(name, use_nodes=True, make_node_tree_empty=True)
     utils.build_pbr_textured_nodes(mat.node_tree,
                                    color_texture_path=texture_paths[name]["color"],
@@ -39,13 +39,14 @@ def add_named_material(name: str, scale=(1.0, 1.0, 1.0)) -> bpy.types.Material:
                                    metallic_texture_path=texture_paths[name]["metallic"],
                                    displacement_texture_path=texture_paths[name]["displacement"],
                                    ambient_occlusion_texture_path=texture_paths[name]["ambient_occlusion"],
-                                   scale=scale)
+                                   scale=scale,
+                                   displacement_scale=displacement_scale)
     return mat
 
 
 def set_scene_objects():
     add_named_material("Metal07")
-    add_named_material("Marble01")
+    add_named_material("Marble01", displacement_scale=0.02)
 
     current_object = utils.create_smooth_monkey(location=(0.0, 0.0, 1.0), rotation=(0.0, 0.0, -math.pi * 60.0 / 180.0))
     current_object.data.materials.append(bpy.data.materials["Metal07"])
