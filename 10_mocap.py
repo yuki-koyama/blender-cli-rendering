@@ -11,12 +11,28 @@ import utils
 
 # Define paths for the PBR textures used in this scene
 texture_paths = {
-    "ambient_occlusion": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_AO.jpg",
-    "color": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_col.jpg",
-    "displacement": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_disp.jpg",
-    "normal": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_nrm.jpg",
-    "roughness": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_rgh.jpg",
+    "Concrete07": {
+        "ambient_occlusion": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_AO.jpg",
+        "color": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_col.jpg",
+        "displacement": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_disp.jpg",
+        "metallic": "",
+        "normal": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_nrm.jpg",
+        "roughness": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_rgh.jpg",
+    }
 }
+
+
+def add_named_material(name: str, scale=(1.0, 1.0, 1.0)) -> bpy.types.Material:
+    mat = utils.add_material(name, use_nodes=True, make_node_tree_empty=True)
+    utils.build_pbr_textured_nodes(mat.node_tree,
+                                   color_texture_path=texture_paths[name]["color"],
+                                   roughness_texture_path=texture_paths[name]["roughness"],
+                                   normal_texture_path=texture_paths[name]["normal"],
+                                   metallic_texture_path=texture_paths[name]["metallic"],
+                                   displacement_texture_path=texture_paths[name]["displacement"],
+                                   ambient_occlusion_texture_path=texture_paths[name]["ambient_occlusion"],
+                                   scale=scale)
+    return mat
 
 
 def create_armature_from_bvh(bvh_path: str) -> bpy.types.Object:
@@ -38,14 +54,7 @@ def create_armature_from_bvh(bvh_path: str) -> bpy.types.Object:
 def build_scene(scene: bpy.types.Scene, input_bvh_path: str) -> bpy.types.Object:
 
     # Build a concrete material for the floor and the wall
-    mat = utils.add_material("Concrete07", use_nodes=True, make_node_tree_empty=True)
-    utils.build_pbr_textured_nodes(mat.node_tree,
-                                   color_texture_path=texture_paths["color"],
-                                   roughness_texture_path=texture_paths["roughness"],
-                                   normal_texture_path=texture_paths["normal"],
-                                   displacement_texture_path=texture_paths["displacement"],
-                                   ambient_occlusion_texture_path=texture_paths["ambient_occlusion"],
-                                   scale=(0.25, 0.25, 0.25))
+    add_named_material("Concrete07", scale=(0.25, 0.25, 0.25))
 
     # Build a metal material for the humanoid body
     mat = utils.add_material("BlueMetal", use_nodes=True, make_node_tree_empty=True)
