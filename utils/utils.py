@@ -95,7 +95,11 @@ def build_environment_texture_background(world: bpy.types.World, hdri_path: str,
     arrange_nodes(node_tree)
 
 
-def set_output_properties(scene: bpy.types.Scene, resolution_percentage: int = 100, output_file_path: str = "", res_x: int = 1920, res_y: int = 1080) -> None:
+def set_output_properties(scene: bpy.types.Scene,
+                          resolution_percentage: int = 100,
+                          output_file_path: str = "",
+                          res_x: int = 1920,
+                          res_y: int = 1080) -> None:
     scene.render.resolution_percentage = resolution_percentage
     scene.render.resolution_x = res_x
     scene.render.resolution_y = res_y
