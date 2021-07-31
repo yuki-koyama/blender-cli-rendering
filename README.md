@@ -126,4 +126,4 @@ Python scripts for generating scenes and rendering images using Blender from com
 
 ## License
 
-Scripts in this repository use the Blender Python API, which is licensed under GNU General Public License (GPL). Thus, these scripts are considered as derivative works of a GPL-licensed work, so they are also licensed under GPL following the copyleft rule.
+GNU General Public License v3.0 (GPL-3.0). We have chosen this license because we respect [the philosophy of free software](https://code.blender.org/2019/06/blender-is-free-software/).
