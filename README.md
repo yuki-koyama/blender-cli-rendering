@@ -1,14 +1,14 @@
 # blender-cli-rendering
 
 ![GitHub](https://img.shields.io/github/license/yuki-koyama/blender-cli-rendering)
-![Blender](https://img.shields.io/badge/blender-2.83-brightgreen)
+![Blender](https://img.shields.io/badge/Blender-2.93-brightgreen)
 
-Python scripts for generating scenes and rendering images using Blender from command-line interface.
+A set of Blender Python scripts for generating scenes and rendering images directly from command-line interface.
 
 ## Principles
 
 - Able to run without display (thus, the renderer should be Cycles instead of EEVEE)
-- Support the latest Blender release (currently 2.83)
+- Support the latest LTS release (currently 2.93)
 
 ## Possible Usages
 
