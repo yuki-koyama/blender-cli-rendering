@@ -6,26 +6,28 @@ import sys
 import math
 import os
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+working_dir_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(working_dir_path)
+
 import utils
 
 # Define paths for the PBR textures used in this scene
 texture_paths = {
     "Metal07": {
         "ambient_occlusion": "",
-        "color": "./assets/cc0textures.com/[2K]Metal07/Metal07_col.jpg",
-        "displacement": "./assets/cc0textures.com/[2K]Metal07/Metal07_disp.jpg",
-        "metallic": "./assets/cc0textures.com/[2K]Metal07/Metal07_met.jpg",
-        "normal": "./assets/cc0textures.com/[2K]Metal07/Metal07_nrm.jpg",
-        "roughness": "./assets/cc0textures.com/[2K]Metal07/Metal07_rgh.jpg",
+        "color": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Metal07/Metal07_col.jpg"),
+        "displacement": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Metal07/Metal07_disp.jpg"),
+        "metallic": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Metal07/Metal07_met.jpg"),
+        "normal": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Metal07/Metal07_nrm.jpg"),
+        "roughness": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Metal07/Metal07_rgh.jpg"),
     },
     "Marble01": {
         "ambient_occlusion": "",
-        "color": "./assets/cc0textures.com/[2K]Marble01/Marble01_col.jpg",
-        "displacement": "./assets/cc0textures.com/[2K]Marble01/Marble01_disp.jpg",
+        "color": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Marble01/Marble01_col.jpg"),
+        "displacement": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Marble01/Marble01_disp.jpg"),
         "metallic": "",
-        "normal": "./assets/cc0textures.com/[2K]Marble01/Marble01_nrm.jpg",
-        "roughness": "./assets/cc0textures.com/[2K]Marble01/Marble01_rgh.jpg",
+        "normal": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Marble01/Marble01_nrm.jpg"),
+        "roughness": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Marble01/Marble01_rgh.jpg"),
     },
 }
 
@@ -74,12 +76,12 @@ def set_scene_objects():
 
 
 # Args
-output_file_path = str(sys.argv[sys.argv.index('--') + 1])
+output_file_path = bpy.path.relpath(str(sys.argv[sys.argv.index('--') + 1]))
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
 num_samples = int(sys.argv[sys.argv.index('--') + 3])
 
 # Parameters
-hdri_path = "./assets/HDRIs/green_point_park_2k.hdr"
+hdri_path = os.path.join(working_dir_path, "assets/HDRIs/green_point_park_2k.hdr")
 
 # Scene Building
 scene = bpy.data.scenes["Scene"]

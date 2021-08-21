@@ -5,12 +5,14 @@ import sys
 import math
 import os
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+working_dir_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(working_dir_path)
+
 import utils
 
 
 def set_scene_objects():
-    image_path = "./assets/matcaps/blue.png"
+    image_path = os.path.join(working_dir_path, "assets/matcaps/blue.png")
 
     mat = utils.add_material("MatCap", use_nodes=True, make_node_tree_empty=True)
     utils.build_matcap_nodes(mat.node_tree, image_path)
@@ -27,7 +29,7 @@ def set_scene_objects():
 
 
 # Args
-output_file_path = str(sys.argv[sys.argv.index('--') + 1])
+output_file_path = bpy.path.relpath(str(sys.argv[sys.argv.index('--') + 1]))
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
 num_samples = int(sys.argv[sys.argv.index('--') + 3])
 

@@ -7,7 +7,9 @@ import os
 import random
 from typing import List, Tuple
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+working_dir_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(working_dir_path)
+
 import utils
 
 
@@ -79,12 +81,12 @@ def set_scene_objects() -> bpy.types.Object:
 
 
 # Args
-output_file_path = str(sys.argv[sys.argv.index('--') + 1])
+output_file_path = bpy.path.relpath(str(sys.argv[sys.argv.index('--') + 1]))
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
 num_samples = int(sys.argv[sys.argv.index('--') + 3])
 
 # Parameters
-hdri_path = "./assets/HDRIs/green_point_park_2k.hdr"
+hdri_path = os.path.join(working_dir_path, "assets/HDRIs/green_point_park_2k.hdr")
 
 # Scene Building
 scene = bpy.data.scenes["Scene"]

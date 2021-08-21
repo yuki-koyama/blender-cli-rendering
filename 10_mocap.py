@@ -6,18 +6,20 @@ import sys
 import math
 import os
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+working_dir_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(working_dir_path)
+
 import utils
 
 # Define paths for the PBR textures used in this scene
 texture_paths = {
     "Concrete07": {
-        "ambient_occlusion": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_AO.jpg",
-        "color": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_col.jpg",
-        "displacement": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_disp.jpg",
+        "ambient_occlusion": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Concrete07/Concrete07_AO.jpg"),
+        "color": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Concrete07/Concrete07_col.jpg"),
+        "displacement": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Concrete07/Concrete07_disp.jpg"),
         "metallic": "",
-        "normal": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_nrm.jpg",
-        "roughness": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_rgh.jpg",
+        "normal": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Concrete07/Concrete07_nrm.jpg"),
+        "roughness": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Concrete07/Concrete07_rgh.jpg"),
     }
 }
 
@@ -97,12 +99,12 @@ def build_scene(scene: bpy.types.Scene, input_bvh_path: str) -> bpy.types.Object
 
 # Args
 input_bvh_path = str(sys.argv[sys.argv.index('--') + 1])  # "./assets/motion/102_01.bvh"
-output_file_path = str(sys.argv[sys.argv.index('--') + 2])  # "./"
+output_file_path = bpy.path.relpath(str(sys.argv[sys.argv.index('--') + 2])) # "./out/frame_"
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 3])  # 100
 num_samples = int(sys.argv[sys.argv.index('--') + 4])  # 128
 
 # Parameters
-hdri_path = "./assets/HDRIs/green_point_park_2k.hdr"
+hdri_path = os.path.join(working_dir_path, "assets/HDRIs/green_point_park_2k.hdr")
 
 # Scene Building
 scene = bpy.data.scenes["Scene"]

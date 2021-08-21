@@ -4,12 +4,14 @@ import bpy
 import os
 import sys
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+working_dir_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(working_dir_path)
+
 import utils
 
 
 def get_output_file_path() -> str:
-    return str(sys.argv[sys.argv.index('--') + 1])
+    return bpy.path.relpath(str(sys.argv[sys.argv.index('--') + 1]))
 
 
 def get_resolution_percentage() -> int:
