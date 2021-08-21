@@ -15,19 +15,19 @@ import utils
 texture_paths = {
     "Fabric02": {
         "ambient_occlusion": "",
-        "color": "./assets/cc0textures.com/[2K]Fabric02/Fabric02_col.jpg",
-        "displacement": "./assets/cc0textures.com/[2K]Fabric02/Fabric02_disp.jpg",
+        "color": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Fabric02/Fabric02_col.jpg"),
+        "displacement": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Fabric02/Fabric02_disp.jpg"),
         "metallic": "",
-        "normal": "./assets/cc0textures.com/[2K]Fabric02/Fabric02_nrm.jpg",
-        "roughness": "./assets/cc0textures.com/[2K]Fabric02/Fabric02_rgh.jpg",
+        "normal": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Fabric02/Fabric02_nrm.jpg"),
+        "roughness": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Fabric02/Fabric02_rgh.jpg"),
     },
     "Fabric03": {
         "ambient_occlusion": "",
-        "color": "./assets/cc0textures.com/[2K]Fabric03/Fabric03_col.jpg",
-        "displacement": "./assets/cc0textures.com/[2K]Fabric03/Fabric03_disp.jpg",
+        "color": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Fabric03/Fabric03_col.jpg"),
+        "displacement": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Fabric03/Fabric03_disp.jpg"),
         "metallic": "",
-        "normal": "./assets/cc0textures.com/[2K]Fabric03/Fabric03_nrm.jpg",
-        "roughness": "./assets/cc0textures.com/[2K]Fabric03/Fabric03_rgh.jpg",
+        "normal": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Fabric03/Fabric03_nrm.jpg"),
+        "roughness": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Fabric03/Fabric03_rgh.jpg"),
     },
 }
 

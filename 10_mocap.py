@@ -6,18 +6,20 @@ import sys
 import math
 import os
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+working_dir_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(working_dir_path)
+
 import utils
 
 # Define paths for the PBR textures used in this scene
 texture_paths = {
     "Concrete07": {
-        "ambient_occlusion": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_AO.jpg",
-        "color": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_col.jpg",
-        "displacement": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_disp.jpg",
+        "ambient_occlusion": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Concrete07/Concrete07_AO.jpg"),
+        "color": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Concrete07/Concrete07_col.jpg"),
+        "displacement": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Concrete07/Concrete07_disp.jpg"),
         "metallic": "",
-        "normal": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_nrm.jpg",
-        "roughness": "./assets/cc0textures.com/[2K]Concrete07/Concrete07_rgh.jpg",
+        "normal": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Concrete07/Concrete07_nrm.jpg"),
+        "roughness": os.path.join(working_dir_path, "assets/cc0textures.com/[2K]Concrete07/Concrete07_rgh.jpg"),
     }
 }
 

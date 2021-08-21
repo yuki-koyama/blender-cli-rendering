@@ -12,7 +12,7 @@ import utils
 
 
 def set_scene_objects():
-    image_path = "./assets/matcaps/blue.png"
+    image_path = os.path.join(working_dir_path, "assets/matcaps/blue.png")
 
     mat = utils.add_material("MatCap", use_nodes=True, make_node_tree_empty=True)
     utils.build_matcap_nodes(mat.node_tree, image_path)
