@@ -29,7 +29,7 @@ def set_scene_objects():
 
 
 # Args
-output_file_path = str(sys.argv[sys.argv.index('--') + 1])
+output_file_path = bpy.path.relpath(str(sys.argv[sys.argv.index('--') + 1]))
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
 num_samples = int(sys.argv[sys.argv.index('--') + 3])
 

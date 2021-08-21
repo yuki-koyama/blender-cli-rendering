@@ -11,7 +11,7 @@ import utils
 
 
 def get_output_file_path() -> str:
-    return str(sys.argv[sys.argv.index('--') + 1])
+    return bpy.path.relpath(str(sys.argv[sys.argv.index('--') + 1]))
 
 
 def get_resolution_percentage() -> int:

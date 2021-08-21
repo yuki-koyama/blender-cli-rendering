@@ -99,7 +99,7 @@ def build_scene(scene: bpy.types.Scene, input_bvh_path: str) -> bpy.types.Object
 
 # Args
 input_bvh_path = str(sys.argv[sys.argv.index('--') + 1])  # "./assets/motion/102_01.bvh"
-output_file_path = str(sys.argv[sys.argv.index('--') + 2])  # "./"
+output_file_path = bpy.path.relpath(str(sys.argv[sys.argv.index('--') + 2])) # "./out/frame_"
 resolution_percentage = int(sys.argv[sys.argv.index('--') + 3])  # 100
 num_samples = int(sys.argv[sys.argv.index('--') + 4])  # 128
 
