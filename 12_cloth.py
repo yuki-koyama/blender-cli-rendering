@@ -6,7 +6,9 @@ import sys
 import math
 import os
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+working_dir_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(working_dir_path)
+
 import utils
 
 # Define paths for the PBR textures used in this scene
