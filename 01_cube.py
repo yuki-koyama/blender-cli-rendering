@@ -1,4 +1,4 @@
-# blender --background --python 01_cube.py --render-frame 1 -- </path/to/output/image> <resolution_percentage>
+# blender --background --python 01_cube.py --render-frame 1 -- </path/to/output/image> <resolution_percentage> <num_samples>
 
 import bpy
 import os
