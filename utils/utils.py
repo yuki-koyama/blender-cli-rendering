@@ -115,6 +115,8 @@ def set_cycles_renderer(scene: bpy.types.Scene,
                         use_motion_blur: bool = False,
                         use_transparent_bg: bool = False,
                         prefer_cuda_use: bool = True,
+                        prefer_metal_use: bool = False,
+                        prefer_optix_use: bool = False,
                         use_adaptive_sampling: bool = False) -> None:
     scene.camera = camera_object
 
@@ -135,6 +137,18 @@ def set_cycles_renderer(scene: bpy.types.Scene,
 
         # Change the preference setting
         bpy.context.preferences.addons["cycles"].preferences.compute_device_type = "CUDA"
+
+    if prefer_metal_use:
+        bpy.context.scene.cycles.device = "GPU"
+
+        # Change the preference setting
+        bpy.context.preferences.addons["cycles"].preferences.compute_device_type = "METAL"
+
+    if prefer_optix_use:
+        bpy.context.scene.cycles.device = "GPU"
+
+        # Change the preference setting
+        bpy.context.preferences.addons["cycles"].preferences.compute_device_type = "OPTIX"
 
     # Call get_devices() to let Blender detects GPU device (if any)
     bpy.context.preferences.addons["cycles"].preferences.get_devices()
