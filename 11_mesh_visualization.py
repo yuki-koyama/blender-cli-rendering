@@ -7,7 +7,7 @@ import os
 import random
 
 import mathutils
-import numpy as np
+import math
 from typing import List, Tuple
 
 working_dir_path = os.path.dirname(os.path.abspath(__file__))
@@ -41,14 +41,13 @@ def get_color(x: float) -> Tuple[float, float, float]:
 def set_scene_objects(model_path: str = None,
                       model_location: mathutils.Vector = (0.0, 0.0, 0.0),
                       model_rotation: mathutils.Vector = (0.0, 0.0, 0.0),
-                      model_scale: mathutils.Vector = (1, 1, 1),
-                      subdivision_level: int = 1) -> bpy.types.Object:
+                      model_scale: mathutils.Vector = (1, 1, 1)) -> bpy.types.Object:
     # Instantiate a floor plane
     utils.create_plane(size=200.0, location=(0.0, 0.0, -1.0))
 
     # Instantiate a triangle mesh
     if model_path is None:
-        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=subdivision_level)
+        bpy.ops.mesh.primitive_ico_sphere_add()
     else:
         utils.import_mesh(model_path, "mesh_visualization")
 
@@ -57,10 +56,8 @@ def set_scene_objects(model_path: str = None,
         return None
 
     # Set RTS
-    current_object.rotation_euler = model_rotation * 1.0 / 180.0 * np.pi
+    current_object.rotation_euler = model_rotation * 1.0 / 180.0 * math.pi
     current_object.scale = model_scale
-
-    mesh = current_object.data
 
     # Add modifier
     utils.add_wireframe_modifier(current_object, 0.007)
