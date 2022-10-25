@@ -70,3 +70,9 @@ def add_displace_modifier(mesh_object: bpy.types.Object,
 
     # TODO: Check whether vertex_group is either empty or defined
     modifier.vertex_group = vertex_group
+
+
+def add_wireframe_modifier(mesh_object: bpy.types.Object,
+                           thickness: float) -> None:
+    modifier = mesh_object.modifiers.new(name="Wireframe", type="WIREFRAME")
+    modifier.thickness = thickness

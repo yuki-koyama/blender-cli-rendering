@@ -1,3 +1,5 @@
+import os.path
+
 import bpy
 import math
 from typing import Tuple, Iterable, Optional, Sequence
@@ -100,10 +102,24 @@ def create_three_smooth_monkeys(
 # https://docs.blender.org/api/current/bpy.types.VertexGroups.html
 # https://docs.blender.org/api/current/bpy.types.VertexGroup.html
 def add_vertex_group(mesh_object: bpy.types.Object, name: str = "Group") -> bpy.types.VertexGroup:
-
     # TODO: Check whether the object has a mesh data
     # TODO: Check whether the object already has a vertex group with the specified name
 
     vertex_group = mesh_object.vertex_groups.new(name=name)
 
     return vertex_group
+
+
+def import_mesh(file_path: str, name: str) -> bpy.types.Object:
+    file_name, file_ext = os.path.splitext(file_path)
+    if file_ext == ".ply":
+        bpy.ops.import_mesh.ply(filepath=file_path)
+    elif file_ext == ".stl":
+        bpy.ops.import_mesh.stl(filepath=file_path)
+
+    current_object = bpy.context.object
+
+    if name is not None:
+        current_object.name = name
+
+    return current_object

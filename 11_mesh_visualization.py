@@ -5,6 +5,9 @@ import sys
 import math
 import os
 import random
+
+import mathutils
+import numpy as np
 from typing import List, Tuple
 
 working_dir_path = os.path.dirname(os.path.abspath(__file__))
@@ -35,78 +38,92 @@ def get_color(x: float) -> Tuple[float, float, float]:
     return ((1.0 - t) * c0[0] + t * c1[0], (1.0 - t) * c0[1] + t * c1[1], (1.0 - t) * c0[2] + t * c1[2])
 
 
-def set_scene_objects() -> bpy.types.Object:
+def set_scene_objects(model_path: str = None,
+                      model_location: mathutils.Vector = (0.0, 0.0, 0.0),
+                      model_rotation: mathutils.Vector = (0.0, 0.0, 0.0),
+                      model_scale: mathutils.Vector = (1, 1, 1),
+                      subdivision_level: int = 1) -> bpy.types.Object:
     # Instantiate a floor plane
     utils.create_plane(size=200.0, location=(0.0, 0.0, -1.0))
 
     # Instantiate a triangle mesh
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3)
+    if model_path is None:
+        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=subdivision_level)
+    else:
+        utils.import_mesh(model_path, "mesh_visualization")
+
     current_object = bpy.context.object
+    if current_object is None:
+        return None
 
-    # Assign random colors for each triangle
+    # Set RTS
+    current_object.rotation_euler = model_rotation * 1.0 / 180.0 * np.pi
+    current_object.scale = model_scale
+
     mesh = current_object.data
-    mesh.vertex_colors.new(name='Col')
-    random_numbers = get_random_numbers(len(mesh.vertex_colors['Col'].data))
-    for index, vertex_color in enumerate(mesh.vertex_colors['Col'].data):
-        vertex_color.color = get_color(random_numbers[index // 3]) + tuple([1.0])
 
-    # Setup a material with wireframe visualization and per-face colors
-    mat = utils.add_material("Material_Visualization", use_nodes=True, make_node_tree_empty=True)
-    current_object.data.materials.append(mat)
+    # Add modifier
+    utils.add_wireframe_modifier(current_object, 0.007)
 
-    output_node = mat.node_tree.nodes.new(type='ShaderNodeOutputMaterial')
-    principled_node = mat.node_tree.nodes.new(type='ShaderNodeBsdfPrincipled')
-    rgb_node = mat.node_tree.nodes.new(type='ShaderNodeRGB')
-    mix_node = mat.node_tree.nodes.new(type='ShaderNodeMixShader')
-    wire_node = mat.node_tree.nodes.new(type='ShaderNodeWireframe')
-    wire_mat_node = mat.node_tree.nodes.new(type='ShaderNodeBsdfDiffuse')
-    attrib_node = mat.node_tree.nodes.new(type='ShaderNodeAttribute')
-
-    attrib_node.attribute_name = 'Col'
-    rgb_node.outputs['Color'].default_value = (0.1, 0.1, 0.1, 1.0)
-
-    mat.node_tree.links.new(attrib_node.outputs['Color'], principled_node.inputs['Base Color'])
-    mat.node_tree.links.new(principled_node.outputs['BSDF'], mix_node.inputs[1])
-    mat.node_tree.links.new(rgb_node.outputs['Color'], wire_mat_node.inputs['Color'])
-    mat.node_tree.links.new(wire_mat_node.outputs['BSDF'], mix_node.inputs[2])
-    mat.node_tree.links.new(wire_node.outputs['Fac'], mix_node.inputs['Fac'])
-    mat.node_tree.links.new(mix_node.outputs['Shader'], output_node.inputs['Surface'])
-
-    utils.arrange_nodes(mat.node_tree)
-
-    bpy.ops.object.empty_add(location=(0.0, -0.8, 0.0))
-    focus_target = bpy.context.object
-
-    return focus_target
+    return bpy.context.object
 
 
-# Args
-output_file_path = bpy.path.relpath(str(sys.argv[sys.argv.index('--') + 1]))
-resolution_percentage = int(sys.argv[sys.argv.index('--') + 2])
-num_samples = int(sys.argv[sys.argv.index('--') + 3])
+if __name__ == "__main__":
+    # Args
+    parser = utils.ArgumentParserForBlender()
+    parser.add_argument("--input_model", type=str,
+                        default='/Users/lihongbo/Desktop/code/BlenderToolbox/meshes/spot.ply',
+                        help='Input model path')
+    parser.add_argument("--output_path", type=str, default='out/mesh_visualization_', help='Output path for the file')
+    parser.add_argument("--resolution_percentage", type=int, default='50',
+                        help='Resolution percentage for output image')
+    parser.add_argument("--num_samples", type=int, default='200', help='Sampes')
+    parser.add_argument("--purpose", type=str, default="both")
 
-# Parameters
-hdri_path = os.path.join(working_dir_path, "assets/HDRIs/green_point_park_2k.hdr")
+    opt = parser.parse_args()
 
-# Scene Building
-scene = bpy.data.scenes["Scene"]
-world = scene.world
+    output_file_path = os.path.join(os.getcwd(), opt.output_path)
+    resolution_percentage = opt.resolution_percentage
+    num_samples = opt.num_samples
 
-## Reset
-utils.clean_objects()
+    # Parameters
+    hdri_path = os.path.join(working_dir_path, "assets/HDRIs/white.jpeg")
 
-## Object
-focus_target_object = set_scene_objects()
+    # Scene Building
+    scene = bpy.data.scenes["Scene"]
+    world = scene.world
 
-## Camera
-camera_object = utils.create_camera(location=(0.0, -10.0, 0.0))
+    ## Reset
+    utils.clean_objects()
 
-utils.add_track_to_constraint(camera_object, focus_target_object)
-utils.set_camera_params(camera_object.data, focus_target_object, lens=72, fstop=0.5)
+    ## Object
+    focus_target_object = set_scene_objects(model_path=opt.input_model,
+                                            model_location=mathutils.Vector((1.12, -0.14, 0)),
+                                            model_rotation=mathutils.Vector((90, 0, 227)),
+                                            model_scale=mathutils.Vector((1.5, 1.5, 1.5)))
+    if focus_target_object is None:
+        print("Import Model Failed.")
 
-## Lights
-utils.build_environment_texture_background(world, hdri_path)
+    ## Camera
+    camera_object = utils.create_camera(location=(4, 0, 3))
 
-# Render Setting
-utils.set_output_properties(scene, resolution_percentage, output_file_path)
-utils.set_cycles_renderer(scene, camera_object, num_samples, use_transparent_bg=True)
+    # utils.add_track_to_constraint(camera_object, focus_target_object)
+    utils.set_camera_params(camera_object.data, focus_target_object, lens=45, fstop=0.5)
+
+    ## Lights
+    utils.build_environment_texture_background(world, hdri_path)
+
+    # Render Setting
+    utils.set_output_properties(scene, resolution_percentage, output_file_path)
+    utils.set_cycles_renderer(scene, camera_object, num_samples, prefer_cuda_use=False, use_transparent_bg=True)
+
+    lookAtLocation = (0, 0, 1)
+    utils.look_at(camera_object, mathutils.Vector(lookAtLocation))
+
+    if opt.purpose == "save_blend":
+        bpy.ops.wm.save_mainfile(filepath=os.path.join(os.getcwd(), "out/test.blend"))
+    elif opt.purpose == "rendering":
+        bpy.ops.render.render(write_still=True)
+    else:
+        bpy.ops.wm.save_mainfile(filepath=os.path.join(os.getcwd(), "out/test.blend"))
+        bpy.ops.render.render(write_still=True)

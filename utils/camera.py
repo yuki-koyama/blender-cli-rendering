@@ -1,5 +1,6 @@
 import bpy
 from typing import Tuple
+import mathutils
 
 
 def create_camera(location: Tuple[float, float, float]) -> bpy.types.Object:
@@ -21,3 +22,10 @@ def set_camera_params(camera: bpy.types.Camera,
     camera.dof.focus_object = focus_target_object
     camera.dof.aperture_fstop = fstop
     camera.dof.aperture_blades = 11
+
+
+def look_at(camera: bpy.types.Camera, point: mathutils.Vector):
+    direction = point - camera.location
+    rotQuat = direction.to_track_quat('-Z', 'Y')
+    camera.rotation_euler = rotQuat.to_euler()
+    return camera
