@@ -6,9 +6,15 @@ def add_split_tone_node_group() -> bpy.types.NodeGroup:
     group = bpy.data.node_groups.new(type="CompositorNodeTree", name="SplitToneSub")
 
     input_node = group.nodes.new("NodeGroupInput")
-    group.inputs.new("NodeSocketColor", "Image")
-    group.inputs.new("NodeSocketFloat", "Hue")
-    group.inputs.new("NodeSocketFloat", "Saturation")
+    if bpy.app.version[0] == 4:
+        group.interface.new_socket(name="Image", description="input_image",in_out ="INPUT", socket_type="NodeSocketColor")
+        group.interface.new_socket(name="Hue", description="input_hue",in_out ="INPUT", socket_type="NodeSocketFloat")
+        group.interface.new_socket(name="Saturation", description="input_saturation",in_out ="INPUT", socket_type="NodeSocketFloat")
+    else:
+        group.inputs.new("NodeSocketColor", "Image")
+        group.inputs.new("NodeSocketFloat", "Hue")
+        group.inputs.new("NodeSocketFloat", "Saturation")
+    
 
     solid_node = group.nodes.new(type="CompositorNodeCombHSVA")
     solid_node.inputs["S"].default_value = 1.0
@@ -25,8 +31,11 @@ def add_split_tone_node_group() -> bpy.types.NodeGroup:
     comb_node = group.nodes.new(type="CompositorNodeCombHSVA")
 
     output_node = group.nodes.new("NodeGroupOutput")
-    group.outputs.new("NodeSocketColor", "Image")
-
+    if bpy.app.version[0] == 4:
+        group.interface.new_socket(name="Image", description="output_image",in_out ="OUTPUT", socket_type="NodeSocketColor")
+    else:
+        group.outputs.new("NodeSocketColor", "Image")
+    
     group.links.new(input_node.outputs["Hue"], solid_node.inputs["H"])
     group.links.new(input_node.outputs["Saturation"], overlay_node.inputs["Fac"])
     group.links.new(input_node.outputs["Image"], overlay_node.inputs[1])
@@ -47,18 +56,34 @@ def add_split_tone_node_group() -> bpy.types.NodeGroup:
 
     input_node = group.nodes.new("NodeGroupInput")
 
-    group.inputs.new("NodeSocketColor", "Image")
-    group.inputs.new("NodeSocketFloat", "HighlightsHue")
-    group.inputs.new("NodeSocketFloat", "HighlightsSaturation")
-    group.inputs.new("NodeSocketFloat", "ShadowsHue")
-    group.inputs.new("NodeSocketFloat", "ShadowsSaturation")
-    group.inputs.new("NodeSocketFloatFactor", "Balance")
+    if bpy.app.version[0] == 4:
+        group.interface.new_socket(name="Image",                description="input_image", in_out ="INPUT", socket_type="NodeSocketColor")
+        group.interface.new_socket(name="HighlightsHue",        description="input_hhue",  in_out ="INPUT", socket_type="NodeSocketFloat")
+        group.interface.new_socket(name="HighlightsSaturation", description="input_hsat",  in_out ="INPUT", socket_type="NodeSocketFloat")
+        group.interface.new_socket(name="ShadowsHue",           description="input_shadh", in_out ="INPUT", socket_type="NodeSocketFloat")
+        group.interface.new_socket(name="ShadowsSaturation",    description="input_shads", in_out ="INPUT", socket_type="NodeSocketFloat")
+        group.interface.new_socket(name="Balance",              description="input_bal",   in_out ="INPUT", socket_type="NodeSocketFloat")
 
-    set_socket_value_range(group.inputs["HighlightsHue"])
-    set_socket_value_range(group.inputs["HighlightsSaturation"])
-    set_socket_value_range(group.inputs["ShadowsHue"])
-    set_socket_value_range(group.inputs["ShadowsSaturation"])
-    set_socket_value_range(group.inputs["Balance"], default_value=0.5)
+        set_socket_value_range(group.interface.items_tree["HighlightsHue"])
+        set_socket_value_range(group.interface.items_tree["HighlightsSaturation"])
+        set_socket_value_range(group.interface.items_tree["ShadowsHue"])
+        set_socket_value_range(group.interface.items_tree["ShadowsSaturation"])
+        set_socket_value_range(group.interface.items_tree["Balance"], default_value=0.5)
+    else:
+        group.inputs.new("NodeSocketColor", "Image")
+        group.inputs.new("NodeSocketFloat", "HighlightsHue")
+        group.inputs.new("NodeSocketFloat", "HighlightsSaturation")
+        group.inputs.new("NodeSocketFloat", "ShadowsHue")
+        group.inputs.new("NodeSocketFloat", "ShadowsSaturation")
+        group.inputs.new("NodeSocketFloatFactor", "Balance")
+
+        set_socket_value_range(group.inputs["HighlightsHue"])
+        set_socket_value_range(group.inputs["HighlightsSaturation"])
+        set_socket_value_range(group.inputs["ShadowsHue"])
+        set_socket_value_range(group.inputs["ShadowsSaturation"])
+        set_socket_value_range(group.inputs["Balance"], default_value=0.5)
+    
+     
 
     input_sep_node = group.nodes.new(type="CompositorNodeSepHSVA")
 
@@ -88,7 +113,10 @@ def add_split_tone_node_group() -> bpy.types.NodeGroup:
     comb_node.use_clamp = False
 
     output_node = group.nodes.new("NodeGroupOutput")
-    group.outputs.new("NodeSocketColor", "Image")
+    if bpy.app.version[0] == 4:
+        group.interface.new_socket(name="Image", description="output_image",in_out ="OUTPUT", socket_type="NodeSocketColor")
+    else:
+        group.outputs.new("NodeSocketColor", "Image")
 
     group.links.new(input_node.outputs["Image"], input_sep_node.inputs["Image"])
     group.links.new(input_node.outputs["Image"], shadows_node.inputs["Image"])
@@ -113,16 +141,29 @@ def add_split_tone_node_group() -> bpy.types.NodeGroup:
 
 def add_vignette_node_group() -> bpy.types.NodeGroup:
     group = bpy.data.node_groups.new(type="CompositorNodeTree", name="Vignette")
-
+    
     input_node = group.nodes.new("NodeGroupInput")
-    group.inputs.new("NodeSocketColor", "Image")
-    group.inputs.new("NodeSocketFloat", "Amount")
-    group.inputs["Amount"].default_value = 0.2
-    group.inputs["Amount"].min_value = 0.0
-    group.inputs["Amount"].max_value = 1.0
+    
+    #https://blender.stackexchange.com/questions/284538/can-not-create-node-group-inputs-and-outputs-using-python
+    if bpy.app.version[0] == 4:
+        group.interface.new_socket(name="Image", description="input_image",in_out ="INPUT", socket_type="NodeSocketColor")
+        group.interface.new_socket(name="Amount", description="input_amount",in_out ="INPUT", socket_type="NodeSocketFloat")
+        group.interface.items_tree["Amount"].default_value = 0.2
+        group.interface.items_tree["Amount"].min_value = 0.0
+        group.interface.items_tree["Amount"].max_value = 1.0
+    else:
+        group.inputs.new("NodeSocketColor", "Image")
+        group.inputs.new("NodeSocketFloat", "Amount")
+        group.inputs["Amount"].default_value = 0.2
+        group.inputs["Amount"].min_value = 0.0
+        group.inputs["Amount"].max_value = 1.0
 
     lens_distortion_node = group.nodes.new(type="CompositorNodeLensdist")
-    lens_distortion_node.inputs["Distort"].default_value = 1.000
+
+    if bpy.app.version[0] == 4:
+        lens_distortion_node.inputs["Distortion"].default_value = 1.000
+    else:
+        lens_distortion_node.inputs["Distort"].default_value = 1.000
 
     separate_rgba_node = group.nodes.new(type="CompositorNodeSepRGBA")
 
@@ -136,8 +177,12 @@ def add_vignette_node_group() -> bpy.types.NodeGroup:
     mix_node.blend_type = 'MULTIPLY'
 
     output_node = group.nodes.new("NodeGroupOutput")
-    group.outputs.new("NodeSocketColor", "Image")
-
+    
+    if bpy.app.version[0] == 4:
+        group.interface.new_socket(name="Image", description="output_image",in_out ="OUTPUT", socket_type="NodeSocketColor")
+    else:
+        group.outputs.new("NodeSocketColor", "Image")
+        
     group.links.new(input_node.outputs["Amount"], mix_node.inputs["Fac"])
     group.links.new(input_node.outputs["Image"], mix_node.inputs[1])
     group.links.new(input_node.outputs["Image"], lens_distortion_node.inputs["Image"])
@@ -182,10 +227,21 @@ def build_scene_composition(scene: bpy.types.Scene,
     render_layer_node = scene.node_tree.nodes.new(type="CompositorNodeRLayers")
 
     vignette_node = create_vignette_node(scene.node_tree)
-    vignette_node.inputs["Amount"].default_value = vignette
+    
+    if bpy.app.version[0] == 4:
+        vignette_node.node_tree.interface.items_tree["Amount"].default_value = vignette
+    else:
+        vignette_node.inputs["Amount"].default_value = vignette
+    # idx_vign = [i for i in range(len(vignette_node.node_tree.interface.items_tree)) if vignette_node.node_tree.interface.items_tree[i].description=='input_amount']
+    # vignette_node.node_tree.interface.items_tree[idx_vign[0]].default_value = vignette
 
     lens_distortion_node = scene.node_tree.nodes.new(type="CompositorNodeLensdist")
-    lens_distortion_node.inputs["Distort"].default_value = -dispersion * 0.40
+    
+    if bpy.app.version[0] == 4:
+        lens_distortion_node.inputs["Distortion"].default_value = -dispersion * 0.40
+    else:
+        lens_distortion_node.inputs["Distort"].default_value = -dispersion * 0.40
+
     lens_distortion_node.inputs["Dispersion"].default_value = dispersion
 
     color_correction_node = scene.node_tree.nodes.new(type="CompositorNodeColorCorrection")
